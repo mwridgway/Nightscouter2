@@ -7,8 +7,11 @@
 //
 
 import Foundation
+public protocol SitesDataSourceProvider: Dateable {
+    var sites: [Site] { get }
+}
 
-public class SitesDataSource{
+public class SitesDataSource: SitesDataSourceProvider{
     public var sites: [Site] {
         let cal = Calibration()
         let sgv = SensorGlucoseValue()
@@ -17,7 +20,7 @@ public class SitesDataSource{
         var s1 = Site()
         var s2 = Site()
         var s3 = Site()
-        
+        s1.url = NSURL(string: "benscgm.herokuapp.com")!
         s1.sgvs.append(sgv)
         s1.deviceStatus.append(de)
         s1.sgvs.append(sgv)
@@ -26,9 +29,11 @@ public class SitesDataSource{
         s2.cals.append(cal)
         s3.deviceStatus.append(de)
         
-        return [s1, s2, s3]
+        return [s1, s2]
         
     }
+    public var milliseconds: Double = AppConfiguration.Constant.knownMilliseconds
+    
     public init(){
         
     }

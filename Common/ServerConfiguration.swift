@@ -98,7 +98,6 @@ extension ServerConfiguration {
         
     }
     
-    
     public var displayUnits: Units {
         if let settings = settings {
             return settings.units

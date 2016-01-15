@@ -9,16 +9,18 @@
 import UIKit
 import NightscouterKit
 
-protocol SitesDataSourceProvider: Dateable {
-    var sites: [Site] { get }
-}
 
 public struct CellIdentifiers {
     public static let SiteTableViewStyleLarge = "siteCellLarge"
 }
 
-
-class SitesTableViewController: UITableViewController, SitesDataSourceProvider {
+class SitesTableViewController: UITableViewController, SitesDataSourceProvider, SegueHandlerType {
+    
+    
+    enum SegueIdentifier: String {
+        case EditExisting, ShowDetail, AddNew, AddNewWhenEmpty, LaunchLabs, ShowPageView, UnwindToSiteList
+    }
+    
     
     var sites: [Site] = SitesDataSource().sites
     
@@ -151,16 +153,74 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider {
     }
     
     
-    /*
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
+        
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        
+            switch segueIdentifierForSegue(segue) {
+                
+            case .EditExisting:
+                #if DEBUG
+                    print("Editing existing site", terminator: "")
+                #endif
+                editing = false
+                let siteDetailViewController = segue.destinationViewController as! FormViewController
+                // Get the cell that generated this segue.
+                if let selectedSiteCell = sender as? UITableViewCell {
+                    let indexPath = tableView.indexPathForCell(selectedSiteCell)!
+                    let selectedSite = sites[indexPath.row]
+                    siteDetailViewController.site = selectedSite
+                }
+                
+            case .AddNew:
+                #if DEBUG
+                    print("Adding new site", terminator: "")
+                #endif
+                self.setEditing(false, animated: true)
+                
+            case .AddNewWhenEmpty:
+                #if DEBUG
+                    print("Adding new site when empty", terminator: "")
+                #endif
+                self.setEditing(false, animated: true)
+                return
+                
+            case .ShowDetail:
+                let siteDetailViewController = segue.destinationViewController as! SiteDetailViewController
+                // Get the cell that generated this segue.
+                if let selectedSiteCell = sender as? UITableViewCell {
+                    let indexPath = tableView.indexPathForCell(selectedSiteCell)!
+                    let selectedSite = sites[indexPath.row]
+                    siteDetailViewController.site = selectedSite
+                }
+                
+            case .ShowPageView:
+                // let siteListPageViewController = segue.destinationViewController as! SiteListPageViewController
+                // Get the cell that generated this segue.
+                if let selectedSiteCell = sender as? UITableViewCell {
+                    let indexPath = tableView.indexPathForCell(selectedSiteCell)!
+//                    AppDataManageriOS.sharedInstance.currentSiteIndex = indexPath.row
+                }
+                
+                if let incomingSite = sender as? Site{
+                    if let indexOfSite = sites.indexOf(incomingSite) {
+//                        AppDataManageriOS.sharedInstance.currentSiteIndex = indexOfSite
+                    }
+                }
+                
+            default:
+                #if DEBUG
+                    print("Unhandled segue idendifier: \(segue.identifier)", terminator: "")
+                #endif
+            }
+        
+        
     }
-    */
-    
+
     
     
     // MARK: Interface Builder Actions

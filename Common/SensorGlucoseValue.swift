@@ -82,11 +82,6 @@ extension ReservedValues {
         }
     }
 }
-public extension GlucoseValueHolder {
-    
-}
-
-
 
 public enum Direction : String, CustomStringConvertible {
     case None = "None", DoubleUp = "DoubleUp", SingleUp = "SingleUp", FortyFiveUp = "FortyFiveUp", Flat = "Flat", FortyFiveDown = "FortyFiveDown", SingleDown = "SingleDown", DoubleDown = "DoubleDown", NotComputable = "NOT COMPUTABLE", RateOutOfRange = "RateOutOfRange", Not_Computable = "NOT_COMPUTABLE"
