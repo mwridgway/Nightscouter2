@@ -143,13 +143,3 @@ public extension CompassControl {
     }
     
 }
-
-// MARK: - Delegate Methods
-public extension CompassControl {
-    
-}
-
-// MARK: - Actions
-public extension CompassControl {
-    
-}
