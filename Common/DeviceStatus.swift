@@ -35,7 +35,6 @@ public struct DeviceStatus: CustomStringConvertible, Dateable {
         }
     }
     
-    
     /**
      
         Initializes a new device status structure with the default values.

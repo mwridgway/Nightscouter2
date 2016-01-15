@@ -52,6 +52,13 @@
 		1742F0411C458765008DED3F /* NSURL-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1742F03F1C458765008DED3F /* NSURL-Extensions.swift */; };
 		1742F0431C45889D008DED3F /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1742F0421C45889D008DED3F /* FormViewController.swift */; };
 		175DDBF31C48236C0083CC8C /* SiteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175DDBF21C48236C0083CC8C /* SiteTableViewCell.swift */; };
+		176BE2761C496A330040F1B7 /* ModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176BE2751C496A330040F1B7 /* ModelController.swift */; };
+		176BE2791C496A3F0040F1B7 /* SiteDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176BE2771C496A3F0040F1B7 /* SiteDetailViewController.swift */; };
+		176BE27A1C496A3F0040F1B7 /* SiteListPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176BE2781C496A3F0040F1B7 /* SiteListPageViewController.swift */; };
+		176BE27C1C496A7D0040F1B7 /* html in Resources */ = {isa = PBXBuildFile; fileRef = 176BE27B1C496A7D0040F1B7 /* html */; };
+		176BE27E1C496E060040F1B7 /* SegueHandlerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176BE27D1C496E060040F1B7 /* SegueHandlerType.swift */; };
+		176BE2801C4979950040F1B7 /* Chartable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176BE27F1C4979950040F1B7 /* Chartable.swift */; };
+		176BE2811C4979950040F1B7 /* Chartable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176BE27F1C4979950040F1B7 /* Chartable.swift */; };
 		1770545E1C489AD500302D83 /* SiteSummaryModelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1770545D1C489AD500302D83 /* SiteSummaryModelViewModel.swift */; };
 		1770545F1C489AD500302D83 /* SiteSummaryModelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1770545D1C489AD500302D83 /* SiteSummaryModelViewModel.swift */; };
 		177054611C489BBF00302D83 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1742F0221C449857008DED3F /* Array+Extensions.swift */; };
@@ -222,6 +229,12 @@
 		1742F03F1C458765008DED3F /* NSURL-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURL-Extensions.swift"; sourceTree = "<group>"; };
 		1742F0421C45889D008DED3F /* FormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
 		175DDBF21C48236C0083CC8C /* SiteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewCell.swift; sourceTree = "<group>"; };
+		176BE2751C496A330040F1B7 /* ModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelController.swift; sourceTree = "<group>"; };
+		176BE2771C496A3F0040F1B7 /* SiteDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteDetailViewController.swift; sourceTree = "<group>"; };
+		176BE2781C496A3F0040F1B7 /* SiteListPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteListPageViewController.swift; sourceTree = "<group>"; };
+		176BE27B1C496A7D0040F1B7 /* html */ = {isa = PBXFileReference; lastKnownFileType = folder; path = html; sourceTree = "<group>"; };
+		176BE27D1C496E060040F1B7 /* SegueHandlerType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueHandlerType.swift; sourceTree = "<group>"; };
+		176BE27F1C4979950040F1B7 /* Chartable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chartable.swift; sourceTree = "<group>"; };
 		1770545D1C489AD500302D83 /* SiteSummaryModelViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteSummaryModelViewModel.swift; sourceTree = "<group>"; };
 		177054711C492FDC00302D83 /* BackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		177054721C492FDC00302D83 /* ColorBlockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorBlockView.swift; sourceTree = "<group>"; };
@@ -343,9 +356,8 @@
 		1735807F1C4435BD00E893DB /* NightscouterKit Framework (iOS) */ = {
 			isa = PBXGroup;
 			children = (
-				177054711C492FDC00302D83 /* BackgroundView.swift */,
-				177054721C492FDC00302D83 /* ColorBlockView.swift */,
-				177054731C492FDC00302D83 /* CompassControl.swift */,
+				176BE2821C497D0C0040F1B7 /* Protocols */,
+				176BE2831C497D1A0040F1B7 /* Views */,
 				1742F03C1C458475008DED3F /* NightscouterAssetKit.swift */,
 				173580801C4435BD00E893DB /* NightscouterKit.h */,
 				173580821C4435BD00E893DB /* Info.plist */,
@@ -439,6 +451,7 @@
 		1742F02D1C4498B7008DED3F /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				176BE27F1C4979950040F1B7 /* Chartable.swift */,
 				1735811A1C443C6400E893DB /* Protocols.swift */,
 			);
 			name = Protocols;
@@ -457,10 +470,29 @@
 		1742F0441C469DE5008DED3F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				176BE27B1C496A7D0040F1B7 /* html */,
 				1770547C1C4955A100302D83 /* Storyboards */,
 				173580571C44354200E893DB /* Assets.xcassets */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		176BE2821C497D0C0040F1B7 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				176BE27D1C496E060040F1B7 /* SegueHandlerType.swift */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
+		176BE2831C497D1A0040F1B7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				177054711C492FDC00302D83 /* BackgroundView.swift */,
+				177054721C492FDC00302D83 /* ColorBlockView.swift */,
+				177054731C492FDC00302D83 /* CompassControl.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		1770547A1C49558B00302D83 /* Views */ = {
@@ -475,6 +507,9 @@
 			isa = PBXGroup;
 			children = (
 				1742F0421C45889D008DED3F /* FormViewController.swift */,
+				176BE2751C496A330040F1B7 /* ModelController.swift */,
+				176BE2771C496A3F0040F1B7 /* SiteDetailViewController.swift */,
+				176BE2781C496A3F0040F1B7 /* SiteListPageViewController.swift */,
 				1723E48B1C46D5B600EB4C8F /* SitesTableViewController.swift */,
 			);
 			name = Controllers;
@@ -714,6 +749,7 @@
 				1770548A1C49601B00302D83 /* Localizable.strings in Resources */,
 				173580581C44354200E893DB /* Assets.xcassets in Resources */,
 				173580561C44354200E893DB /* Main.storyboard in Resources */,
+				176BE27C1C496A7D0040F1B7 /* html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -766,8 +802,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				177054861C495F7600302D83 /* SitesTableViewController.swift in Sources */,
+				176BE2761C496A330040F1B7 /* ModelController.swift in Sources */,
 				175DDBF31C48236C0083CC8C /* SiteTableViewCell.swift in Sources */,
 				1742F0431C45889D008DED3F /* FormViewController.swift in Sources */,
+				176BE27A1C496A3F0040F1B7 /* SiteListPageViewController.swift in Sources */,
+				176BE2791C496A3F0040F1B7 /* SiteDetailViewController.swift in Sources */,
 				173580511C44354200E893DB /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -788,6 +827,7 @@
 				1770545E1C489AD500302D83 /* SiteSummaryModelViewModel.swift in Sources */,
 				177054621C489BBF00302D83 /* Double+Extension.swift in Sources */,
 				1742F0401C458765008DED3F /* NSURL-Extensions.swift in Sources */,
+				176BE27E1C496E060040F1B7 /* SegueHandlerType.swift in Sources */,
 				177054651C489BBF00302D83 /* UIColor+Extension.swift in Sources */,
 				177054641C489BBF00302D83 /* String+Extensions.swift in Sources */,
 				177054761C492FDC00302D83 /* ColorBlockView.swift in Sources */,
@@ -802,6 +842,7 @@
 				177054611C489BBF00302D83 /* Array+Extensions.swift in Sources */,
 				1735811E1C443E8900E893DB /* Calibration.swift in Sources */,
 				177054911C4963A200302D83 /* SitesDataSource.swift in Sources */,
+				176BE2801C4979950040F1B7 /* Chartable.swift in Sources */,
 				177054631C489BBF00302D83 /* NSCalendar+Extension.swift in Sources */,
 				1735811B1C443C6400E893DB /* Protocols.swift in Sources */,
 				1742F03D1C458475008DED3F /* NightscouterAssetKit.swift in Sources */,
@@ -836,6 +877,7 @@
 				1770545F1C489AD500302D83 /* SiteSummaryModelViewModel.swift in Sources */,
 				177054691C489BC000302D83 /* String+Extensions.swift in Sources */,
 				1770546A1C489BC000302D83 /* UIColor+Extension.swift in Sources */,
+				176BE2811C4979950040F1B7 /* Chartable.swift in Sources */,
 				173581221C44459E00E893DB /* MeteredGlucoseValue.swift in Sources */,
 				177054671C489BC000302D83 /* Double+Extension.swift in Sources */,
 				1735811F1C443E8900E893DB /* Calibration.swift in Sources */,
