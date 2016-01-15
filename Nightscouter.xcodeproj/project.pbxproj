@@ -235,6 +235,10 @@
 		176BE27B1C496A7D0040F1B7 /* html */ = {isa = PBXFileReference; lastKnownFileType = folder; path = html; sourceTree = "<group>"; };
 		176BE27D1C496E060040F1B7 /* SegueHandlerType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueHandlerType.swift; sourceTree = "<group>"; };
 		176BE27F1C4979950040F1B7 /* Chartable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chartable.swift; sourceTree = "<group>"; };
+		176BE2841C497D890040F1B7 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		176BE2851C497D890040F1B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		176BE2861C497D970040F1B7 /* NightscouteriOSAssets.pcvd */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = NightscouteriOSAssets.pcvd; sourceTree = "<group>"; };
+		176BE2871C497D970040F1B7 /* NightscouterWatchOSAssets.pcvd */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = NightscouterWatchOSAssets.pcvd; sourceTree = "<group>"; };
 		1770545D1C489AD500302D83 /* SiteSummaryModelViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteSummaryModelViewModel.swift; sourceTree = "<group>"; };
 		177054711C492FDC00302D83 /* BackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		177054721C492FDC00302D83 /* ColorBlockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorBlockView.swift; sourceTree = "<group>"; };
@@ -289,6 +293,8 @@
 		173580441C44354200E893DB = {
 			isa = PBXGroup;
 			children = (
+				176BE2841C497D890040F1B7 /* LICENSE */,
+				176BE2851C497D890040F1B7 /* README.md */,
 				1735808C1C44367F00E893DB /* Shared Resources */,
 				173580781C44359B00E893DB /* Nightscouter iOS App */,
 				1742F0391C457ED6008DED3F /* Nightscouter Watch App */,
@@ -385,6 +391,8 @@
 		1735808C1C44367F00E893DB /* Shared Resources */ = {
 			isa = PBXGroup;
 			children = (
+				176BE2861C497D970040F1B7 /* NightscouteriOSAssets.pcvd */,
+				176BE2871C497D970040F1B7 /* NightscouterWatchOSAssets.pcvd */,
 			);
 			name = "Shared Resources";
 			path = Resources;
