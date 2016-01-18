@@ -35,7 +35,7 @@ class SiteTableViewCell: UITableViewCell {
         self.dataSource = dataSource
         self.delegate = delegate
         
-        siteLastReadingLabel.text = dataSource.lastReadingLabel
+        siteLastReadingLabel.text = dataSource.lastReadingDate.timeAgoSinceNow()
         siteLastReadingLabel.textColor = delegate?.batteryColor
         
         siteBatteryLabel.text = dataSource.batteryLabel

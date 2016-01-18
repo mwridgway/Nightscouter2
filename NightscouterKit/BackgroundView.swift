@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable
+//@IBDesignable
 public class BackgroundView: UIView {
     
     // Only override drawRect: if you perform custom drawing.

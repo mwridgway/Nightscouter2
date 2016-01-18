@@ -83,7 +83,7 @@ extension ReservedValues {
     }
 }
 
-public enum Direction : String, CustomStringConvertible {
+public enum Direction : String, CustomStringConvertible, RawRepresentable {
     case None = "None", DoubleUp = "DoubleUp", SingleUp = "SingleUp", FortyFiveUp = "FortyFiveUp", Flat = "Flat", FortyFiveDown = "FortyFiveDown", SingleDown = "SingleDown", DoubleDown = "DoubleDown", NotComputable = "NOT COMPUTABLE", RateOutOfRange = "RateOutOfRange", Not_Computable = "NOT_COMPUTABLE"
     
     public var description : String {
@@ -137,6 +137,36 @@ public enum Direction : String, CustomStringConvertible {
     
     public init() {
         self = .None
+    }
+}
+
+extension Direction {
+    public var angleForCompass: Float {
+        get {
+            switch (self) {
+            case .FortyFiveUp:
+                return -45
+            case .Flat:
+                return -90
+            case .FortyFiveDown:
+                return -120
+            case .SingleDown, .DoubleDown:
+                return -180
+            default:
+                return 0
+            }
+        }
+    }
+    public var isDoubleRingVisible: Bool {
+        return self == .DoubleDown || self == .DoubleUp
+    }
+    
+    public var isNotComputable: Bool {
+        return self == .NotComputable || self == .Not_Computable
+    }
+    
+    public var isArrowVisible: Bool {
+        return !(isNotComputable || self == .None || self == .RateOutOfRange)
     }
 }
 

@@ -94,7 +94,7 @@ extension SiteDetailViewController {
     
     func configureView() {
         if let site = site, dataSource = SiteSummaryModelViewModel(withSite: site) {
-            siteLastReadingLabel?.text = dataSource.lastReadingLabel
+            siteLastReadingLabel?.text = dataSource.lastReadingDate.description
             siteLastReadingLabel?.textColor = dataSource.batteryColor
             
             siteBatteryLabel?.text = dataSource.batteryLabel

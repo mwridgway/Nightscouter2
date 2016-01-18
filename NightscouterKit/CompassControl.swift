@@ -8,27 +8,27 @@
 
 import UIKit
 
-@IBDesignable
+//@IBDesignable
 public class CompassControl: UIView {
     public override func intrinsicContentSize() -> CGSize {
         return CGSizeMake(156, 196)
     }
     
-    @IBInspectable
+//    @IBInspectable
     public var sgvText:String = PlaceHolderStrings.sgv {
         didSet{
             setNeedsDisplay()
         }
     }
 
-    @IBInspectable
+//    @IBInspectable
     public var color: UIColor = DesiredColorState.Neutral.colorValue {
         didSet {
             setNeedsDisplay()
         }
     }
     
-    @IBInspectable
+//    @IBI  nspectable
     public var delta: String = PlaceHolderStrings.delta {
         didSet{
             setNeedsDisplay()
@@ -51,15 +51,15 @@ public class CompassControl: UIView {
             case .SingleUp:
                 configireDrawRect()
             case .FortyFiveUp:
-                configireDrawRect(angle:-45)
+                configireDrawRect(angle: direction.angleForCompass)
             case .Flat:
-                configireDrawRect(angle:-90)
+                configireDrawRect(angle: direction.angleForCompass)
             case .FortyFiveDown:
-                configireDrawRect(angle:-120)
+                configireDrawRect(angle: direction.angleForCompass)
             case .SingleDown:
-                configireDrawRect(angle:-180)
+                configireDrawRect(angle: direction.angleForCompass)
             case .DoubleDown:
-                configireDrawRect(true, angle: -180)
+                configireDrawRect(true, angle: direction.angleForCompass)
             case .NotComputable, .Not_Computable:
                 configireDrawRect(isArrowVisible: false, isUncomputable: true)
             case .RateOutOfRange:
@@ -99,12 +99,12 @@ public extension CompassControl {
 
 // MARK: - Methods
 public extension CompassControl {
-    private func configireDrawRect( isDoubleUp:Bool = false, isArrowVisible:Bool = true, isUncomputable:Bool = false, angle:CGFloat?=0, sgvText:String?=nil ){
+    private func configireDrawRect( isDoubleUp:Bool = false, isArrowVisible:Bool = true, isUncomputable:Bool = false, angle:Float=0, sgvText:String?=nil ){
         self.isDoubleUp = isDoubleUp
         self.isArrowVisible = isArrowVisible
         self.isUncomputable = isUncomputable
         
-        self.angle = angle!
+        self.angle = CGFloat(angle)
         if (sgvText != nil) {
             self.sgvText = sgvText!
         }
