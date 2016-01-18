@@ -8,10 +8,9 @@
 import Foundation
 import UIKit
 
-
-
 public protocol SiteCommonInfoDataSource {
-    var lastReadingLabel: String { get }
+    //var lastReadingLabel: String { get }
+    var lastReadingDate: NSDate { get }
     var batteryLabel: String { get }
     var rawHidden: Bool { get }
     var rawLabel: String { get }
@@ -19,6 +18,7 @@ public protocol SiteCommonInfoDataSource {
     var urlLabel: String { get }
     var sgvLabel: String { get }
     var deltaLabel: String { get }
+    var lookStale: Bool { get }
 }
 
 public protocol SiteCommonInfoDelegate {
@@ -29,11 +29,13 @@ public protocol SiteCommonInfoDelegate {
     var deltaColor: UIColor { get }
 }
 
-public protocol CompassViewDataSource: SiteCommonInfoDataSource {
+public protocol DirectionDisplayable {
     var direction: Direction { get }
+}
+
+public protocol CompassViewDataSource: SiteCommonInfoDataSource, DirectionDisplayable {
     var text: String { get }
     var detailText: String { get }
-    var lookStale: Bool { get }
 }
 
 public protocol CompassViewDelegate: SiteCommonInfoDelegate {
@@ -42,9 +44,13 @@ public protocol CompassViewDelegate: SiteCommonInfoDelegate {
 
 public typealias TableViewRowWithCompassDataSource = protocol<SiteCommonInfoDataSource, CompassViewDataSource>
 public typealias TableViewRowWithCompassDelegate = protocol<SiteCommonInfoDelegate, CompassViewDelegate>
+public typealias TableViewRowWithOutCompassDataSource = protocol<SiteCommonInfoDataSource, DirectionDisplayable>
+public typealias TableViewRowWithOutCompassDelegate = protocol<SiteCommonInfoDelegate>
 
-public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, SiteCommonInfoDelegate, CompassViewDataSource, CompassViewDelegate {
-    public var lastReadingLabel: String
+
+public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisplayable, SiteCommonInfoDelegate, CompassViewDataSource, CompassViewDelegate {
+    //public var lastReadingLabel: String
+    public var lastReadingDate: NSDate
     public var batteryLabel: String
     public var rawHidden: Bool
     public var rawLabel: String
@@ -80,7 +86,8 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, SiteCommonInf
         
         
         var deltaString: String?
-        var lastReadingString: String?
+        //var lastReadingString: String?
+        var lastReadingDate: NSDate?
         var sgvString: String?
         var rawString: String?
         var batteryString: String?
@@ -99,8 +106,8 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, SiteCommonInf
             
             
             
-            lastReadingString = latestSgv.date.description
-            
+            //lastReadingString = latestSgv.date.description
+            lastReadingDate = latestSgv.date
             
             
             sgvString = "\(latestSgv.mgdl.formattedForMgdl)"
@@ -160,7 +167,8 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, SiteCommonInf
         
         
         
-        self.lastReadingLabel = lastReadingString ?? PlaceHolderStrings.date
+        // self.lastReadingLabel = lastReadingString ?? PlaceHolderStrings.date
+        self.lastReadingDate = lastReadingDate ?? NSDate(timeIntervalSince1970: AppConfiguration.Constant.knownMilliseconds)
         self.lastReadingColor = lastReadingColorVar?.colorValue ?? PlaceHolderStrings.defaultColor.colorValue
         
         self.rawLabel = rawString ?? PlaceHolderStrings.raw
