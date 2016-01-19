@@ -31,20 +31,22 @@
         <!--Glance Interface Controller-->
         <scene sceneID="wuB-EA-A1f">
             <objects>
-                <glanceController topTemplateType="body3" bottomTemplateType="groupBody1Footer" id="4Ca-bw-TAk" customClass="GlanceController" customModule="Nightscouter_Watch_App_Extension">
+                <glanceController topTemplateType="body2Body1" bottomTemplateType="extraLargeBody2Body1Footer" id="4Ca-bw-TAk" customClass="GlanceController" customModule="Nightscouter_Watch_App_Extension">
                     <items>
-                        <label alignment="left" text="120 -" id="alV-KU-BfD"/>
-                        <group alignment="left" id="z2z-Nn-MRP">
-                            <items>
-                                <imageView height="1" alignment="left" id="2BW-GX-agB"/>
-                            </items>
-                        </group>
-                        <label alignment="left" text="Label" id="JCw-Gi-Uq4"/>
-                        <label alignment="left" text="Footer" id="OmJ-x4-y6r"/>
+                        <label alignment="left" text="-------" id="k8s-mj-CGD"/>
+                        <label alignment="left" text="---" id="H8n-N2-cVI"/>
+                        <label alignment="left" text="---" id="tul-nT-2Ax"/>
+                        <label alignment="left" text="---" id="d2f-mJ-Njt"/>
+                        <label alignment="left" text="--- : ---" id="l6M-i2-iNv"/>
+                        <label alignment="left" text="--%" id="zvE-Wj-UXV"/>
                     </items>
                     <connections>
-                        <outlet property="compassGroup" destination="z2z-Nn-MRP" id="4co-tm-bY8"/>
-                        <outlet property="compassImage" destination="2BW-GX-agB" id="0uK-Tj-dUe"/>
+                        <outlet property="batteryLabel" destination="zvE-Wj-UXV" id="mGS-q3-Jbr"/>
+                        <outlet property="lastUpdateLabel" destination="H8n-N2-cVI" id="dVb-xn-70k"/>
+                        <outlet property="siteDeltaLabel" destination="d2f-mJ-Njt" id="E9x-l9-yBF"/>
+                        <outlet property="siteNameLabel" destination="k8s-mj-CGD" id="s2p-FO-otA"/>
+                        <outlet property="siteRawLabel" destination="l6M-i2-iNv" id="n72-UG-ov4"/>
+                        <outlet property="siteSgvLabel" destination="tul-nT-2Ax" id="eLD-Sh-geV"/>
                     </connections>
                 </glanceController>
             </objects>

@@ -11,92 +11,86 @@ import Foundation
 import NightscouterWatchKit
 
 class GlanceController: WKInterfaceController {
-
-    @IBOutlet var compassGroup: WKInterfaceGroup!
-    @IBOutlet var detailGroup: WKInterfaceGroup!
-    @IBOutlet var lastUpdateLabel: WKInterfaceLabel!
-    @IBOutlet var lastUpdateHeader: WKInterfaceLabel!
-    @IBOutlet var batteryLabel: WKInterfaceLabel!
-    @IBOutlet var batteryHeader: WKInterfaceLabel!
-    @IBOutlet var compassImage: WKInterfaceImage!
-    @IBOutlet var siteUpdateTimer: WKInterfaceTimer!
     
+    @IBOutlet var lastUpdateLabel: WKInterfaceLabel!
+    @IBOutlet var batteryLabel: WKInterfaceLabel!
+    @IBOutlet var siteDeltaLabel: WKInterfaceLabel!
+    @IBOutlet var siteRawLabel: WKInterfaceLabel!
+    @IBOutlet var siteNameLabel: WKInterfaceLabel!
+    
+    @IBOutlet var siteSgvLabel: WKInterfaceLabel!
     var site: Site? {
         didSet {
             self.configureView()
         }
     }
-
+    
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
-        
         // Configure interface objects here.
         self.configureView()
     }
-
+    
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
     }
-
+    
     override func didDeactivate() {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
     }
-
+    
     func configureView() {
-        
         guard let site = self.site, dataSource = SiteSummaryModelViewModel(withSite: site) else {
-            let image = NSAssetKitWatchOS.imageOfWatchFace()
-            compassImage.setImage(image)
-            compassImage.setAlpha(0.5)
-            
             return
         }
         
-        let compassAlpha: CGFloat = dataSource.lookStale ? 0.5 : 1.0
-        //let timerHidden: Bool = dataSource.lookStale
-        let image = self.createImage(dataSource, delegate: dataSource, frame: calculateFrameForImage())
-        
         NSOperationQueue.mainQueue().addOperationWithBlock {
             
-            self.setTitle(dataSource.nameLabel)
+            let dateString = NSCalendar.autoupdatingCurrentCalendar().stringRepresentationOfElapsedTimeSinceNow(dataSource.lastReadingDate)
             
-            // Compass Image
-            self.compassImage.setAlpha(compassAlpha)
-            self.compassImage.setImage(image)
+            let lastUpdateHeader = "LR"
+            let formattedLastUpdateString = self.getFormattedStringWithHeaderFor(dateString, textColor: dataSource.lastReadingColor, textHeader: lastUpdateHeader)
+        
+            let rawHeader = "R"
+            let formattedRaw = self.getFormattedStringWithHeaderFor(dataSource.rawLabel, textColor: dataSource.rawColor, textHeader: rawHeader)
+        
+            let batteryHeader = "B"
+            let formattedBattery = self.getFormattedStringWithHeaderFor(dataSource.batteryLabel, textColor: dataSource.batteryColor, textHeader: batteryHeader)
             
             // Battery label
-            self.batteryLabel.setText(dataSource.batteryLabel)
-            self.batteryLabel.setTextColor(dataSource.batteryColor)
+            self.batteryLabel.setAttributedText(formattedBattery)
             
-            // Last reading label
-            self.lastUpdateLabel.setText(PlaceHolderStrings.date)
-            self.lastUpdateLabel.setTextColor(PlaceHolderStrings.defaultColor.colorValue)
-            self.lastUpdateLabel.setHidden(true)
+            self.lastUpdateLabel.setAttributedText(formattedLastUpdateString)
             
-            self.siteUpdateTimer.setDate(dataSource.lastReadingDate)
-            self.siteUpdateTimer.setTextColor(dataSource.lastReadingColor)
-            self.siteUpdateTimer.setHidden(false)
+            self.siteDeltaLabel.setText(dataSource.deltaLabel)
+            self.siteDeltaLabel.setTextColor(dataSource.deltaColor)
+            self.siteNameLabel.setText(dataSource.nameLabel)
+            
+            let sgvString = dataSource.sgvLabel + " " + dataSource.direction.emojiForDirection
+            self.siteSgvLabel.setText(sgvString)
+            self.siteSgvLabel.setTextColor(dataSource.sgvColor)
+            
+            // Raw data
+            self.siteRawLabel.setAttributedText(formattedRaw)
+            self.siteRawLabel.setHidden(dataSource.rawHidden)
         }
         
     }
     
-    func calculateFrameForImage() -> CGRect {
-        let frame = self.contentFrame
-        let smallest = min(min(frame.height, frame.width), 134)
-        let groupFrame = CGRect(x: 0, y: 0, width: smallest, height: smallest)
+    func getFormattedStringWithHeaderFor(textValue: String, textColor: UIColor, textHeader: String) -> NSAttributedString {
+        let headerFontDict = [NSFontAttributeName: UIFont.boldSystemFontOfSize(8)]
         
-        return groupFrame
+        let headerString = NSMutableAttributedString(string: textHeader, attributes: headerFontDict)
+        
+        headerString.addAttribute(NSForegroundColorAttributeName, value: UIColor(white: 1.0, alpha: 0.5), range: NSRange(location:0,length:textHeader.characters.count))
+        
+        let valueString = NSMutableAttributedString(string: textValue)
+        valueString.addAttribute(NSForegroundColorAttributeName, value: textColor, range: NSRange(location:0,length:textValue.characters.count))
+        
+        headerString.appendAttributedString(valueString)
+        
+        return headerString
     }
-    
-    func createImage(dataSource:CompassViewDataSource, delegate:CompassViewDelegate, frame: CGRect) -> UIImage {
-        let sgvColor = delegate.sgvColor
-        let rawColor = delegate.rawColor
-        
-        let image = NSAssetKitWatchOS.imageOfWatchFace(arrowTintColor: sgvColor, rawColor: rawColor, isDoubleUp: dataSource.direction.isDoubleRingVisible , isArrowVisible: dataSource.direction.isArrowVisible, isRawEnabled: dataSource.rawHidden, deltaString: dataSource.deltaLabel, sgvString: dataSource.sgvLabel, rawString: dataSource.rawLabel, angle: CGFloat(dataSource.direction.angleForCompass) , watchFrame: frame)
-        
-        return image
-    }
-
 }
