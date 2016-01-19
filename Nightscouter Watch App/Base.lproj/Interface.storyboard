@@ -19,21 +19,21 @@
                     </connections>
                 </notificationController>
             </objects>
-            <point key="canvasLocation" x="220" y="643"/>
+            <point key="canvasLocation" x="220" y="697"/>
         </scene>
         <!--Notification Controller-->
         <scene sceneID="ZPc-GJ-vnh">
             <objects>
                 <controller id="4sK-HA-Art" customClass="NotificationController" customModule="Nightscouter_Watch_App" customModuleProvider="target"/>
             </objects>
-            <point key="canvasLocation" x="468" y="643"/>
+            <point key="canvasLocation" x="468" y="697"/>
         </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="wuB-EA-A1f">
             <objects>
                 <glanceController topTemplateType="body2Body1" bottomTemplateType="extraLargeBody2Body1Footer" id="4Ca-bw-TAk" customClass="GlanceController" customModule="Nightscouter_Watch_App_Extension">
                     <items>
-                        <label alignment="left" text="-------" id="k8s-mj-CGD"/>
+                        <label alignment="left" text="Nightscouter" id="k8s-mj-CGD"/>
                         <label alignment="left" text="---" id="H8n-N2-cVI"/>
                         <label alignment="left" text="---" id="tul-nT-2Ax"/>
                         <label alignment="left" text="---" id="d2f-mJ-Njt"/>
@@ -50,7 +50,7 @@
                     </connections>
                 </glanceController>
             </objects>
-            <point key="canvasLocation" x="763" y="362"/>
+            <point key="canvasLocation" x="220" y="435"/>
         </scene>
         <!--Nightscouter-->
         <scene sceneID="o9p-CN-OBn">
@@ -171,7 +171,7 @@
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="403" y="129"/>
+            <point key="canvasLocation" x="220" y="175"/>
         </scene>
         <!--SiteDetail-->
         <scene sceneID="BvE-GE-ZIc">
@@ -241,7 +241,7 @@
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="403" y="362"/>
+            <point key="canvasLocation" x="468" y="182.5"/>
         </scene>
     </scenes>
 </document>
