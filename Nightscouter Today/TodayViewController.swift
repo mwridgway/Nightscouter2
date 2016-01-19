@@ -10,7 +10,7 @@ import UIKit
 import NotificationCenter
 import NightscouterKit
 
-class TodayViewController: UITableViewController, NCWidgetProviding {
+class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSourceProvider {
     
     struct TableViewConstants {
         static let baseRowCount = 2
@@ -22,7 +22,7 @@ class TodayViewController: UITableViewController, NCWidgetProviding {
         }
     }
     
-    var sites:[Site] = [Site]()
+    var sites: [Site] = SitesDataSource().sites
     
     // Whenever this changes, it updates the attributed title of the refresh control.
     var lastUpdatedTime: NSDate?

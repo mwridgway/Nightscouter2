@@ -22,7 +22,7 @@ import NightscouterKit
 class ModelController: NSObject, UIPageViewControllerDataSource {
 
     var sites: [Site]
-    var currentIndex: Int = 0
+    var currentIndex: Int
     
     init(sites: [Site], currentIndex: Int) {
         self.sites = sites
