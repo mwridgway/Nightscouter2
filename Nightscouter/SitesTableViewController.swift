@@ -9,16 +9,16 @@
 import UIKit
 import NightscouterKit
 
+public enum StoryboardIdentifier: String {
+    case FormViewController, SitesTableViewController, SiteListPageViewController
+}
+
 class SitesTableViewController: UITableViewController, SitesDataSourceProvider, SegueHandlerType {
     
     struct CellIdentifier {
         static let SiteTableViewStyleLarge = "siteCellLarge"
     }
 
-    enum StoryboardIdentifier: String {
-        case FormViewController
-    }
-    
     enum SegueIdentifier: String {
         case EditExisting, ShowDetail, AddNew, AddNewWhenEmpty, LaunchLabs, ShowPageView, UnwindToSiteList
     }

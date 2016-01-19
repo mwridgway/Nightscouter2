@@ -41,6 +41,80 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    
+    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
+            print("Recieved URL: \(url) with options: \(options)")
+        #endif
+        let schemes = supportedSchemes!
+        if (!schemes.contains((url.scheme))) { // If the incoming scheme is not contained within the array of supported schemes return false.
+            return false
+        }
+        
+        // We now have an acceptable scheme. Pass the URL to the deep linking handler.
+        deepLinkToURL(url)
+        
+        return true
+    }
 
 }
 
+extension AppDelegate {
+    
+    func deepLinkToURL(url: NSURL) {
+        // Maybe this can be expanded to handle icomming messages from remote or local notifications.
+        if let pathComponents = url.pathComponents {
+            
+            if let queryItems = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)?.queryItems {
+                #if DEBUG
+                    print("queryItems: \(queryItems)") // Not handling queries at that moment, but might want to.
+                #endif
+            }
+            
+            if let navController = self.window?.rootViewController as? UINavigationController { // Get the root view controller's navigation controller.
+                navController.popToRootViewControllerAnimated(false) // Return to root viewcontroller without animation.
+                let storyboard = self.window?.rootViewController?.storyboard // Grab the storyboard from the rootview.
+                var viewControllers = navController.viewControllers // Grab all the current view controllers in the stack.
+                for stringID in pathComponents { // iterate through all the path components. Currently the app only has one level of deep linking.
+                    if let stor = StoryboardIdentifier(rawValue: stringID) { // Attempt to create a storyboard identifier out of the string.
+                        let linkIsAllowed = true //Constants.StoryboardViewControllerIdentifier.deepLinkableStoryboards.contains(stor) // Check to see if this is an allowed viewcontroller.
+                        if linkIsAllowed {
+                            let newViewController = storyboard!.instantiateViewControllerWithIdentifier(stringID)
+                            
+                            switch (stor) {
+                            case .SiteListPageViewController:
+                                viewControllers.append(newViewController) // Create the view controller and append it to the navigation view controller stack
+                            case .FormViewController:
+                                navController.presentViewController(newViewController, animated: false, completion: { () -> Void in
+                                    // ...
+                                })
+                            default:
+                                viewControllers.append(newViewController) // Create the view controller and append it to the navigation view controller stack
+                            }
+                        }
+                    }
+                }
+                navController.viewControllers = viewControllers // Apply the updated list of view controller to the current navigation controller.
+            }
+        }
+    }
+
+    var supportedSchemes: [String]? {
+        if let info = NSBundle.mainBundle().infoDictionary as [String : AnyObject]? {
+            var schemes = [String]() // Create an empty array we can later set append available schemes.
+            if let bundleURLTypes = info["CFBundleURLTypes"] as? [AnyObject] {
+                for (index, _) in bundleURLTypes.enumerate() {
+                    if let urlTypeDictionary = bundleURLTypes[index] as? [String : AnyObject] {
+                        if let urlScheme = urlTypeDictionary["CFBundleURLSchemes"] as? [String] {
+                            schemes += urlScheme // We've found the supported schemes appending to the array.
+                            return schemes
+                        }
+                    }
+                }
+            }
+        }
+        return nil
+    }
+
+}
