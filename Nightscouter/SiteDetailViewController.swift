@@ -12,16 +12,16 @@ import NightscouterKit
 class SiteDetailViewController: UIViewController, UIWebViewDelegate {
     
     // MARK: IBOutlets
-    @IBOutlet weak var siteCompassControl: CompassControl?
-    @IBOutlet weak var siteLastReadingHeader: UILabel?
-    @IBOutlet weak var siteLastReadingLabel: UILabel?
-    @IBOutlet weak var siteBatteryHeader: UILabel?
-    @IBOutlet weak var siteBatteryLabel: UILabel?
-    @IBOutlet weak var siteRawHeader: UILabel?
-    @IBOutlet weak var siteRawLabel: UILabel?
-    @IBOutlet weak var siteNameLabel: UILabel?
-    @IBOutlet weak var siteWebView: UIWebView?
-    @IBOutlet weak var siteActivityView: UIActivityIndicatorView?
+    @IBOutlet weak private var siteCompassControl: CompassControl?
+    @IBOutlet weak private var siteLastReadingHeader: UILabel?
+    @IBOutlet weak private var siteLastReadingLabel: UILabel?
+    @IBOutlet weak private var siteBatteryHeader: UILabel?
+    @IBOutlet weak private var siteBatteryLabel: UILabel?
+    @IBOutlet weak private var siteRawHeader: UILabel?
+    @IBOutlet weak private var siteRawLabel: UILabel?
+    @IBOutlet weak private var siteNameLabel: UILabel?
+    @IBOutlet weak private var siteWebView: UIWebView?
+    @IBOutlet weak private var siteActivityView: UIActivityIndicatorView?
     
     // MARK: Properties
     var site: Site? {
@@ -141,7 +141,6 @@ extension SiteDetailViewController {
         if let site = self.site {
             //            site.overrideScreenLock = shouldOverride
             
-            
             //            AppDataManageriOS.sharedInstance.shouldDisableIdleTimer = site.overrideScreenLock
             //            AppDataManageriOS.sharedInstance.updateSite(site)
             UIApplication.sharedApplication().idleTimerDisabled = site.overrideScreenLock
@@ -197,8 +196,6 @@ extension SiteDetailViewController {
         
         self.view.window?.tintColor = nil
         
-        // Resolving Incident with Identifier: 1169918A-77AC-4D15-8610-E62C1D74E386
-        // Crash in UIPopoverPresentationController
         if let popoverController = alertController.popoverPresentationController {
             popoverController.barButtonItem = sender
         }

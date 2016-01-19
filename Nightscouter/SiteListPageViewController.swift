@@ -9,16 +9,16 @@
 import UIKit
 import NightscouterKit
 
-class SiteListPageViewController: UIViewController, UIPageViewControllerDelegate {
+class SiteListPageViewController: UIViewController, SitesDataSourceProvider, UIPageViewControllerDelegate {
+
+    @IBOutlet weak private var goToListButton: UIButton!
+    @IBOutlet weak private var pageControl: UIPageControl!
     
     var pageViewController: UIPageViewController?
     
     var sites: [Site] = SitesDataSource().sites
-    
-    var currentIndex: Int = 0
-    
-    @IBOutlet weak var goToListButton: UIButton!
-    @IBOutlet weak var pageControl: UIPageControl!
+    var lastViewedSiteIndex: Int = 0
+    var milliseconds: Double = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +28,7 @@ class SiteListPageViewController: UIViewController, UIPageViewControllerDelegate
         pageViewController!.delegate = self        
 
 
-        let startingViewController: SiteDetailViewController = self.modelController.viewControllerAtIndex(currentIndex, storyboard: self.storyboard!)!
+        let startingViewController: SiteDetailViewController = self.modelController.viewControllerAtIndex(lastViewedSiteIndex, storyboard: self.storyboard!)!
         let viewControllers = [startingViewController]
         pageViewController!.setViewControllers(viewControllers, direction: .Forward, animated: false, completion: {done in })
         pageViewController!.dataSource = self.modelController
@@ -72,7 +72,7 @@ class SiteListPageViewController: UIViewController, UIPageViewControllerDelegate
         // Return the model controller object, creating it if necessary.
         // In more complex implementations, the model controller may be passed to the view controller.
         if _modelController == nil {
-            _modelController = ModelController(sites: sites,currentIndex: currentIndex)
+            _modelController = ModelController(sites: sites, currentIndex: lastViewedSiteIndex)
         }
         return _modelController!
     }

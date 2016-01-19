@@ -9,6 +9,16 @@
 import Foundation
 public protocol SitesDataSourceProvider: Dateable {
     var sites: [Site] { get }
+    var lastViewedSiteIndex: Int { get }
+}
+
+extension SitesDataSourceProvider {
+    public var milliseconds: Double {
+        return 1168583640000
+    }
+    public var lastViewedSiteIndex: Int {
+        return 0
+    }
 }
 
 public class SitesDataSource: SitesDataSourceProvider{
@@ -30,9 +40,10 @@ public class SitesDataSource: SitesDataSourceProvider{
         s3.deviceStatus.append(de)
         
         return [s1, s2]
-        
     }
-    public var milliseconds: Double = AppConfiguration.Constant.knownMilliseconds
+    
+    // public var lastViewedSiteIndex = 0
+    //public var milliseconds: Double = AppConfiguration.Constant.knownMilliseconds
     
     public init(){
         

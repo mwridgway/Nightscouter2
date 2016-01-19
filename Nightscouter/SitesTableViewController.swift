@@ -9,25 +9,25 @@
 import UIKit
 import NightscouterKit
 
-
-public struct CellIdentifiers {
-    public static let SiteTableViewStyleLarge = "siteCellLarge"
-}
-
 class SitesTableViewController: UITableViewController, SitesDataSourceProvider, SegueHandlerType {
     
+    struct CellIdentifier {
+        static let SiteTableViewStyleLarge = "siteCellLarge"
+    }
+
+    enum StoryboardIdentifier: String {
+        case FormViewController
+    }
     
     enum SegueIdentifier: String {
         case EditExisting, ShowDetail, AddNew, AddNewWhenEmpty, LaunchLabs, ShowPageView, UnwindToSiteList
     }
     
-    
     var sites: [Site] = SitesDataSource().sites
-    
     var milliseconds: Double = 0 {
         didSet{
             let str = String(stringInterpolation:LocalizedString.lastUpdatedDateLabel.localized, AppConfiguration.lastUpdatedDateFormatter.stringFromDate(date))
-            self.refreshControl?.attributedTitle = NSAttributedString(string:str, attributes: [NSForegroundColorAttributeName:UIColor.whiteColor()])
+            self.refreshControl?.attributedTitle = NSAttributedString(string:str, attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
         }
     }
     
@@ -47,8 +47,6 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        
-        milliseconds = AppConfiguration.Constant.knownMilliseconds
         // Common setup.
         configureView()
     }
@@ -83,7 +81,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifiers.SiteTableViewStyleLarge, forIndexPath: indexPath) as! SiteTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier.SiteTableViewStyleLarge, forIndexPath: indexPath) as! SiteTableViewCell
         
         let model = SiteSummaryModelViewModel(withSite: sites[indexPath.row])
         cell.configure(withDataSource: model!, delegate: model!)
@@ -161,67 +159,63 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
-            switch segueIdentifierForSegue(segue) {
-                
-            case .EditExisting:
-                #if DEBUG
-                    print("Editing existing site", terminator: "")
-                #endif
-                editing = false
-                let siteDetailViewController = segue.destinationViewController as! FormViewController
-                // Get the cell that generated this segue.
-                if let selectedSiteCell = sender as? UITableViewCell {
-                    let indexPath = tableView.indexPathForCell(selectedSiteCell)!
-                    let selectedSite = sites[indexPath.row]
-                    siteDetailViewController.site = selectedSite
-                }
-                
-            case .AddNew:
-                #if DEBUG
-                    print("Adding new site", terminator: "")
-                #endif
-                self.setEditing(false, animated: true)
-                
-            case .AddNewWhenEmpty:
-                #if DEBUG
-                    print("Adding new site when empty", terminator: "")
-                #endif
-                self.setEditing(false, animated: true)
-                return
-                
-            case .ShowDetail:
-                let siteDetailViewController = segue.destinationViewController as! SiteDetailViewController
-                // Get the cell that generated this segue.
-                if let selectedSiteCell = sender as? UITableViewCell {
-                    let indexPath = tableView.indexPathForCell(selectedSiteCell)!
-                    let selectedSite = sites[indexPath.row]
-                    siteDetailViewController.site = selectedSite
-                }
-                
-            case .ShowPageView:
-                // let siteListPageViewController = segue.destinationViewController as! SiteListPageViewController
-                // Get the cell that generated this segue.
-                if let selectedSiteCell = sender as? UITableViewCell {
-                    let indexPath = tableView.indexPathForCell(selectedSiteCell)!
-//                    AppDataManageriOS.sharedInstance.currentSiteIndex = indexPath.row
-                }
-                
-                if let incomingSite = sender as? Site{
-                    if let indexOfSite = sites.indexOf(incomingSite) {
-//                        AppDataManageriOS.sharedInstance.currentSiteIndex = indexOfSite
-                    }
-                }
-                
-            default:
-                #if DEBUG
-                    print("Unhandled segue idendifier: \(segue.identifier)", terminator: "")
-                #endif
+        switch segueIdentifierForSegue(segue) {
+            
+        case .EditExisting:
+            #if DEBUG
+                print("Editing existing site", terminator: "")
+            #endif
+            editing = false
+            let siteDetailViewController = segue.destinationViewController as! FormViewController
+            // Get the cell that generated this segue.
+            if let selectedSiteCell = sender as? UITableViewCell {
+                let indexPath = tableView.indexPathForCell(selectedSiteCell)!
+                let selectedSite = sites[indexPath.row]
+                siteDetailViewController.site = selectedSite
             }
-        
-        
+            
+        case .AddNew:
+            #if DEBUG
+                print("Adding new site", terminator: "")
+            #endif
+            self.setEditing(false, animated: true)
+            
+        case .AddNewWhenEmpty:
+            #if DEBUG
+                print("Adding new site when empty", terminator: "")
+            #endif
+            self.setEditing(false, animated: true)
+            return
+            
+        case .ShowDetail:
+            let siteDetailViewController = segue.destinationViewController as! SiteDetailViewController
+            // Get the cell that generated this segue.
+            if let selectedSiteCell = sender as? UITableViewCell {
+                let indexPath = tableView.indexPathForCell(selectedSiteCell)!
+                let selectedSite = sites[indexPath.row]
+                siteDetailViewController.site = selectedSite
+            }
+            
+        case .ShowPageView:
+            // let siteListPageViewController = segue.destinationViewController as! SiteListPageViewController
+            // Get the cell that generated this segue.
+            if let selectedSiteCell = sender as? UITableViewCell {
+                let indexPath = tableView.indexPathForCell(selectedSiteCell)!
+                // AppDataManageriOS.sharedInstance.currentSiteIndex = indexPath.row
+            }
+            
+            if let incomingSite = sender as? Site{
+                if let indexOfSite = sites.indexOf(incomingSite) {
+                    // AppDataManageriOS.sharedInstance.currentSiteIndex = indexOfSite
+                }
+            }
+            
+        default:
+            #if DEBUG
+                print("Unhandled segue idendifier: \(segue.identifier)", terminator: "")
+            #endif
+        }
     }
-
-    
     
     // MARK: Interface Builder Actions
     
@@ -249,7 +243,6 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         // Make sure the idle screen timer is turned back to normal. Screen will time out.
         //AppDataManageriOS.sharedInstance.shouldDisableIdleTimer = false
         UIApplication.sharedApplication().idleTimerDisabled = false
-        
     }
     
     func updateData(){
@@ -259,26 +252,26 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
                 refreshControl?.beginRefreshing()
                 tableView.setContentOffset(CGPointMake(0, tableView.contentOffset.y-refreshControl!.frame.size.height), animated: true)
             }
-            //            for (index, site) in sites.enumerate() {
-            //                refreshDataFor(site, index: index)
-            //            }
-            refreshControl?.endRefreshing()
-            
-        } else {
+            // for (index, site) in sites.enumerate() {
+            //  refreshDataFor(site, index: index)
+            // }
+            // refreshControl?.endRefreshing()
+        }
+        
+        defer {
             // No data in the sites array. Cancel the refreshing!
             refreshControl?.endRefreshing()
         }
     }
     
-    
     func shouldIShowNewSiteForm() {
         // If the sites array is empty show a vesion of the form that does not allow escape.
         if sites.isEmpty{
-            // let vc = storyboard?.instantiateViewControllerWithIdentifier(Constants.StoryboardViewControllerIdentifier.SiteFormViewController.rawValue) as! SiteFormViewController
-            //self.parentViewController!.presentViewController(vc, animated: true, completion: { () -> Void in
-            // println("Finished presenting SiteFormViewController.")
-            
-            // })
+            let vc = storyboard?.instantiateViewControllerWithIdentifier(StoryboardIdentifier.FormViewController.rawValue) as! FormViewController
+            self.parentViewController!.presentViewController(vc, animated: true, completion: { () -> Void in
+                print("Finished presenting SiteFormViewController.")
+                
+            })
         }
     }
     
@@ -304,9 +297,9 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         
         let editAction = UIAlertAction(title: LocalizedString.generalEditLabel.localized, style: .Default) { (action) in
             let indexPath = NSIndexPath(forRow: index, inSection: 0)
-            //let tableViewCell = self.tableView.cellForRowAtIndexPath(indexPath)
+            let tableViewCell = self.tableView.cellForRowAtIndexPath(indexPath)
             self.accessoryIndexPath = indexPath
-//            self.performSegueWithIdentifier(Constants.SegueIdentifier.EditSite.rawValue, sender:tableViewCell)
+            self.performSegueWithIdentifier(SegueIdentifier.EditExisting.rawValue, sender:tableViewCell)
         }
         alertController.addAction(editAction)
         
