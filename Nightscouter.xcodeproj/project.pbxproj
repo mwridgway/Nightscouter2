@@ -349,7 +349,7 @@
 				1735808C1C44367F00E893DB /* Shared Resources */,
 				173580781C44359B00E893DB /* Nightscouter iOS App */,
 				1742F0391C457ED6008DED3F /* Nightscouter Watch App */,
-				1735808B1C44367F00E893DB /* Shared ListerKit Framework Code */,
+				1735808B1C44367F00E893DB /* Shared Framework Code */,
 				173580671C44357D00E893DB /* Frameworks */,
 				1735804E1C44354200E893DB /* Products */,
 				D48357883675903BBCE9EE44 /* Pods */,
@@ -432,7 +432,7 @@
 			path = NightscouterKit;
 			sourceTree = "<group>";
 		};
-		1735808B1C44367F00E893DB /* Shared ListerKit Framework Code */ = {
+		1735808B1C44367F00E893DB /* Shared Framework Code */ = {
 			isa = PBXGroup;
 			children = (
 				173581231C44496700E893DB /* AppConfiguration.swift */,
@@ -444,7 +444,7 @@
 				177054941C4963C900302D83 /* Resources */,
 				177054931C4963B400302D83 /* ViewModels */,
 			);
-			name = "Shared ListerKit Framework Code";
+			name = "Shared Framework Code";
 			path = Common;
 			sourceTree = "<group>";
 		};
