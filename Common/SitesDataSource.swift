@@ -31,6 +31,6 @@ public class SitesDataSource: SitesDataSourceProvider{
     
     public static let sharedInstance = SitesDataSource()
     private init(){
-        sites = [Site(url: NSURL(string: "https://benscgm-dev.herokuapp.com")!, apiSecret: "benscgm1234surfcity")]
+        sites = [Site(url: NSURL(string: "https://benscgm-dev.herokuapp.com")!, apiSecret: "")]
     }
 }
