@@ -23,6 +23,11 @@ public struct PlaceHolderStrings {
     public static let defaultColor: DesiredColorState = .Neutral
 }
 
+public enum StoryboardIdentifier: String, RawRepresentable {
+    case FormViewController, SitesTableViewController, SiteListPageViewController, SiteDetailViewController
+    public static let allValues = [FormViewController, SitesTableViewController, SiteListPageViewController, SiteDetailViewController]
+}
+
 public class AppConfiguration {
 
     // MARK: Types

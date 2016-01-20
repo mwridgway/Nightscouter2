@@ -22,7 +22,9 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
         }
     }
     
-    var sites: [Site] = SitesDataSource().sites
+    var sites: [Site] {
+        return SitesDataSource.sharedInstance.sites
+    }
     
     // Whenever this changes, it updates the attributed title of the refresh control.
     var lastUpdatedTime: NSDate?
@@ -35,13 +37,15 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
         
         /*
         if let  sitesData = AppDataManageriOS.sharedInstance.defaults.dataForKey(DefaultKey.sitesArrayObjectsKey) {
-            if let sitesArray = NSKeyedUnarchiver.unarchiveObjectWithData(sitesData) as? [Site] {
-                sites = sitesArray
-            }
+        if let sitesArray = NSKeyedUnarchiver.unarchiveObjectWithData(sitesData) as? [Site] {
+        sites = sitesArray
+        }
         }
         */
         
-        sites = SitesDataSource().sites//AppDataManager.sharedInstance.sites
+        var sites: [Site] {
+            return SitesDataSource.sharedInstance.sites
+        }
         
         let itemCount = sites.isEmpty ? 1 : sites.count
         
@@ -94,10 +98,9 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
             let cell = tableView.dequeueReusableCellWithIdentifier(TableViewConstants.CellIdentifiers.content, forIndexPath: indexPath) as! SiteNSNowTableViewCell
             let site = sites[indexPath.row]
             
-//            contentCell.configureCell(site)
             let model = SiteSummaryModelViewModel(withSite: sites[indexPath.row])
-            cell.configure(withDataSource: model!, delegate: model!)
-
+            cell.configure(withDataSource: model, delegate: model)
+            
             if (lastUpdatedTime?.timeIntervalSinceNow > 60 || lastUpdatedTime == nil || site.configuration == nil) {
                 // No configuration was there... go get some.
                 // println("Attempting to get configuration data from site...")
@@ -130,33 +133,33 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
     func refreshDataFor(site: Site, index: Int){
         // Start up the API
         
-       /*
+        /*
         loadDataFor(site, index: index) { (returnedModel, returnedSite, returnedIndex, returnedError) -> Void in
-            
-            if let error = returnedError {
-                print("\(__FUNCTION__) ERROR recieved: \(error)")
-                
-            } else {
-                if let returnedSite = returnedSite, returnedIndex = returnedIndex {
-                    
-                    self.lastUpdatedTime = returnedSite.lastConnectedDate
-                    self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: returnedIndex, inSection: 0)], withRowAnimation: .Automatic)
-                    
-                    AppDataManageriOS.sharedInstance.updateSite(returnedSite)
-                }
-            }
+        
+        if let error = returnedError {
+        print("\(__FUNCTION__) ERROR recieved: \(error)")
+        
+        } else {
+        if let returnedSite = returnedSite, returnedIndex = returnedIndex {
+        
+        self.lastUpdatedTime = returnedSite.lastConnectedDate
+        self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: returnedIndex, inSection: 0)], withRowAnimation: .Automatic)
+        
+        AppDataManageriOS.sharedInstance.updateSite(returnedSite)
         }
-*/
+        }
+        }
+        */
     }
     
     func openApp(with indexPath: NSIndexPath) {
         if let context = extensionContext {
             
-//            let site = sites[indexPath.row], uuidString = site.uuid.UUIDString
-//            AppDataManageriOS.sharedInstance.currentSiteIndex = indexPath.row
+            let site = sites[indexPath.row], uuidString = site.uuid.UUIDString
+            //AppDataManageriOS.sharedInstance.currentSiteIndex = indexPath.row
             
-//            let url = NSURL(string: "nightscouter://link/\(Constants.StoryboardViewControllerIdentifier.SiteListPageViewController.rawValue)/\(uuidString)")
-//            context.openURL(url!, completionHandler: nil)
+            let url = NSURL(string: "nightscouter://link/\(StoryboardIdentifier.SiteListPageViewController.rawValue)/\(uuidString)")
+            context.openURL(url!, completionHandler: nil)
         }
     }
 }

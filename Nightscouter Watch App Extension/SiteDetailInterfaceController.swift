@@ -51,14 +51,16 @@ class SiteDetailInterfaceController: WKInterfaceController {
     
     func configureView() {
         
-        guard let site = self.site, dataSource = SiteSummaryModelViewModel(withSite: site) else {
+        guard let site = self.site else {
+            
+
             let image = NSAssetKitWatchOS.imageOfWatchFace()
             compassImage.setImage(image)
             compassImage.setAlpha(0.5)
             
             return
         }
-        
+        let dataSource = SiteSummaryModelViewModel(withSite: site)
         let compassAlpha: CGFloat = dataSource.lookStale ? 0.5 : 1.0
         //let timerHidden: Bool = dataSource.lookStale
         let image = self.createImage(dataSource, delegate: dataSource, frame: calculateFrameForImage())

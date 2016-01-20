@@ -42,9 +42,11 @@ class GlanceController: WKInterfaceController {
     }
     
     func configureView() {
-        guard let site = self.site, dataSource = SiteSummaryModelViewModel(withSite: site) else {
+        guard let site = self.site else {
             return
         }
+        
+        let  dataSource = SiteSummaryModelViewModel(withSite: site)
         
         NSOperationQueue.mainQueue().addOperationWithBlock {
             
