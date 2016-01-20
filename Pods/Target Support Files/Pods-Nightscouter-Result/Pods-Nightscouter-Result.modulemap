@@ -1,6 +1,0 @@
-framework module Result {
-  umbrella header "Pods-Nightscouter-Result-umbrella.h"
-
-  export *
-  module * { export * }
-}

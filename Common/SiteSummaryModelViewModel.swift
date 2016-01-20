@@ -130,7 +130,7 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
         var isStaleData: (warn: Bool, urgent: Bool) = (false, false)
         
         if let latestSgv = site.sgvs.first {
-            let thresholds: Threshold = settings.thresholds
+            let thresholds: Thresholds = settings.thresholds
             sgvColorVar = thresholds.desiredColorState(forValue: latestSgv.mgdl)
             
             lastReadingDate = latestSgv.date

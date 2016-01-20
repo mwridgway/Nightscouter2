@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		17292EC71C4FD6D400538D01 /* DictionaryRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17292EC61C4FD6D400538D01 /* DictionaryRepresentable.swift */; };
+		17292EC81C4FD6D400538D01 /* DictionaryRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17292EC61C4FD6D400538D01 /* DictionaryRepresentable.swift */; };
+		17292EC91C4FD6D400538D01 /* DictionaryRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17292EC61C4FD6D400538D01 /* DictionaryRepresentable.swift */; };
+		17292ECB1C4FD9B800538D01 /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17292ECA1C4FD9B800538D01 /* JSONParser.swift */; };
+		17292ECC1C4FD9B800538D01 /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17292ECA1C4FD9B800538D01 /* JSONParser.swift */; };
 		173580511C44354200E893DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173580501C44354200E893DB /* AppDelegate.swift */; };
 		173580561C44354200E893DB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 173580541C44354200E893DB /* Main.storyboard */; };
 		173580581C44354200E893DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 173580571C44354200E893DB /* Assets.xcassets */; };
@@ -200,6 +205,8 @@
 		0517B0CAAFBC5B79CC2C9081 /* Pods-Nightscouter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter/Pods-Nightscouter.release.xcconfig"; sourceTree = "<group>"; };
 		0BFD910FBCCE4AEC9AC07A53 /* Pods_Nightscouter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nightscouter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1723E48B1C46D5B600EB4C8F /* SitesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SitesTableViewController.swift; sourceTree = "<group>"; };
+		17292EC61C4FD6D400538D01 /* DictionaryRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DictionaryRepresentable.swift; path = "../../../Dropbox/Development/Nightscouter/Shared Framework Code/Protocols/DictionaryRepresentable.swift"; sourceTree = "<group>"; };
+		17292ECA1C4FD9B800538D01 /* JSONParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONParser.swift; sourceTree = "<group>"; };
 		1735804D1C44354200E893DB /* Nightscouter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nightscouter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		173580501C44354200E893DB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		173580551C44354200E893DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -435,6 +442,7 @@
 		1735808B1C44367F00E893DB /* Shared Framework Code */ = {
 			isa = PBXGroup;
 			children = (
+				17292ECA1C4FD9B800538D01 /* JSONParser.swift */,
 				173581231C44496700E893DB /* AppConfiguration.swift */,
 				1742F02E1C44A135008DED3F /* Site.swift */,
 				177054901C4963A200302D83 /* SitesDataSource.swift */,
@@ -444,7 +452,6 @@
 				177054941C4963C900302D83 /* Resources */,
 				177054931C4963B400302D83 /* ViewModels */,
 			);
-
 			name = "Shared Framework Code";
 			path = Common;
 			sourceTree = "<group>";
@@ -565,6 +572,7 @@
 		1742F02D1C4498B7008DED3F /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				17292EC61C4FD6D400538D01 /* DictionaryRepresentable.swift */,
 				176BE27F1C4979950040F1B7 /* Chartable.swift */,
 				1735811A1C443C6400E893DB /* Protocols.swift */,
 			);
@@ -1132,6 +1140,7 @@
 			files = (
 				177054861C495F7600302D83 /* SitesTableViewController.swift in Sources */,
 				176BE2761C496A330040F1B7 /* ModelController.swift in Sources */,
+				17292EC71C4FD6D400538D01 /* DictionaryRepresentable.swift in Sources */,
 				175DDBF31C48236C0083CC8C /* SiteTableViewCell.swift in Sources */,
 				1742F0431C45889D008DED3F /* FormViewController.swift in Sources */,
 				176BE27A1C496A3F0040F1B7 /* SiteListPageViewController.swift in Sources */,
@@ -1157,6 +1166,7 @@
 				1770545E1C489AD500302D83 /* SiteSummaryModelViewModel.swift in Sources */,
 				177054621C489BBF00302D83 /* Double+Extension.swift in Sources */,
 				1742F0401C458765008DED3F /* NSURL-Extensions.swift in Sources */,
+				17292ECB1C4FD9B800538D01 /* JSONParser.swift in Sources */,
 				176BE27E1C496E060040F1B7 /* SegueHandlerType.swift in Sources */,
 				173A0B7D1C4D25F5005B74FC /* SocketClient.swift in Sources */,
 				177054651C489BBF00302D83 /* UIColor+Extension.swift in Sources */,
@@ -1176,6 +1186,7 @@
 				176BE2801C4979950040F1B7 /* Chartable.swift in Sources */,
 				177054631C489BBF00302D83 /* NSCalendar+Extension.swift in Sources */,
 				1735811B1C443C6400E893DB /* Protocols.swift in Sources */,
+				17292EC81C4FD6D400538D01 /* DictionaryRepresentable.swift in Sources */,
 				1742F03D1C458475008DED3F /* NightscouterAssetKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1201,6 +1212,7 @@
 			files = (
 				1742F0311C44A173008DED3F /* Site.swift in Sources */,
 				173581191C443C3500E893DB /* SensorGlucoseValue.swift in Sources */,
+				17292EC91C4FD6D400538D01 /* DictionaryRepresentable.swift in Sources */,
 				177054921C4963A200302D83 /* SitesDataSource.swift in Sources */,
 				173F84F51C4D4D4100DCB47D /* NSAssetKitWatchOS.swift in Sources */,
 				1770548F1C49608400302D83 /* LocalizedStrings.swift in Sources */,
@@ -1212,6 +1224,7 @@
 				177054681C489BC000302D83 /* NSCalendar+Extension.swift in Sources */,
 				1770545F1C489AD500302D83 /* SiteSummaryModelViewModel.swift in Sources */,
 				177054691C489BC000302D83 /* String+Extensions.swift in Sources */,
+				17292ECC1C4FD9B800538D01 /* JSONParser.swift in Sources */,
 				1770546A1C489BC000302D83 /* UIColor+Extension.swift in Sources */,
 				176BE2811C4979950040F1B7 /* Chartable.swift in Sources */,
 				173581221C44459E00E893DB /* MeteredGlucoseValue.swift in Sources */,

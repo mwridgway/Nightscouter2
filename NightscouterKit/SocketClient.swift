@@ -10,6 +10,8 @@ import Foundation
 import Socket_IO_Client_Swift
 import SwiftyJSON
 import ReactiveCocoa
+import CryptoSwift
+import Alamofire
 
 public class NightscoutSocketIOClient {
     
@@ -21,19 +23,19 @@ public class NightscoutSocketIOClient {
     // TODO: Refactor out...
     private var site: Site?
     
-    private var apiSecret: String?
+    private var apiSecret: String
     private let socket: SocketIOClient
     private var authorizationJSON: AnyObject {
         // Turn the the authorization dictionary into a JSON object.
         
-        var json = JSON([SocketHeader.Client : JSON(SocketValue.ClientMobile), SocketHeader.Secret: JSON(apiSecret ?? "")])
+        var json = JSON([SocketHeader.Client : JSON(SocketValue.ClientMobile), SocketHeader.Secret: JSON(apiSecret.sha1())])
         
         return json.object
     }
     
     
     // API Secret is required for any site that is greater than 0.9.0 or better.
-    public init(url: NSURL, apiSecret: String? = nil) {
+    public init(url: NSURL, apiSecret: String = "") {
         
         self.url = url
         self.apiSecret = apiSecret
@@ -43,6 +45,7 @@ public class NightscoutSocketIOClient {
         
         // From ericmarkmartin... RAC integration
         self.signal = socket.rac_socketSignal()
+      
         
         // Listen to connect.
         socket.on(WebEvents.connect.rawValue) { data, ack in
@@ -71,114 +74,49 @@ extension NightscoutSocketIOClient {
             let json = JSON(data[0])
             
             if self.site == nil {
-                self.site = Site()
+                self.site = Site(url: self.url, apiSecret: self.apiSecret)
             }
             
-            if var site = self.site {
-                if let lastUpdated = json[JSONProperty.lastUpdated].double {
-                    // print(lastUpdated)
-                    site.milliseconds = lastUpdated
+            self.site?.milliseconds = NSDate().timeIntervalSince1970 * 1000
+            
+            var headers: [String: String] = ["Content-Type": "application/json"]
+            headers["api-secret"] = self.apiSecret.sha1()
+            let configurationURL = self.url.URLByAppendingPathComponent("api/v1/status").URLByAppendingPathExtension("json")
+            self.makeHTTPGetRequest(configurationURL, parameters: nil, headers:  headers, completetion: { (result) -> Void in
+                if let jsonDict = result.dictionaryObject {
+                    self.site?.parseJSONforConfiugration(JSON(jsonDict))
                 }
-                
-                if let uploaderBattery = json[JSONProperty.devicestatus][JSONProperty.uploaderBattery].int {
-                    site.deviceStatus.append(DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: 0))
-                }
-                
-                let deviceStatus = json[JSONProperty.devicestatus]
-                
-                for (_, subJson) in deviceStatus {
-                    print(subJson.description)
-                    if let mills = subJson[JSONProperty.mills].double {
-                        if let uploaderBattery = subJson[JSONProperty.uploader, JSONProperty.battery].int {
-                            site.deviceStatus.append(DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: mills))
-                        }
-                    }
-                }
-                
-                
-                let sgvs = json[JSONProperty.sgvs]
-                for (_, subJson) in sgvs {
-                    if let deviceString = subJson[JSONProperty.device].string, rssi = subJson[JSONProperty.rssi].int, unfiltered = subJson[JSONProperty.unfiltered].double, directionString = subJson[JSONProperty.direction].string, filtered = subJson[JSONProperty.filtered].double, noiseInt = subJson[JSONProperty.noise].int, mills = subJson[JSONProperty.mills].double, mgdl = subJson[JSONProperty.mgdl].double {
-                        
-                        let device = Device(rawValue: deviceString) ?? Device.Unknown
-                        let direction = Direction(rawValue: directionString) ?? Direction.None
-                        let noise = Noise(rawValue: noiseInt) ?? Noise()
-                        
-                        let sensorValue = SensorGlucoseValue(direction: direction, device: device, rssi: rssi, unfiltered: unfiltered, filtered: filtered, mgdl: mgdl, noise: noise, milliseconds: mills)
-                        
-                        
-                        site.sgvs.append(sensorValue)
-                        // print(sensorValue)
-                    }
-                }
-                
-                let mbgs = json[JSONProperty.mbgs]
-                for (_, subJson) in mbgs {
-                    if let deviceString = subJson[JSONProperty.device].string, mills = subJson[JSONProperty.mills].double, mgdl = subJson[JSONProperty.mgdl].double {
-                        let device = Device(rawValue: deviceString) ?? Device.Unknown
-                        
-                        let meter = MeteredGlucoseValue(milliseconds: mills, device: device, mgdl: mgdl)
-                        site.mbgs.append(meter)
-                        // print(meter)
-                    }
-                }
-                
-                let cals = json[JSONProperty.cals]
-                for (_, subJson) in cals {
-                    if let slope = subJson[JSONProperty.slope].double, intercept = subJson[JSONProperty.intercept].double, scale = subJson[JSONProperty.scale].double, mills = subJson[JSONProperty.mills].double {
-                        
-                        let calibration = Calibration(slope: slope, intercept: intercept, scale: scale, milliseconds: mills)
-                        
-                        site.cals.append(calibration)
-                        // print(calibration)
-                    }
-                }
-                // print(site)
-                
-                // makes sure things are sorted correctly by date. When delta's come in they might screw up the order.
-                site.sgvs = site.sgvs.sort{(item1:SensorGlucoseValue, item2:SensorGlucoseValue) -> Bool in
-                    item1.date.compare(item2.date) == NSComparisonResult.OrderedDescending
-                }
-                site.cals = site.cals.sort{(item1:Calibration, item2:Calibration) -> Bool in
-                    item1.date.compare(item2.date) == NSComparisonResult.OrderedDescending
-                }
-                site.mbgs = site.mbgs.sort{(item1:MeteredGlucoseValue, item2:MeteredGlucoseValue) -> Bool in
-                    item1.date.compare(item2.date) == NSComparisonResult.OrderedDescending
-                }
-                
-                self.site = site
-                return site
-                
-            }
+            })
+
+            self.site?.parseJSONforSocketData(json)
+            
             return self.site!
         }
     }
-}
+    
+    private func makeHTTPGetRequest (url: NSURL, parameters: [String: String]?, headers: [String: String]?, completetion:(result: JSON) -> Void) {
+        Alamofire.Manager.sharedInstance.request(.GET, url,  parameters: parameters, headers: headers)
+            /// Becuase Nightscout uses scientific notation in the json for some numbers. for example, intercept":-1.7976931348623157e+308, I can't use the json response handler. Instead I need to take the raw data, convert it to a string, remove the "+" and then create json.
+            .responseData { (response: Response<NSData, NSError>) -> Void in
+                switch response.result {
+                case .Success(let data):
+                    guard var stringVersion = NSString(data: data, encoding: NSUTF8StringEncoding) else {
+                        break
+                    }
+                    stringVersion = stringVersion.stringByReplacingOccurrencesOfString("+", withString: "")
+                    
+                    if let newData = stringVersion.dataUsingEncoding(NSUTF8StringEncoding) {
+                        let json = JSON(data: newData)
+                        completetion(result: json)
+                    }
+                case .Failure(let error):
+                    print(error)
+                    break
+        }
+        }
+    }
+        
 
-// All the JSON keys I saw when parsing the socket.io output for dataUpdate
-struct JSONProperty {
-    static let lastUpdated = "lastUpdated"
-    static let devicestatus = "devicestatus"
-    static let uploader = "uploader"
-    static let battery = "battery"
-    static let sgvs = "sgvs"
-    static let mbgs = "mbgs"
-    static let cals = "cals"
-    static let slope = "slope"
-    static let intercept = "intercept"
-    static let scale = "scale"
-    static let mills = "mills"
-    static let mgdl = "mgdl"
-    static let uploaderBattery = "uploaderBattery"
-    static let device = "device"
-    static let rssi = "rssi"
-    static let filtered = "filtered"
-    static let unfiltered = "unfiltered"
-    static let direction = "direction"
-    static let noise = "noise"
-    static let profiles = "profiles"
-    static let treatments = "treatments"
-    static let deltaCount = "delta"
 }
 
 public enum ClientNotifications: String {

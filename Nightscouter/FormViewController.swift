@@ -63,6 +63,8 @@ class FormViewController: UIViewController, UITextFieldDelegate, UINavigationCon
         if let site = site {
             navigationItem.title = site.url.host
             urlTextField.text   = site.url.absoluteString
+            
+            passwordTextField.text = site.apiSecret
         }
         
         checkValidSiteName()

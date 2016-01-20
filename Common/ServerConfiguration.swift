@@ -47,7 +47,7 @@ public struct ServerConfiguration: CustomStringConvertible {
         let alrm = Alarm(urgentHigh: true, urgentHighMins: [1,2,3], high: true, highMins: [1,2,3], low: true, lowMins: [1,2,3], urgentLow: true, urgentLowMins: [1,2,3], warnMins: [1,2,3])
         let timeAgo = TimeAgoAlert(warn: true, warnMins: 5, urgent: true, urgentMins: 10)
         let plugins: [ShowPlugins] = [ShowPlugins.delta, ShowPlugins.rawbg]
-        let thre = Threshold(bgHigh: 300, bgLow: 70, bgTargetBottom: 60, bgTargetTop: 250)
+        let thre = Thresholds(bgHigh: 300, bgLow: 70, bgTargetBottom: 60, bgTargetTop: 250)
         let atype = AlarmType.predict
         self.settings = Settings(units: .Mgdl, timeFormat: 12, nightMode: false, editMode: false, showRawbg: RawBGMode.Always, customTitle: "CustomTitle", theme: "color", alarms: alrm, timeAgo: timeAgo, scaleY: " ", language: "en", showPlugins: plugins, enable: plugins, thresholds: thre, baseURL: " ", alarmType: atype, heartbeat: 10)
 
@@ -120,7 +120,7 @@ public struct Settings: CustomStringConvertible {
     public let language: String
     public let showPlugins: [ShowPlugins]
     public let enable: [ShowPlugins]
-    public let thresholds: Threshold
+    public let thresholds: Thresholds
     public let baseURL: String
     public let alarmType: AlarmType
     public let heartbeat: Int
@@ -193,7 +193,7 @@ public enum RawBGMode: String, CustomStringConvertible {
     }
 }
 
-public struct Threshold: CustomStringConvertible {
+public struct Thresholds: CustomStringConvertible {
     public let bgHigh: Double
     public let bgLow: Double
     public let bgTargetBottom :Double
@@ -205,7 +205,7 @@ public struct Threshold: CustomStringConvertible {
     }
 }
 
-extension Threshold: ColorBoundable {
+extension Thresholds: ColorBoundable {
     public var bottom: Double { return self.bgLow }
     public var targetBottom: Double { return self.bgTargetBottom }
     public var targetTop: Double { return self.bgTargetTop }

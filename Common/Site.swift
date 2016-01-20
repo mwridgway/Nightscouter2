@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import CryptoSwift
 
 public struct Site: Dateable, CustomStringConvertible {
     public var configuration: ServerConfiguration?
@@ -83,11 +82,12 @@ extension Site {
     public var apiSecret: String? {
         set{
             // write to keychain
-            AppConfiguration.keychain[uuid.UUIDString] = newValue?.sha1()
+            AppConfiguration.keychain[uuid.UUIDString] = newValue
         }
         get{
             return AppConfiguration.keychain[uuid.UUIDString]
         }
+        
     }// SHA1 retrieved from keychain?
     
     public init(url: NSURL, apiSecret: String){
@@ -101,10 +101,20 @@ extension Site {
         self.apiSecret = apiSecret
     }
     
+    public init(url: NSURL, apiSecret: String, uuid: NSUUID){
+        self.configuration = nil
+        self.milliseconds = NSDate().timeIntervalSince1970.millisecond
+        self.url = url
+        self.overrideScreenLock = false
+        self.disabled = false
+        self.uuid = uuid
+        
+        self.apiSecret = apiSecret
+    }
 }
 
 extension Site {
-    func generateSummaryModelViewModel() -> SiteSummaryModelViewModel? {
+    public func generateSummaryModelViewModel() -> SiteSummaryModelViewModel {
         return SiteSummaryModelViewModel(withSite: self)
     }
 }

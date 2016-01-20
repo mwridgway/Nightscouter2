@@ -21,6 +21,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
     
     var sites: [Site] = [] {
         didSet{
+            
             self.configureView()
             
         }
@@ -34,6 +35,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         didSet{
             let str = String(stringInterpolation:LocalizedString.lastUpdatedDateLabel.localized, AppConfiguration.lastUpdatedDateFormatter.stringFromDate(date))
             self.refreshControl?.attributedTitle = NSAttributedString(string:str, attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
+            self.refreshControl?.endRefreshing()
         }
     }
     
@@ -63,8 +65,11 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         let site = SitesDataSource.sharedInstance.sites.first
        
         // TODO: REMOVE
-        let socketClient = NightscoutSocketIOClient(url: (site?.url)!, apiSecret: site?.apiSecret)
+        let socketClient = NightscoutSocketIOClient(url: (site?.url)!, apiSecret: site!.apiSecret!)
         socketClient.mapToJsonValues().observeNext { data in
+            
+            self.milliseconds = NSDate().timeIntervalSince1970 * 1000
+            
             if let siteIndex = self.sites.indexOf(data) {
                 self.sites[siteIndex] = data
                 let indexPath = NSIndexPath(forRow: siteIndex, inSection: 0)
@@ -72,7 +77,6 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             } else {
                 self.sites.append(data)
                 let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-
                 self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
             }
         }
@@ -107,7 +111,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         
         let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier.SiteTableViewStyleLarge, forIndexPath: indexPath) as! SiteTableViewCell
         
-        let model = SiteSummaryModelViewModel(withSite: sites[indexPath.row])
+        let model = sites[indexPath.row].generateSummaryModelViewModel()
         cell.configure(withDataSource: model, delegate: model)
         return cell
     }
