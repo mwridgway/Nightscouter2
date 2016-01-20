@@ -55,27 +55,4 @@ class SiteNSNowTableViewCell: UITableViewCell {
         siteNameLabel.text = dataSource.nameLabel
         siteColorBlockView.backgroundColor = delegate?.sgvColor
     }
-//
-//    override func prepareForReuse() {
-//        super.prepareForReuse()
-//        
-//        siteNameLabel.text = nil
-//        siteBatteryLabel.text = nil
-//        siteRawLabel.text = nil
-//        siteLastReadingLabel.text = nil
-//        siteColorBlockView.backgroundColor = colorForDesiredColorState(DesiredColorState.Neutral)
-//        
-//        siteSgvLabel.text = nil
-//        siteSgvLabel.textColor = Theme.Color.labelTextColor
-//        
-//        siteDirectionLabel.text = nil
-//        siteDirectionLabel.textColor = Theme.Color.labelTextColor
-//        
-//        siteLastReadingLabel.text = Constants.LocalizedString.tableViewCellLoading.localized
-//        siteLastReadingLabel.textColor = Theme.Color.labelTextColor
-//        
-//        siteRawHeader.hidden = false
-//        siteRawLabel.hidden = false
-//        siteRawLabel.textColor = Theme.Color.labelTextColor
-//    }
 }
