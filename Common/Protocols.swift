@@ -69,7 +69,7 @@ extension ColorBoundable {
 
 // TODO: Should this be here?
 public enum DesiredColorState: String, CustomStringConvertible {
-    case Alert, Warning, Positive, Neutral
+    case Alert, Warning, Positive, Neutral, Default
     
     public var description: String {
         return self.rawValue
@@ -156,7 +156,8 @@ public extension DesiredColorState {
         DesiredColorState.Neutral: AppColor(red: 0.851, green: 0.851, blue: 0.851, alpha: 1.000),
         DesiredColorState.Alert: AppColor(red: 1.000, green: 0.067, blue: 0.310, alpha: 1.000),
         DesiredColorState.Positive: AppColor(red: 0.016, green: 0.871, blue: 0.443, alpha: 1.000),
-        DesiredColorState.Warning: AppColor(red: 1.000, green: 0.902, blue: 0.125, alpha: 1.000)
+        DesiredColorState.Warning: AppColor(red: 1.000, green: 0.902, blue: 0.125, alpha: 1.000),
+        DesiredColorState.Default: AppColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     ]
     
     #if os(iOS) || os(watchOS)

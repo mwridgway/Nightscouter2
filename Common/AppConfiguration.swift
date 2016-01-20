@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import KeychainAccess
 
 // TODO: Locallize these strings and move them to centeral location so all view can have consistent placeholder text.
 public struct PlaceHolderStrings {
@@ -20,7 +21,7 @@ public struct PlaceHolderStrings {
     public static let battery: String = "--%"
 
     
-    public static let defaultColor: DesiredColorState = .Neutral
+    public static let defaultColor: DesiredColorState = .Default
 }
 
 public enum StoryboardIdentifier: String, RawRepresentable {
@@ -29,8 +30,11 @@ public enum StoryboardIdentifier: String, RawRepresentable {
 }
 
 public class AppConfiguration {
-
     // MARK: Types
+
+    public static var keychain: Keychain {
+        return Keychain(service: "com.nothingonline.nightscouter")
+    }
     
     private struct Defaults {
         static let firstLaunchKey = "AppConfiguration.Defaults.firstLaunchKey"

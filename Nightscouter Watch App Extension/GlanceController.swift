@@ -42,6 +42,7 @@ class GlanceController: WKInterfaceController {
     }
     
     func configureView() {
+      
         guard let site = self.site else {
             return
         }
@@ -52,40 +53,41 @@ class GlanceController: WKInterfaceController {
             
             let dateString = NSCalendar.autoupdatingCurrentCalendar().stringRepresentationOfElapsedTimeSinceNow(dataSource.lastReadingDate)
             
-            let lastUpdateHeader = "LR"
-            let formattedLastUpdateString = self.getFormattedStringWithHeaderFor(dateString, textColor: dataSource.lastReadingColor, textHeader: lastUpdateHeader)
+            let formattedLastUpdateString = self.formattedStringWithHeaderFor(dateString, textColor: dataSource.lastReadingColor, textHeader: LocalizedString.lastReadingLabelShort.localized)
         
-            let rawHeader = "R"
-            let formattedRaw = self.getFormattedStringWithHeaderFor(dataSource.rawLabel, textColor: dataSource.rawColor, textHeader: rawHeader)
+            let formattedRaw = self.formattedStringWithHeaderFor(dataSource.rawLabel, textColor: dataSource.rawColor, textHeader: LocalizedString.rawLabelShort.localized)
         
-            let batteryHeader = "B"
-            let formattedBattery = self.getFormattedStringWithHeaderFor(dataSource.batteryLabel, textColor: dataSource.batteryColor, textHeader: batteryHeader)
+            let formattedBattery = self.formattedStringWithHeaderFor(dataSource.batteryLabel, textColor: dataSource.batteryColor, textHeader: LocalizedString.batteryLabelShort.localized)
             
-            // Battery label
+            let sgvString = String(stringInterpolation:dataSource.sgvLabel, dataSource.direction.emojiForDirection)
+
+            // Battery
             self.batteryLabel.setAttributedText(formattedBattery)
-            
             self.lastUpdateLabel.setAttributedText(formattedLastUpdateString)
             
+            // Delta
             self.siteDeltaLabel.setText(dataSource.deltaLabel)
             self.siteDeltaLabel.setTextColor(dataSource.deltaColor)
+            
+            // Name
             self.siteNameLabel.setText(dataSource.nameLabel)
             
-            let sgvString = dataSource.sgvLabel + " " + dataSource.direction.emojiForDirection
+            // Sgv
             self.siteSgvLabel.setText(sgvString)
             self.siteSgvLabel.setTextColor(dataSource.sgvColor)
             
-            // Raw data
+            // Raw
             self.siteRawLabel.setAttributedText(formattedRaw)
             self.siteRawLabel.setHidden(dataSource.rawHidden)
         }
         
     }
     
-    func getFormattedStringWithHeaderFor(textValue: String, textColor: UIColor, textHeader: String) -> NSAttributedString {
+    func formattedStringWithHeaderFor(textValue: String, textColor: UIColor, textHeader: String) -> NSAttributedString {
+
         let headerFontDict = [NSFontAttributeName: UIFont.boldSystemFontOfSize(8)]
         
         let headerString = NSMutableAttributedString(string: textHeader, attributes: headerFontDict)
-        
         headerString.addAttribute(NSForegroundColorAttributeName, value: UIColor(white: 1.0, alpha: 0.5), range: NSRange(location:0,length:textHeader.characters.count))
         
         let valueString = NSMutableAttributedString(string: textValue)

@@ -19,9 +19,17 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         case EditExisting, ShowDetail, AddNew, AddNewWhenEmpty, LaunchLabs, ShowPageView, UnwindToSiteList
     }
     
-    var sites: [Site] {
-        return SitesDataSource.sharedInstance.sites
+    var sites: [Site] = [] {
+        didSet{
+            self.configureView()
+            
+        }
     }
+    //        {
+    //        return SitesDataSource.sharedInstance.sites
+    //    }
+    
+    
     var milliseconds: Double = 0 {
         didSet{
             let str = String(stringInterpolation:LocalizedString.lastUpdatedDateLabel.localized, AppConfiguration.lastUpdatedDateFormatter.stringFromDate(date))
@@ -52,8 +60,25 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
+        let site = SitesDataSource.sharedInstance.sites.first
+        
+        let socketClient = NightscoutSocketIOClient(url: (site?.url)!, apiSecret: site?.apiSecret)
+        socketClient.mapToJsonValues().observeNext { data in
+            if let siteIndex = self.sites.indexOf(data) {
+                self.sites[siteIndex] = data
+                let indexPath = NSIndexPath(forRow: siteIndex, inSection: 0)
+                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            } else {
+                self.sites.append(data)
+                let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+
+                self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            }
+        }
+        
+        
         // Check if we should display a form.
-        shouldIShowNewSiteForm()
+        // shouldIShowNewSiteForm()
     }
     
     override func didReceiveMemoryWarning() {
@@ -228,7 +253,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             // This segue is triggered when we "save" or "next" out of the url form.
             if let selectedIndexPath = accessoryIndexPath {
                 // Update an existing site.
-                //                AppDataManageriOS.sharedInstance.updateSite(site)
+                // AppDataManageriOS.sharedInstance.updateSite(site)
                 
                 tableView.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: .None)
                 accessoryIndexPath = nil
@@ -236,7 +261,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
                 // Add a new site.
                 editing = false
                 let newIndexPath = NSIndexPath(forRow: 0, inSection: 0)
-                //                AppDataManageriOS.sharedInstance.addSite(site, index: newIndexPath.row)
+                // AppDataManageriOS.sharedInstance.addSite(site, index: newIndexPath.row)
                 SitesDataSource.sharedInstance.sites.insert(site, atIndex: newIndexPath.row)
                 tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Automatic)
                 accessoryIndexPath = nil
@@ -245,8 +270,8 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         
         if let pageViewController = sender.sourceViewController as? SiteListPageViewController {
             // let modelController = pageViewController.modelController
-            // let site = modelController.sites[pageViewController.currentIndex]
-            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: pageViewController.lastViewedSiteIndex, inSection: 0)], withRowAnimation: .None)
+            // let site = modelController.sites[pageViewController.lastViewedSiteIndex]
+            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: pageViewController.lastViewedSiteIndex, inSection: 0)], withRowAnimation: .Automatic)
         }
         shouldIShowNewSiteForm()
     }

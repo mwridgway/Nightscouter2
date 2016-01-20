@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CryptoSwift
 
 public struct Site: Dateable, CustomStringConvertible {
     public var configuration: ServerConfiguration?
@@ -40,7 +41,7 @@ public struct Site: Dateable, CustomStringConvertible {
     
     public init(url: NSURL){
         self.configuration = nil
-        self.milliseconds = AppConfiguration.Constant.knownMilliseconds
+        self.milliseconds = NSDate().timeIntervalSince1970.millisecond
         self.url = url
         self.overrideScreenLock = false
         self.disabled = false
@@ -50,7 +51,7 @@ public struct Site: Dateable, CustomStringConvertible {
 
     public init(url: NSURL, uuid: NSUUID){
         self.configuration = nil
-        self.milliseconds = AppConfiguration.Constant.knownMilliseconds
+        self.milliseconds = NSDate().timeIntervalSince1970.millisecond
         self.url = url
         self.overrideScreenLock = false
         self.disabled = false
@@ -78,20 +79,20 @@ extension Site: Hashable {
     }
 }
 
-
 extension Site {
     public var apiSecret: String? {
         set{
             // write to keychain
+            AppConfiguration.keychain[uuid.UUIDString] = newValue?.sha1()
         }
         get{
-            return nil
+            return AppConfiguration.keychain[uuid.UUIDString]
         }
     }// SHA1 retrieved from keychain?
     
     public init(url: NSURL, apiSecret: String){
         self.configuration = nil
-        self.milliseconds = AppConfiguration.Constant.knownMilliseconds
+        self.milliseconds = NSDate().timeIntervalSince1970.millisecond
         self.url = url
         self.overrideScreenLock = false
         self.disabled = false
