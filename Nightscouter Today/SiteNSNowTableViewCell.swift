@@ -41,7 +41,7 @@ class SiteNSNowTableViewCell: UITableViewCell {
         self.delegate = delegate
         
         siteLastReadingLabel.text = dataSource.lastReadingDate.timeAgoSinceNow()
-        siteLastReadingLabel.textColor = delegate?.batteryColor
+        siteLastReadingLabel.textColor = delegate?.lastReadingColor
         
         siteBatteryLabel.text = dataSource.batteryLabel
         siteBatteryLabel.textColor = delegate?.batteryColor
