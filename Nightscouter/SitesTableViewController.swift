@@ -61,7 +61,8 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         super.viewDidAppear(animated)
         
         let site = SitesDataSource.sharedInstance.sites.first
-        
+       
+        // TODO: REMOVE
         let socketClient = NightscoutSocketIOClient(url: (site?.url)!, apiSecret: site?.apiSecret)
         socketClient.mapToJsonValues().observeNext { data in
             if let siteIndex = self.sites.indexOf(data) {
