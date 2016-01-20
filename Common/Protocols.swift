@@ -185,3 +185,13 @@ public func colorForDesiredColorState(state:DesiredColorState) -> UIColor {
     }
 }
 */
+
+
+
+func iterateEnum<T: Hashable>(_: T.Type) -> AnyGenerator<T> {
+    var i = 0
+    return anyGenerator {
+        let next = withUnsafePointer(&i) { UnsafePointer<T>($0).memory }
+        return next.hashValue == i++ ? next : nil
+    }
+}

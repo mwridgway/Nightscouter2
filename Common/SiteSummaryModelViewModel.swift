@@ -72,15 +72,44 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
     public var lookStale: Bool
     public var desiredColor: DesiredColorState
     
-    public init?(withSite site:Site) {
-        
+    public init(withSite site:Site) {
+
+        let displayUrlString = site.url.host ?? site.url.absoluteString
+
         guard let configuration = site.configuration, settings = configuration.settings else {
-            return nil
+
+            // self.lastReadingLabel = lastReadingString ?? PlaceHolderStrings.date
+            self.lastReadingDate = NSDate(timeIntervalSince1970: AppConfiguration.Constant.knownMilliseconds/1000)
+            self.lastReadingColor = PlaceHolderStrings.defaultColor.colorValue
+            
+            self.rawLabel = PlaceHolderStrings.raw
+            self.rawColor = PlaceHolderStrings.defaultColor.colorValue
+            self.rawHidden = false
+            
+            self.sgvLabel = PlaceHolderStrings.sgv
+            self.sgvColor = PlaceHolderStrings.defaultColor.colorValue
+            
+            self.batteryLabel = PlaceHolderStrings.battery
+            self.batteryColor = PlaceHolderStrings.defaultColor.colorValue
+            
+            self.nameLabel = PlaceHolderStrings.displayName
+            self.urlLabel = displayUrlString
+            
+            self.deltaLabel = PlaceHolderStrings.delta
+            self.deltaColor = PlaceHolderStrings.defaultColor.colorValue
+            
+            
+            self.detailText = self.deltaLabel
+            self.desiredColor = PlaceHolderStrings.defaultColor
+            self.lookStale = false
+            self.direction = Direction.None
+            self.text = self.sgvLabel
+
+            return
         }
         
         let units: Units = configuration.displayUnits
         let displayName: String = configuration.displayName
-        let displayUrlString = site.url.host ?? site.url.absoluteString
         let isRawDataAvailable = configuration.displayRawData
         
         

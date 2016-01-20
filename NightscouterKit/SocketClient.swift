@@ -16,7 +16,7 @@ public class NightscoutSocketIOClient {
     // From ericmarkmartin... RAC integration
     public let signal: Signal<[AnyObject], NSError>
     
-    public var url: NSURL!
+    private var url: NSURL!
     
     // TODO: Refactor out...
     private var site: Site?
@@ -49,7 +49,7 @@ public class NightscoutSocketIOClient {
             print("socket connected")
             self.socket.emit(WebEvents.authorize.rawValue, self.authorizationJSON)
         }
-
+        
         // Start up the whole thing.
         socket.connect()
     }
@@ -64,10 +64,10 @@ public class NightscoutSocketIOClient {
 // Extending the VC, but all of this should be in a data store of some kind.
 
 extension NightscoutSocketIOClient {
-   
+    
     func mapToJsonValues() -> Signal<Site, NSError> {
         return self.signal.map { data in
-        
+            
             let json = JSON(data[0])
             
             if self.site == nil {
@@ -117,7 +117,7 @@ extension NightscoutSocketIOClient {
                 for (_, subJson) in mbgs {
                     if let deviceString = subJson[JSONProperty.device].string, mills = subJson[JSONProperty.mills].double, mgdl = subJson[JSONProperty.mgdl].double {
                         let device = Device(rawValue: deviceString) ?? Device.Unknown
-
+                        
                         let meter = MeteredGlucoseValue(milliseconds: mills, device: device, mgdl: mgdl)
                         site.mbgs.append(meter)
                         // print(meter)

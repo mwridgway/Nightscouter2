@@ -28,7 +28,7 @@ class SitesTableInterfaceController: WKInterfaceController {
         print(">>> Entering \(__FUNCTION__) <<<")
         
         // TODO: Remove once we get a real datasource hooked up.
-        sites = SitesDataSource().sites
+        sites = SitesDataSource.sharedInstance.sites
         
         // TODO: Need to update the table when data changes... also need to call updateTable if empty to show an empty row.
         if sites.isEmpty { updateTableData() }
@@ -41,12 +41,12 @@ class SitesTableInterfaceController: WKInterfaceController {
         // push controller...
         print(">>> Entering \(__FUNCTION__) <<<")
         let site = sites[rowIndex]
-        if let mvm = SiteSummaryModelViewModel(withSite: site) {
-            
-            print(mvm)
-            // push relevant context over to the detail page.
-            pushControllerWithName(ControllerName.SiteDetail, context: ["mvm" :  ""])
-        }
+        let mvm = SiteSummaryModelViewModel(withSite: site)
+        
+        print(mvm)
+        // push relevant context over to the detail page.
+        pushControllerWithName(ControllerName.SiteDetail, context: ["mvm" :  ""])
+        
     }
     
     private func updateTableData() {
@@ -68,9 +68,9 @@ class SitesTableInterfaceController: WKInterfaceController {
                 self.sitesTable.setNumberOfRows(self.sites.count, withRowType: rowTypeIdentifier)
                 for (index, site) in self.sites.enumerate() {
                     if let row = self.sitesTable.rowControllerAtIndex(index) as? SiteRowController {
-                        if let mvm = SiteSummaryModelViewModel(withSite: site) {
-                            row.configure(withDataSource: mvm, delegate: mvm)
-                        }
+                        let mvm = SiteSummaryModelViewModel(withSite: site)
+                        row.configure(withDataSource: mvm, delegate: mvm)
+                        
                     }
                 }
                 

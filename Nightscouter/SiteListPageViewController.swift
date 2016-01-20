@@ -10,13 +10,15 @@ import UIKit
 import NightscouterKit
 
 class SiteListPageViewController: UIViewController, SitesDataSourceProvider, UIPageViewControllerDelegate {
-
+    
     @IBOutlet weak private var goToListButton: UIButton!
     @IBOutlet weak private var pageControl: UIPageControl!
     
     var pageViewController: UIPageViewController?
     
-    var sites: [Site] = SitesDataSource().sites
+    var sites: [Site] {
+        return SitesDataSource.sharedInstance.sites
+    }
     var lastViewedSiteIndex: Int = 0
     var milliseconds: Double = 0
     
@@ -25,9 +27,9 @@ class SiteListPageViewController: UIViewController, SitesDataSourceProvider, UIP
         // Do any additional setup after loading the view, typically from a nib.
         // Configure the page view controller and add it as a child view controller.
         pageViewController = UIPageViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
-        pageViewController!.delegate = self        
-
-
+        pageViewController!.delegate = self
+        
+        
         let startingViewController: SiteDetailViewController = self.modelController.viewControllerAtIndex(lastViewedSiteIndex, storyboard: self.storyboard!)!
         let viewControllers = [startingViewController]
         pageViewController!.setViewControllers(viewControllers, direction: .Forward, animated: false, completion: {done in })
@@ -116,7 +118,7 @@ class SiteListPageViewController: UIViewController, SitesDataSourceProvider, UIP
     
     func setupNotifications() {
         // Listen for global update timer.
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateNavigationController", name: NightscoutAPIClientNotification.DataUpdateSuccessful, object: nil)
+        //        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateNavigationController", name: NightscoutAPIClientNotification.DataUpdateSuccessful, object: nil)
     }
     
     func updateNavigationController() {

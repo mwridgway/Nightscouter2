@@ -9,21 +9,19 @@
 import UIKit
 import NightscouterKit
 
-public enum StoryboardIdentifier: String {
-    case FormViewController, SitesTableViewController, SiteListPageViewController
-}
-
 class SitesTableViewController: UITableViewController, SitesDataSourceProvider, SegueHandlerType {
     
     struct CellIdentifier {
         static let SiteTableViewStyleLarge = "siteCellLarge"
     }
-
+    
     enum SegueIdentifier: String {
         case EditExisting, ShowDetail, AddNew, AddNewWhenEmpty, LaunchLabs, ShowPageView, UnwindToSiteList
     }
     
-    var sites: [Site] = SitesDataSource().sites
+    var sites: [Site] {
+        return SitesDataSource.sharedInstance.sites
+    }
     var milliseconds: Double = 0 {
         didSet{
             let str = String(stringInterpolation:LocalizedString.lastUpdatedDateLabel.localized, AppConfiguration.lastUpdatedDateFormatter.stringFromDate(date))
@@ -84,7 +82,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier.SiteTableViewStyleLarge, forIndexPath: indexPath) as! SiteTableViewCell
         
         let model = SiteSummaryModelViewModel(withSite: sites[indexPath.row])
-        cell.configure(withDataSource: model!, delegate: model!)
+        cell.configure(withDataSource: model, delegate: model)
         return cell
     }
     
@@ -221,6 +219,36 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
     
     @IBAction func refreshTable(sender: UIRefreshControl) {
         updateData()
+    }
+    
+    @IBAction func unwindToSiteList(sender: UIStoryboardSegue) {
+        
+        if let sourceViewController = sender.sourceViewController as? FormViewController, site = sourceViewController.site {
+            
+            // This segue is triggered when we "save" or "next" out of the url form.
+            if let selectedIndexPath = accessoryIndexPath {
+                // Update an existing site.
+                //                AppDataManageriOS.sharedInstance.updateSite(site)
+                
+                tableView.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: .None)
+                accessoryIndexPath = nil
+            } else {
+                // Add a new site.
+                editing = false
+                let newIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+                //                AppDataManageriOS.sharedInstance.addSite(site, index: newIndexPath.row)
+                SitesDataSource.sharedInstance.sites.insert(site, atIndex: newIndexPath.row)
+                tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Automatic)
+                accessoryIndexPath = nil
+            }
+        }
+        
+        if let pageViewController = sender.sourceViewController as? SiteListPageViewController {
+            // let modelController = pageViewController.modelController
+            // let site = modelController.sites[pageViewController.currentIndex]
+            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: pageViewController.lastViewedSiteIndex, inSection: 0)], withRowAnimation: .None)
+        }
+        shouldIShowNewSiteForm()
     }
     
     // MARK: Private Methods

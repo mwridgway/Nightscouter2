@@ -22,30 +22,17 @@ extension SitesDataSourceProvider {
 }
 
 public class SitesDataSource: SitesDataSourceProvider{
-    public var sites: [Site] {
-        let cal = Calibration()
-        let sgv = SensorGlucoseValue()
-        let de = DeviceStatus()
-        
-        var s1 = Site()
-        var s2 = Site()
-        var s3 = Site()
-        s1.url = NSURL(string: "benscgm.herokuapp.com")!
-        s1.sgvs.append(sgv)
-        s1.deviceStatus.append(de)
-        s1.sgvs.append(sgv)
-        s1.cals.append(cal)
-        s2.sgvs.append(sgv)
-        s2.cals.append(cal)
-        s3.deviceStatus.append(de)
-        
-        return [s1, s2]
-    }
+    public var sites: [Site]
+    public var lastViewedSiteIndex = 0
     
-    // public var lastViewedSiteIndex = 0
-    //public var milliseconds: Double = AppConfiguration.Constant.knownMilliseconds
+    public var lastViewedSiteUUID: NSUUID?
+    public var siteForComplication: NSUUID?
     
-    public init(){
-        
+    public var milliseconds: Double = AppConfiguration.Constant.knownMilliseconds
+    
+    public static let sharedInstance = SitesDataSource()
+
+    private init(){
+        sites = []
     }
 }
