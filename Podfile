@@ -7,7 +7,7 @@ inhibit_all_warnings!
 def limited_pods
     pod 'Socket.IO-Client-Swift', '~> 4.1.6' # Or latest version
     # ReactiveCocoa will not work on watchOS for some reason.
-    pod 'ReactiveCocoa', '4.0.4-alpha-4'
+#    pod 'ReactiveCocoa', '4.0.4-alpha-4'
 
     pod 'DateTools'
 end
@@ -17,6 +17,7 @@ def global_pods
     pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
     pod 'CryptoSwift'
     pod 'KeychainAccess'
+    pod 'ReactiveCocoa', '4.0.4-alpha-4'
 end
 
 

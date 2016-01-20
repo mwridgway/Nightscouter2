@@ -47,9 +47,8 @@ public typealias TableViewRowWithCompassDelegate = protocol<SiteCommonInfoDelega
 public typealias TableViewRowWithOutCompassDataSource = protocol<SiteCommonInfoDataSource, DirectionDisplayable>
 public typealias TableViewRowWithOutCompassDelegate = protocol<SiteCommonInfoDelegate>
 
-
 public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisplayable, SiteCommonInfoDelegate, CompassViewDataSource, CompassViewDelegate {
-    //public var lastReadingLabel: String
+
     public var lastReadingDate: NSDate
     public var batteryLabel: String
     public var rawHidden: Bool
@@ -65,7 +64,6 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
     public var sgvColor: UIColor
     public var deltaColor: UIColor
     
-    
     public var direction: Direction
     public var text: String
     public var detailText: String
@@ -73,38 +71,43 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
     public var desiredColor: DesiredColorState
     
     public init(withSite site:Site) {
-
+        
         let displayUrlString = site.url.host ?? site.url.absoluteString
-
+        
         guard let configuration = site.configuration, settings = configuration.settings else {
-
-            // self.lastReadingLabel = lastReadingString ?? PlaceHolderStrings.date
+            
+            // Last Reading
             self.lastReadingDate = NSDate(timeIntervalSince1970: AppConfiguration.Constant.knownMilliseconds/1000)
             self.lastReadingColor = PlaceHolderStrings.defaultColor.colorValue
             
+            // Raw
             self.rawLabel = PlaceHolderStrings.raw
             self.rawColor = PlaceHolderStrings.defaultColor.colorValue
             self.rawHidden = false
             
+            // Sgv
             self.sgvLabel = PlaceHolderStrings.sgv
             self.sgvColor = PlaceHolderStrings.defaultColor.colorValue
             
+            // Battery
             self.batteryLabel = PlaceHolderStrings.battery
             self.batteryColor = PlaceHolderStrings.defaultColor.colorValue
             
+            // Name and URL
             self.nameLabel = PlaceHolderStrings.displayName
             self.urlLabel = displayUrlString
             
+            // Delta
             self.deltaLabel = PlaceHolderStrings.delta
             self.deltaColor = PlaceHolderStrings.defaultColor.colorValue
             
-            
+            // Compass
             self.detailText = self.deltaLabel
             self.desiredColor = PlaceHolderStrings.defaultColor
             self.lookStale = false
             self.direction = Direction.None
             self.text = self.sgvLabel
-
+            
             return
         }
         
@@ -112,10 +115,7 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
         let displayName: String = configuration.displayName
         let isRawDataAvailable = configuration.displayRawData
         
-        
-        
         var deltaString: String?
-        //var lastReadingString: String?
         var lastReadingDate: NSDate?
         var sgvString: String?
         var rawString: String?
@@ -133,11 +133,7 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
             let thresholds: Threshold = settings.thresholds
             sgvColorVar = thresholds.desiredColorState(forValue: latestSgv.mgdl)
             
-            
-            
-            //lastReadingString = latestSgv.date.description
             lastReadingDate = latestSgv.date
-            
             
             sgvString = "\(latestSgv.mgdl.formattedForMgdl)"
             if units == .Mmol {
@@ -161,9 +157,7 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
                 }
                 
                 rawString =  "\(rawFormattedString) : \(latestSgv.noise.description)"
-                
             }
-            
             
             if let deviceStatus = site.deviceStatus.first {
                 batteryString = deviceStatus.batteryLevel
@@ -175,15 +169,15 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
             isStaleData = settings.timeAgo.isDataStaleWith(interval: timeAgo)
             
             if isStaleData.warn {
-                batteryLabel = PlaceHolderStrings.battery
+                batteryString = PlaceHolderStrings.battery
                 batteryColorVar = DesiredColorState.Neutral
                 
-                rawLabel = PlaceHolderStrings.raw
+                rawString = PlaceHolderStrings.raw
                 rawColorVar = DesiredColorState.Neutral
                 
-                deltaLabel = PlaceHolderStrings.delta
+                deltaString = PlaceHolderStrings.delta
                 
-                sgvLabel = PlaceHolderStrings.sgv
+                sgvString = PlaceHolderStrings.sgv
                 sgvColorVar = DesiredColorState.Neutral
                 lastReadingColorVar = DesiredColorState.Warning
             }
@@ -194,9 +188,6 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
             
         }
         
-        
-        
-        // self.lastReadingLabel = lastReadingString ?? PlaceHolderStrings.date
         self.lastReadingDate = lastReadingDate ?? NSDate(timeIntervalSince1970: AppConfiguration.Constant.knownMilliseconds)
         self.lastReadingColor = lastReadingColorVar?.colorValue ?? PlaceHolderStrings.defaultColor.colorValue
         

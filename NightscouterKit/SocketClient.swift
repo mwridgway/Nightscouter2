@@ -65,7 +65,7 @@ public class NightscoutSocketIOClient {
 
 extension NightscoutSocketIOClient {
     
-    func mapToJsonValues() -> Signal<Site, NSError> {
+    public func mapToJsonValues() -> Signal<Site, NSError> {
         return self.signal.map { data in
             
             let json = JSON(data[0])
@@ -106,7 +106,6 @@ extension NightscoutSocketIOClient {
                         
                         let sensorValue = SensorGlucoseValue(direction: direction, device: device, rssi: rssi, unfiltered: unfiltered, filtered: filtered, mgdl: mgdl, noise: noise, milliseconds: mills)
                         
-                        //SensorGlucoseValue(device: device, rssi: rssi, unfiltered: unfiltered, direction: direction, filtered: filtered, noise: Noise(rawValue: noise) ?? Noise() , milliseconds: mills, mgdl: mgdl)
                         
                         site.sgvs.append(sensorValue)
                         // print(sensorValue)

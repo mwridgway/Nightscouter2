@@ -87,11 +87,15 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-Nightscouter Watch App Extension/Alamofire.framework"
   install_framework "Pods-Nightscouter Watch App Extension/CryptoSwift.framework"
   install_framework "Pods-Nightscouter Watch App Extension/KeychainAccess.framework"
+  install_framework "Pods-Nightscouter Watch App Extension/ReactiveCocoa.framework"
+  install_framework "Pods-Nightscouter Watch App Extension/Result.framework"
   install_framework "Pods-Nightscouter Watch App Extension/SwiftyJSON.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-Nightscouter Watch App Extension/Alamofire.framework"
   install_framework "Pods-Nightscouter Watch App Extension/CryptoSwift.framework"
   install_framework "Pods-Nightscouter Watch App Extension/KeychainAccess.framework"
+  install_framework "Pods-Nightscouter Watch App Extension/ReactiveCocoa.framework"
+  install_framework "Pods-Nightscouter Watch App Extension/Result.framework"
   install_framework "Pods-Nightscouter Watch App Extension/SwiftyJSON.framework"
 fi
