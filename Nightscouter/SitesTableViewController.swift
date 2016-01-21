@@ -8,6 +8,7 @@
 
 import UIKit
 import NightscouterKit
+import ReactiveCocoa
 
 class SitesTableViewController: UITableViewController, SitesDataSourceProvider, SegueHandlerType {
     
@@ -66,7 +67,14 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
        
         // TODO: REMOVE
         let socketClient = NightscoutSocketIOClient(url: (site?.url)!, apiSecret: site!.apiSecret!)
+        
+        
+        socketClient.mapConfigurationValues().observeNext { site in
+            
+           
+        }
         socketClient.mapToJsonValues().observeNext { data in
+            
             
             self.milliseconds = NSDate().timeIntervalSince1970 * 1000
             
@@ -80,6 +88,9 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
                 self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
             }
         }
+
+        
+        
         
         
         // Check if we should display a form.

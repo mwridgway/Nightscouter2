@@ -41,11 +41,18 @@ public class NightscoutSocketIOClient {
         self.apiSecret = apiSecret
         
         // Create a socket.io client with a url string.
-        self.socket = SocketIOClient(socketURL: url.absoluteString, options: [.Log(true), .ForcePolling(false)])
+        self.socket = SocketIOClient(socketURL: url.absoluteString, options: [.Log(true), .ForcePolling(true)])
         
         // From ericmarkmartin... RAC integration
         self.signal = socket.rac_socketSignal()
-      
+        
+        
+        if self.site == nil {
+            self.site = Site(url: self.url, apiSecret: self.apiSecret)
+        }
+        
+        self.site?.milliseconds = NSDate().timeIntervalSince1970 * 1000
+        
         
         // Listen to connect.
         socket.on(WebEvents.connect.rawValue) { data, ack in
@@ -68,26 +75,31 @@ public class NightscoutSocketIOClient {
 
 extension NightscoutSocketIOClient {
     
-    public func mapToJsonValues() -> Signal<Site, NSError> {
+    public func mapConfigurationValues() -> Signal<Site, NSError> {
         return self.signal.map { data in
-            
-            let json = JSON(data[0])
-            
-            if self.site == nil {
-                self.site = Site(url: self.url, apiSecret: self.apiSecret)
-            }
-            
-            self.site?.milliseconds = NSDate().timeIntervalSince1970 * 1000
             
             var headers: [String: String] = ["Content-Type": "application/json"]
             headers["api-secret"] = self.apiSecret.sha1()
             let configurationURL = self.url.URLByAppendingPathComponent("api/v1/status").URLByAppendingPathExtension("json")
+            
             self.makeHTTPGetRequest(configurationURL, parameters: nil, headers:  headers, completetion: { (result) -> Void in
                 if let jsonDict = result.dictionaryObject {
                     self.site?.parseJSONforConfiugration(JSON(jsonDict))
+                    
                 }
             })
 
+            return self.site!
+        }
+        
+    }
+    
+    
+    public func mapToJsonValues() -> Signal<Site, NSError> {
+        return self.signal.map { data in
+            
+            let json = JSON(data[0])
+           
             self.site?.parseJSONforSocketData(json)
             
             return self.site!
@@ -112,11 +124,11 @@ extension NightscoutSocketIOClient {
                 case .Failure(let error):
                     print(error)
                     break
-        }
+                }
         }
     }
-        
-
+    
+    
 }
 
 public enum ClientNotifications: String {
