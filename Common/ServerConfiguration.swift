@@ -157,7 +157,7 @@ public enum ShowPlugins: String, CustomStringConvertible {
 }
 
 public enum Units: String, CustomStringConvertible {
-    case Mgdl = "mg/dl"
+    case Mgdl = "mg/dL"
     case Mmol = "mmol"
     
     public init() {
