@@ -33,6 +33,7 @@ struct JSONPropertyKey {
     static let profiles = "profiles"
     static let treatments = "treatments"
     static let deltaCount = "delta"
+    
     static let url = "url"
     static let overrideScreenLock = "overrideScreenLock"
     static let disabled = "disabled"
@@ -81,7 +82,12 @@ struct JSONPropertyKey {
     static let baseURL = "baseURL"
 }
 
-extension Site {
+
+extension Site: Encodable {
+    
+    func encode() -> [String: AnyObject] {
+        return [JSONPropertyKey.url : url, JSONPropertyKey.overrideScreenLock : overrideScreenLock, JSONPropertyKey.disabled: disabled, JSONPropertyKey.uuid: uuid]
+    }
     
     func siteJSON(config: JSON?, socket: JSON?) -> JSON {
         
@@ -93,7 +99,9 @@ extension Site {
         
         return json
     }
-    
+}
+extension Site {
+
     mutating func parseJSONforSite(json: JSON) {
         let url = json[JSONPropertyKey.url].URL ?? NSURL()
         let overrideScreenLock = json[JSONPropertyKey.overrideScreenLock].bool ?? false

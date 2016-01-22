@@ -20,16 +20,9 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         case EditExisting, ShowDetail, AddNew, AddNewWhenEmpty, LaunchLabs, ShowPageView, UnwindToSiteList
     }
     
-    var sites: [Site] = [] {
-        didSet{
-            
-            self.configureView()
-            
-        }
+    var sites: [Site] {
+        return SitesDataSource.sharedInstance.sites
     }
-    //        {
-    //        return SitesDataSource.sharedInstance.sites
-    //    }
     
     
     var milliseconds: Double = 0 {
@@ -63,38 +56,38 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        let site = SitesDataSource.sharedInstance.sites.first
-       
-        // TODO: REMOVE
-        let socketClient = NightscoutSocketIOClient(url: (site?.url)!, apiSecret: site!.apiSecret!)
+        //        let site = SitesDataSource.sharedInstance.sites.first
+        //
+        //        // TODO: REMOVE
+        //        let socketClient = NightscoutSocketIOClient(url: (site?.url)!, apiSecret: site!.apiSecret!)
+        //
+        //
+        //        socketClient.mapConfigurationValues().observeNext { site in
+        //
+        //
+        //        }
+        //        socketClient.mapToJsonValues().observeNext { data in
+        //
+        //
+        //            self.milliseconds = NSDate().timeIntervalSince1970 * 1000
+        //
+        //            if let siteIndex = self.sites.indexOf(data) {
+        //                self.sites[siteIndex] = data
+        //                let indexPath = NSIndexPath(forRow: siteIndex, inSection: 0)
+        //                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        //            } else {
+        //                self.sites.append(data)
+        //                let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+        //                self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        //            }
+        //        }
         
-        
-        socketClient.mapConfigurationValues().observeNext { site in
-            
-           
-        }
-        socketClient.mapToJsonValues().observeNext { data in
-            
-            
-            self.milliseconds = NSDate().timeIntervalSince1970 * 1000
-            
-            if let siteIndex = self.sites.indexOf(data) {
-                self.sites[siteIndex] = data
-                let indexPath = NSIndexPath(forRow: siteIndex, inSection: 0)
-                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-            } else {
-                self.sites.append(data)
-                let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-                self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-            }
-        }
-
         
         
         
         
         // Check if we should display a form.
-        // shouldIShowNewSiteForm()
+        shouldIShowNewSiteForm()
     }
     
     override func didReceiveMemoryWarning() {
@@ -147,10 +140,10 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         if editingStyle == .Delete {
             
             // Delete object form data source.
-            // AppDataManageriOS.sharedInstance.deleteSiteAtIndex(indexPath.row)
+            SitesDataSource.sharedInstance.removeSite(indexPath.row)
             
             // Delete the row from the data source
-            // tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             
             // If the site array is empty show add form.
             shouldIShowNewSiteForm()
@@ -164,13 +157,12 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
     // Override to support rearranging the table view.
     override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
         // Pull the site that was moved from the data source at its current (fromIndexPath) location.
-        // let site = sites[fromIndexPath.row]
+        let site = sites[fromIndexPath.row]
         
         // Remove the site from the data source from its orginal (fromIndexPath) location.
-        // AppDataManageriOS.sharedInstance.deleteSiteAtIndex(fromIndexPath.row)
-        
+        SitesDataSource.sharedInstance.removeSite(fromIndexPath.row)
         // Insert the site into the data source at its new (toIndexPath) location.
-        // AppDataManageriOS.sharedInstance.addSite(site, index: toIndexPath.row)
+        SitesDataSource.sharedInstance.addSite(site, atIndex: toIndexPath.row)
     }
     
     
@@ -240,12 +232,14 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             // Get the cell that generated this segue.
             if let selectedSiteCell = sender as? UITableViewCell {
                 let indexPath = tableView.indexPathForCell(selectedSiteCell)!
-                // AppDataManageriOS.sharedInstance.currentSiteIndex = indexPath.row
+                SitesDataSource.sharedInstance.lastViewedSiteIndex = indexPath.row
+                SitesDataSource.sharedInstance.lastViewedSiteUUID = sites[indexPath.row].uuid
             }
             
             if let incomingSite = sender as? Site{
                 if let indexOfSite = sites.indexOf(incomingSite) {
-                    // AppDataManageriOS.sharedInstance.currentSiteIndex = indexOfSite
+                    SitesDataSource.sharedInstance.lastViewedSiteIndex = indexOfSite
+                    SitesDataSource.sharedInstance.lastViewedSiteUUID = incomingSite.uuid
                 }
             }
             
@@ -269,16 +263,15 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             // This segue is triggered when we "save" or "next" out of the url form.
             if let selectedIndexPath = accessoryIndexPath {
                 // Update an existing site.
-                // AppDataManageriOS.sharedInstance.updateSite(site)
-                
+                SitesDataSource.sharedInstance.updateSite(site)
                 tableView.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: .None)
                 accessoryIndexPath = nil
             } else {
                 // Add a new site.
                 editing = false
                 let newIndexPath = NSIndexPath(forRow: 0, inSection: 0)
-                // AppDataManageriOS.sharedInstance.addSite(site, index: newIndexPath.row)
                 SitesDataSource.sharedInstance.sites.insert(site, atIndex: newIndexPath.row)
+                
                 tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Automatic)
                 accessoryIndexPath = nil
             }

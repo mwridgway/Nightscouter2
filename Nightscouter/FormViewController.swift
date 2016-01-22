@@ -8,6 +8,7 @@
 
 import UIKit
 import NightscouterKit
+import ReactiveCocoa
 
 protocol FormViewControllerDelegate {
     func formViewControllerDidCancel(viewController: FormViewController)
@@ -22,7 +23,7 @@ class FormViewController: UIViewController, UITextFieldDelegate, UINavigationCon
     @IBOutlet private weak var cancelButton: UIBarButtonItem!
     @IBOutlet private weak var nextButton: UIButton!
     @IBOutlet private weak var middleLayoutContraint: NSLayoutConstraint!
-//    @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
+    // @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet private weak var passwordTextField: UITextField!
     
     var delegate: FormViewControllerDelegate?
@@ -51,34 +52,90 @@ class FormViewController: UIViewController, UITextFieldDelegate, UINavigationCon
     private var currentOrientation: UIDeviceOrientation?
     private var validatedUrlString: String?
     
+    //private var urlStrings: SignalProducer<String, NSError>
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        // Add notification observer for text field updates
-        urlTextField.addTarget(self, action: "textFieldDidUpdate:", forControlEvents: UIControlEvents.EditingChanged)
-        urlTextField.delegate = self
         
         // Set up views if editing an existing Meal.
         if let site = site {
             navigationItem.title = site.url.host
             urlTextField.text   = site.url.absoluteString
-            
             passwordTextField.text = site.apiSecret
         }
         
-        checkValidSiteName()
+        let urlStrings = urlTextField.rac_textSignal()
+            .toSignalProducer()
+            .map { text in text as! String }
+            .throttle(0.5, onScheduler: QueueScheduler.mainQueueScheduler)
+        
+        
+        let validationResults = urlStrings
+            .flatMap(.Latest) { (query: String) -> SignalProducer<(NSData, NSURLResponse), NSError> in
+                let cleanString = query.stringByReplacingOccurrencesOfString(" ", withString: "", options: [], range: nil)
+                // Test that URL actually exists by sending a URL request that returns only the header response
+                self.urlTextField.text = cleanString
+                
+                do {
+                    
+                    let url = try NSURL.validateUrl(cleanString)
+                    let request = NSMutableURLRequest(URL: url)
+                    request.HTTPMethod = "HEAD"
+                    
+                    return NSURLSession.sharedSession()
+                        .rac_dataWithRequest(request)
+                        .retry(2)
+                        .flatMapError { error in
+                            // print("Network error occurred: \(error)")
+                            
+                            // Is there a way to alway pass a bool down to subscribers?
+                            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+                                self.nextButton.enabled = false
+                            })
+                            return SignalProducer.empty
+                    }
+                    
+                } catch let error {
+                    
+                    print("Error validating URL: \(error)")
+                    // Is there a way to alway pass a bool down to subscribers?
+                    self.nextButton.enabled = false
+                    return SignalProducer.empty
+                }
+                
+            }
+            .map { (data, URLResponse) -> String? in
+                // URL Responded - Check Status Code
+                if let urlResponse = URLResponse as? NSHTTPURLResponse
+                {
+                    if ((urlResponse.statusCode >= 200 && urlResponse.statusCode < 400) || urlResponse.statusCode == 405) // 200-399 = Valid Responses, 405 = Valid Response (Weird Response on some valid URLs)
+                    {
+                        return urlResponse.URL?.absoluteString
+                    }
+                    else // Error
+                    {
+                        return nil
+                    }
+                }
+                return nil
+            }
+            .observeOn(UIScheduler())
+        
+        validationResults.startWithNext { results in
+            print("Validation results: \(results)")
+            self.validatedUrlString = results
+            self.nextButton.enabled = (results != nil) ? true : false
+        }
         
         // Or you can do it the old way
-        let offset = 2.0
+        let offset = 1.0
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(offset * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
             // Do something
             self.urlTextField.becomeFirstResponder()
         })
         
-        nextButton.tintColor = tintColorForButton //NightscouterAssetKit.darkNavColor
-        
-        observeKeyboard()
+        tintColorForButton = NightscouterAssetKit.darkNavColor
     }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
@@ -94,44 +151,6 @@ class FormViewController: UIViewController, UITextFieldDelegate, UINavigationCon
         NSNotificationCenter.defaultCenter().removeObserver(self);
     }
     
-    func textFieldDidUpdate(textField: UITextField)
-    {
-        checkValidSiteName()
-    }
-    
-    func checkValidSiteName() {
-        // Remove Spaces
-        
-        urlTextField.text = urlTextField.text!.stringByReplacingOccurrencesOfString(" ", withString: "", options: [], range: nil)
-        
-        // Or you can do it the old way
-        let offset = 0.5
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(offset * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
-            // Validate URL
-            //self.activityIndicator.startAnimating()
-            NSURL.validateUrl(self.urlTextField.text, completion: { (success, urlString, error) -> Void in
-                print("validateURL Error: \(error)")
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
-                    if (success)
-                    {
-                        NSURL.ValidationQueue.queue.cancelAllOperations()
-                        NSURL.ValidationQueue.task.cancel()
-                        self.validatedUrlString = urlString!
-                    }
-                    else
-                    {
-                        self.validatedUrlString = nil
-                    }
-                    self.nextButton.enabled = success
-                    
-                    // self.activityIndicator.stopAnimating()
-                })
-            })
-        })
-        
-    }
-    
     func createSite() {
         // Set the site to be passed to ViewController after the unwind segue.
         let urlString = validatedUrlString ?? ""
@@ -140,10 +159,9 @@ class FormViewController: UIViewController, UITextFieldDelegate, UINavigationCon
             
             if var siteOptional = site {
                 siteOptional.url = url
+                siteOptional.apiSecret = passwordTextField.text ?? ""
                 site = siteOptional
             } else {
-                //#warning TODO: Finish this code
-                // site = Site(url: url, apiSecret: nil)
                 site = Site(url: url, apiSecret: passwordTextField.text ?? "")
             }
             // Hide the keyboard
@@ -162,7 +180,8 @@ class FormViewController: UIViewController, UITextFieldDelegate, UINavigationCon
             //#warning TODO: Finish this code
             
             
-            // performSegueWithIdentifier(Constants.SegueIdentifier.UnwindToSiteList.rawValue, sender: nextButton)
+            performSegueWithIdentifier(SitesTableViewController.SegueIdentifier
+                .UnwindToSiteList.rawValue, sender: nextButton)
         }
         
         return self.nextButton.enabled
@@ -222,7 +241,7 @@ class FormViewController: UIViewController, UITextFieldDelegate, UINavigationCon
         // let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         let animationDuration: NSTimeInterval = (info[UIKeyboardAnimationDurationUserInfoKey])!.doubleValue
         
-
+        
         self.middleLayoutContraint.constant = 0
         UIView.animateWithDuration(animationDuration, animations: { () -> Void in
             self.view.layoutIfNeeded()

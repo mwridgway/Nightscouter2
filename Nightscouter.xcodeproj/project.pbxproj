@@ -97,6 +97,10 @@
 		177054911C4963A200302D83 /* SitesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177054901C4963A200302D83 /* SitesDataSource.swift */; };
 		177054921C4963A200302D83 /* SitesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177054901C4963A200302D83 /* SitesDataSource.swift */; };
 		17CC72C01C4D3B8C00BA5E5B /* SiteNSNowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CC72BF1C4D3B8C00BA5E5B /* SiteNSNowTableViewCell.swift */; };
+		17D0EB611C52D5D4007F21FC /* Encodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0EB5E1C52D5D4007F21FC /* Encodable.swift */; };
+		17D0EB621C52D5D4007F21FC /* Encodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0EB5E1C52D5D4007F21FC /* Encodable.swift */; };
+		17D0EB641C52D7FC007F21FC /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0EB631C52D7FC007F21FC /* Extensions.swift */; };
+		17D0EB651C52D7FC007F21FC /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0EB631C52D7FC007F21FC /* Extensions.swift */; };
 		2F3C94E53AFEAE6B8FB6E296 /* Pods_Nightscouter_Watch_App_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439C79B125828258591DC40A /* Pods_Nightscouter_Watch_App_Extension.framework */; };
 		76F3CEA6F5A3720E0EFEB4C5 /* Pods_Nightscouter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BFD910FBCCE4AEC9AC07A53 /* Pods_Nightscouter.framework */; };
 		88F6A34585C6E099AC08E883 /* Pods_NightscouterWatchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB575D9C7DDA9FD04E625EC2 /* Pods_NightscouterWatchKit.framework */; };
@@ -279,6 +283,8 @@
 		1770548D1C49608400302D83 /* LocalizedStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedStrings.swift; sourceTree = "<group>"; };
 		177054901C4963A200302D83 /* SitesDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SitesDataSource.swift; sourceTree = "<group>"; };
 		17CC72BF1C4D3B8C00BA5E5B /* SiteNSNowTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteNSNowTableViewCell.swift; sourceTree = "<group>"; };
+		17D0EB5E1C52D5D4007F21FC /* Encodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Encodable.swift; sourceTree = "<group>"; };
+		17D0EB631C52D7FC007F21FC /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		21CFA3F1AEB20B30F12C83BA /* Pods_Nightscouter_Watch_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nightscouter_Watch_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BF14B3761DDDE33C7867DF7 /* Pods-NightscouterWatchKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NightscouterWatchKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NightscouterWatchKit/Pods-NightscouterWatchKit.debug.xcconfig"; sourceTree = "<group>"; };
 		439C79B125828258591DC40A /* Pods_Nightscouter_Watch_App_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nightscouter_Watch_App_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -444,7 +450,6 @@
 			children = (
 				17292ECA1C4FD9B800538D01 /* JSONParser.swift */,
 				173581231C44496700E893DB /* AppConfiguration.swift */,
-				1742F02E1C44A135008DED3F /* Site.swift */,
 				177054901C4963A200302D83 /* SitesDataSource.swift */,
 				1742F02C1C449871008DED3F /* Extensions */,
 				177054951C4963D800302D83 /* Models */,
@@ -559,6 +564,7 @@
 		1742F02C1C449871008DED3F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				17D0EB631C52D7FC007F21FC /* Extensions.swift */,
 				1742F03F1C458765008DED3F /* NSURL-Extensions.swift */,
 				1742F0221C449857008DED3F /* Array+Extensions.swift */,
 				1742F0231C449857008DED3F /* Double+Extension.swift */,
@@ -572,6 +578,7 @@
 		1742F02D1C4498B7008DED3F /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				17D0EB5E1C52D5D4007F21FC /* Encodable.swift */,
 				17292EC61C4FD6D400538D01 /* DictionaryRepresentable.swift */,
 				176BE27F1C4979950040F1B7 /* Chartable.swift */,
 				1735811A1C443C6400E893DB /* Protocols.swift */,
@@ -666,6 +673,7 @@
 		177054951C4963D800302D83 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				1742F02E1C44A135008DED3F /* Site.swift */,
 				1735811D1C443E8900E893DB /* Calibration.swift */,
 				173581291C444ED400E893DB /* DeviceStatus.swift */,
 				173581201C44459E00E893DB /* MeteredGlucoseValue.swift */,
@@ -1169,6 +1177,7 @@
 				17292ECB1C4FD9B800538D01 /* JSONParser.swift in Sources */,
 				176BE27E1C496E060040F1B7 /* SegueHandlerType.swift in Sources */,
 				173A0B7D1C4D25F5005B74FC /* SocketClient.swift in Sources */,
+				17D0EB641C52D7FC007F21FC /* Extensions.swift in Sources */,
 				177054651C489BBF00302D83 /* UIColor+Extension.swift in Sources */,
 				177054641C489BBF00302D83 /* String+Extensions.swift in Sources */,
 				173581181C443C3500E893DB /* SensorGlucoseValue.swift in Sources */,
@@ -1177,6 +1186,7 @@
 				177054791C49304B00302D83 /* BackgroundView.swift in Sources */,
 				177054771C492FDC00302D83 /* CompassControl.swift in Sources */,
 				173581241C44496700E893DB /* AppConfiguration.swift in Sources */,
+				17D0EB611C52D5D4007F21FC /* Encodable.swift in Sources */,
 				173581211C44459E00E893DB /* MeteredGlucoseValue.swift in Sources */,
 				173A0B7E1C4D25F5005B74FC /* SocketSignal.swift in Sources */,
 				1770548E1C49608400302D83 /* LocalizedStrings.swift in Sources */,
@@ -1217,6 +1227,7 @@
 				173F84F51C4D4D4100DCB47D /* NSAssetKitWatchOS.swift in Sources */,
 				1770548F1C49608400302D83 /* LocalizedStrings.swift in Sources */,
 				1735812B1C444ED400E893DB /* DeviceStatus.swift in Sources */,
+				17D0EB621C52D5D4007F21FC /* Encodable.swift in Sources */,
 				173F84F81C4D4E5800DCB47D /* NSAssetKitWatchOS+Helpers.swift in Sources */,
 				177054661C489BC000302D83 /* Array+Extensions.swift in Sources */,
 				1742F0341C44A281008DED3F /* ServerConfiguration.swift in Sources */,
@@ -1228,6 +1239,7 @@
 				1770546A1C489BC000302D83 /* UIColor+Extension.swift in Sources */,
 				176BE2811C4979950040F1B7 /* Chartable.swift in Sources */,
 				173581221C44459E00E893DB /* MeteredGlucoseValue.swift in Sources */,
+				17D0EB651C52D7FC007F21FC /* Extensions.swift in Sources */,
 				177054671C489BC000302D83 /* Double+Extension.swift in Sources */,
 				1735811F1C443E8900E893DB /* Calibration.swift in Sources */,
 				1735811C1C443C6400E893DB /* Protocols.swift in Sources */,
