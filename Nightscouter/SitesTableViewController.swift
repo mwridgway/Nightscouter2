@@ -58,7 +58,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         
         if let site = SitesDataSource.sharedInstance.sites.first {
             // TODO: REMOVE
-            let socketClient = NightscoutSocketIOClient(url: site.url, apiSecret: site.apiSecret ?? "")
+            let socketClient = NightscoutSocketIOClient(site: site)
             
             socketClient.mapToSite().observeNext { data in
                 
