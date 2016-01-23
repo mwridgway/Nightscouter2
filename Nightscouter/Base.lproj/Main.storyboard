@@ -68,7 +68,7 @@
                                         <fontDescription key="fontDescription" type="system" weight="thin" pointSize="22"/>
                                         <state key="normal" title="Next"/>
                                         <connections>
-                                            <segue destination="LPP-6U-6g3" kind="unwind" identifier="unwindToSiteList" unwindAction="unwindToSiteList:" id="MHl-pC-ZYP"/>
+                                            <segue destination="LPP-6U-6g3" kind="unwind" identifier="UnwindToSiteList" unwindAction="unwindToSiteList:" id="0gw-bN-rAN"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -89,8 +89,7 @@
                     <navigationItem key="navigationItem" id="zW2-Yz-ClZ">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="qGb-pl-Am2">
                             <connections>
-                                <action selector="cancel:" destination="tpL-5x-ndw" id="q1k-gD-xcc"/>
-                                <segue destination="LPP-6U-6g3" kind="unwind" unwindAction="unwindToSiteList:" id="gkr-OC-xJP"/>
+                                <action selector="cancel:" destination="tpL-5x-ndw" id="rMM-EI-GIc"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -700,6 +699,6 @@
         <image name="settingsIcon" width="22" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="HFf-5z-mN3"/>
+        <segue reference="dpt-zN-5Xh"/>
     </inferredMetricsTieBreakers>
 </document>

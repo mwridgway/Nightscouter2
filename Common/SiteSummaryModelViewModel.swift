@@ -70,7 +70,7 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
     public var lookStale: Bool
     public var desiredColor: DesiredColorState
     
-    public init(withSite site:Site) {
+    public init(withSite site: Site) {
         
         let displayUrlString = site.url.host ?? site.url.absoluteString
         

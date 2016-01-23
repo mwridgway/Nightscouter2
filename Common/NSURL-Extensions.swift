@@ -12,11 +12,16 @@ public extension NSURL
 {
     public struct ValidationQueue {
         public static var queue = NSOperationQueue()
-        public static var task = NSURLSessionDataTask()
     }
     
-    public class func validateUrl(urlString: String?, completion:(success: Bool, urlString: String? , error: NSString) -> Void)
-    {
+    enum ValidationError: ErrorType {
+        case Empty(String)
+        case OnlyPrefix(String)
+        case ContainsWhitespace(String)
+        case CouldNotCreateURL(String)
+    }
+    
+    public class func validateUrl(urlString: String?) throws -> NSURL {
         // Description: This function will validate the format of a URL, re-format if necessary, then attempt to make a header request to verify the URL actually exists and responds.
         // Return Value: This function has no return value but uses a closure to send the response to the caller.
         var formattedUrlString : String?
@@ -24,8 +29,7 @@ public extension NSURL
         // Ignore Nils & Empty Strings
         if (urlString == nil || urlString == "")
         {
-            completion(success: false, urlString: nil, error: "Url String was empty")
-            return
+            throw ValidationError.Empty("Url String was empty")
         }
         
         // Ignore prefixes (including partials)
@@ -33,16 +37,14 @@ public extension NSURL
         for prefix in prefixes
         {
             if ((prefix.rangeOfString(urlString!, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil)) != nil){
-                completion(success: false, urlString: nil, error: "Url String was prefix only")
-                return
+                throw ValidationError.OnlyPrefix("Url String was prefix only")
             }
         }
         
         // Ignore URLs with spaces (NOTE - You should use the below method in the caller to remove spaces before attempting to validate a URL)
         let range = urlString!.rangeOfCharacterFromSet(NSCharacterSet.whitespaceCharacterSet())
         if let _ = range {
-            completion(success: false, urlString: nil, error: "Url String cannot contain whitespaces")
-            return
+           throw ValidationError.ContainsWhitespace("Url String cannot contain whitespaces")
         }
         
         // Check that URL already contains required 'http://' or 'https://', prepend if it does not
@@ -51,13 +53,62 @@ public extension NSURL
         {
             formattedUrlString = "https://"+urlString!
         }
+
+        guard let finalURL = NSURL(string: formattedUrlString!) else {
+            throw ValidationError.CouldNotCreateURL("Url could not be created.")
+        }
+        
+        return finalURL
+    }
+    
+    public class func validateUrl(urlString: String?, completion:(success: Bool, urlString: String? , error: NSString) -> Void)
+    {
+//        // Description: This function will validate the format of a URL, re-format if necessary, then attempt to make a header request to verify the URL actually exists and responds.
+//        // Return Value: This function has no return value but uses a closure to send the response to the caller.
+//        var formattedUrlString : String?
+//        
+//        // Ignore Nils & Empty Strings
+//        if (urlString == nil || urlString == "")
+//        {
+//            completion(success: false, urlString: nil, error: "Url String was empty")
+//            return
+//        }
+//        
+//        // Ignore prefixes (including partials)
+//        let prefixes = ["http://www.", "https://www.", "www."]
+//        for prefix in prefixes
+//        {
+//            if ((prefix.rangeOfString(urlString!, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: nil)) != nil){
+//                completion(success: false, urlString: nil, error: "Url String was prefix only")
+//                return
+//            }
+//        }
+//        
+//        // Ignore URLs with spaces (NOTE - You should use the below method in the caller to remove spaces before attempting to validate a URL)
+//        let range = urlString!.rangeOfCharacterFromSet(NSCharacterSet.whitespaceCharacterSet())
+//        if let _ = range {
+//            completion(success: false, urlString: nil, error: "Url String cannot contain whitespaces")
+//            return
+//        }
+//        
+//        // Check that URL already contains required 'http://' or 'https://', prepend if it does not
+//        formattedUrlString = urlString
+//        if (!formattedUrlString!.hasPrefix("http://") && !formattedUrlString!.hasPrefix("https://"))
+//        {
+//            formattedUrlString = "https://"+urlString!
+//        }
+//        
+//        
+        let parsedURL = try? validateUrl(urlString)
+        
         
         // Check that an NSURL can actually be created with the formatted string
-        if let validatedUrl = NSURL(string: formattedUrlString!)
+        if let validatedUrl = parsedURL //NSURL(string: formattedUrlString!)
         {
             // Test that URL actually exists by sending a URL request that returns only the header response
             let request = NSMutableURLRequest(URL: validatedUrl)
             request.HTTPMethod = "HEAD"
+            ValidationQueue.queue.cancelAllOperations()
             
             let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: nil, delegateQueue: ValidationQueue.queue)
             
@@ -88,9 +139,7 @@ public extension NSURL
                 }
             })
             
-            
             task.resume()
-            ValidationQueue.task = task
         }
     }
     
