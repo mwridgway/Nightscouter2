@@ -10,6 +10,7 @@ import Foundation
 import SwiftyJSON
 
 // All the JSON keys I saw when parsing the socket.io output for dataUpdate
+
 struct JSONPropertyKey {
     static let lastUpdated = "lastUpdated"
     static let devicestatus = "devicestatus"

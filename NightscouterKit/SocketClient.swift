@@ -69,26 +69,34 @@ public class NightscoutSocketIOClient {
     }
 }
 
-
 // TODO: Refactor out of this class...
 // Extending the VC, but all of this should be in a data store of some kind.
 
 extension NightscoutSocketIOClient {
     
+    private func addConfigurationDataToSite(site: Site) {
+        var headers: [String: String] = ["Content-Type": "application/json"]
+        headers["api-secret"] = self.apiSecret.sha1()
+        let configurationURL = self.url.URLByAppendingPathComponent("api/v1/status").URLByAppendingPathExtension("json")
+        
+        self.makeHTTPGetRequest(configurationURL, parameters: nil, headers:  headers, completetion: { (result) -> Void in
+            if let jsonDict = result.dictionaryObject {
+                self.site?.parseJSONforConfiugration(JSON(jsonDict))
+            }
+        })
+    }
+    
+    private func addValuesFromJson(site: Site, data: [AnyObject]) {
+        let json = JSON(data[0])
+        
+        self.site?.parseJSONforSocketData(json)
+    }
+    
     public func mapConfigurationValues() -> Signal<Site, NSError> {
         return self.signal.map { data in
             
-            var headers: [String: String] = ["Content-Type": "application/json"]
-            headers["api-secret"] = self.apiSecret.sha1()
-            let configurationURL = self.url.URLByAppendingPathComponent("api/v1/status").URLByAppendingPathExtension("json")
+            self.addConfigurationDataToSite(self.site!)
             
-            self.makeHTTPGetRequest(configurationURL, parameters: nil, headers:  headers, completetion: { (result) -> Void in
-                if let jsonDict = result.dictionaryObject {
-                    self.site?.parseJSONforConfiugration(JSON(jsonDict))
-                    
-                }
-            })
-
             return self.site!
         }
         
@@ -98,9 +106,16 @@ extension NightscoutSocketIOClient {
     public func mapToJsonValues() -> Signal<Site, NSError> {
         return self.signal.map { data in
             
-            let json = JSON(data[0])
-           
-            self.site?.parseJSONforSocketData(json)
+            self.addValuesFromJson(self.site!, data: data)
+            
+            return self.site!
+        }
+    }
+    
+    public func mapToSite() -> Signal<Site, NSError> {
+        return self.signal.map { data in
+            self.addConfigurationDataToSite(self.site!)
+            self.addValuesFromJson(self.site!, data: data)
             
             return self.site!
         }
