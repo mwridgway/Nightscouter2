@@ -56,35 +56,31 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        //        let site = SitesDataSource.sharedInstance.sites.first
-        //
-        //        // TODO: REMOVE
-        //        let socketClient = NightscoutSocketIOClient(url: (site?.url)!, apiSecret: site!.apiSecret!)
-        //
-        //
-        //        socketClient.mapConfigurationValues().observeNext { site in
-        //
-        //
-        //        }
-        //        socketClient.mapToJsonValues().observeNext { data in
-        //
-        //
-        //            self.milliseconds = NSDate().timeIntervalSince1970 * 1000
-        //
-        //            if let siteIndex = self.sites.indexOf(data) {
-        //                self.sites[siteIndex] = data
-        //                let indexPath = NSIndexPath(forRow: siteIndex, inSection: 0)
-        //                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-        //            } else {
-        //                self.sites.append(data)
-        //                let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-        //                self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-        //            }
-        //        }
-        
-        
-        
-        
+        if let site = SitesDataSource.sharedInstance.sites.first {
+            // TODO: REMOVE
+            let socketClient = NightscoutSocketIOClient(url: site.url, apiSecret: site.apiSecret ?? "")
+            
+            socketClient.mapToSite().observeNext { data in
+                
+                self.milliseconds = NSDate().timeIntervalSince1970 * 1000
+                
+                if let siteIndex = self.sites.indexOf(data) {
+                    //                        self.sites[siteIndex] = data
+                    SitesDataSource.sharedInstance.updateSite(data)
+                    let indexPath = NSIndexPath(forRow: siteIndex, inSection: 0)
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                } else {
+                    //                        self.sites.append(data)
+                    SitesDataSource.sharedInstance.addSite(data, atIndex: nil)
+                    
+                    let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+                    self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                }
+            }
+            
+            
+            
+        }
         
         // Check if we should display a form.
         shouldIShowNewSiteForm()
