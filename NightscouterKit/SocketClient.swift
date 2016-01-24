@@ -21,7 +21,7 @@ public class NightscoutSocketIOClient {
     private var url: NSURL!
     
     // TODO: Refactor out...
-    private var site: Site?
+    private var site: Site
     
     private var apiSecret: String
     private let socket: SocketIOClient
@@ -35,23 +35,19 @@ public class NightscoutSocketIOClient {
     
     
     // API Secret is required for any site that is greater than 0.9.0 or better.
-    public init(url: NSURL, apiSecret: String = "") {
+    public init(site: Site) {
         
-        self.url = url
-        self.apiSecret = apiSecret
-        
+        self.site = site
+        self.url = site.url
+        self.apiSecret = site.apiSecret ?? ""
+
         // Create a socket.io client with a url string.
-        self.socket = SocketIOClient(socketURL: url.absoluteString, options: [.Log(true), .ForcePolling(true)])
+        self.socket = SocketIOClient(socketURL: url.absoluteString, options: [.Log(true), .ForcePolling(false)])
         
         // From ericmarkmartin... RAC integration
         self.signal = socket.rac_socketSignal()
         
-        
-        if self.site == nil {
-            self.site = Site(url: self.url, apiSecret: self.apiSecret)
-        }
-        
-        self.site?.milliseconds = NSDate().timeIntervalSince1970 * 1000
+        self.site.milliseconds = NSDate().timeIntervalSince1970 * 1000
         
         
         // Listen to connect.
@@ -81,7 +77,7 @@ extension NightscoutSocketIOClient {
         
         self.makeHTTPGetRequest(configurationURL, parameters: nil, headers:  headers, completetion: { (result) -> Void in
             if let jsonDict = result.dictionaryObject {
-                self.site?.parseJSONforConfiugration(JSON(jsonDict))
+                self.site.parseJSONforConfiugration(JSON(jsonDict))
             }
         })
     }
@@ -89,16 +85,14 @@ extension NightscoutSocketIOClient {
     private func addValuesFromJson(site: Site, data: [AnyObject]) {
         let json = JSON(data[0])
         
-        self.site?.parseJSONforSocketData(json)
+        self.site.parseJSONforSocketData(json)
     }
     
-    public func mapConfigurationValues() -> Signal<Site, NSError> {
-        return self.signal.map { data in
-            
-            self.addConfigurationDataToSite(self.site!)
-            
-            return self.site!
-        }
+    public func mapConfigurationValues() -> SignalProducer<Site, NSError> {
+        self.addConfigurationDataToSite(self.site)
+        
+        return SignalProducer(value: site)
+        
         
     }
     
@@ -106,18 +100,18 @@ extension NightscoutSocketIOClient {
     public func mapToJsonValues() -> Signal<Site, NSError> {
         return self.signal.map { data in
             
-            self.addValuesFromJson(self.site!, data: data)
+            self.addValuesFromJson(self.site, data: data)
             
-            return self.site!
+            return self.site
         }
     }
     
     public func mapToSite() -> Signal<Site, NSError> {
         return self.signal.map { data in
-            self.addConfigurationDataToSite(self.site!)
-            self.addValuesFromJson(self.site!, data: data)
+            self.addConfigurationDataToSite(self.site)
+            self.addValuesFromJson(self.site, data: data)
             
-            return self.site!
+            return self.site
         }
     }
     

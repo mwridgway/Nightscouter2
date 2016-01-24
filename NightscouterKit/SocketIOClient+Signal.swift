@@ -8,7 +8,6 @@
 
 import Foundation
 import Socket_IO_Client_Swift
-import SwiftyJSON
 import ReactiveCocoa
 
 private var signal : Signal<[AnyObject], NSError>? = nil
