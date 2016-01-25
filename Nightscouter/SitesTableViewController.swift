@@ -62,16 +62,22 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             
             socketClient.mapToSite().observeNext { data in
                 
+                var site = data
+                
+                // FIXME: Configuration is not being returned for some reason... adding a default one for now.
+                if site.configuration == nil {
+                    site.configuration = ServerConfiguration()
+                }
                 self.milliseconds = NSDate().timeIntervalSince1970 * 1000
                 
-                if let siteIndex = self.sites.indexOf(data) {
-                    //                        self.sites[siteIndex] = data
-                    SitesDataSource.sharedInstance.updateSite(data)
+                if let siteIndex = self.sites.indexOf(site) {
+                    // self.sites[siteIndex] = data
+                    SitesDataSource.sharedInstance.updateSite(site)
                     let indexPath = NSIndexPath(forRow: siteIndex, inSection: 0)
                     self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
                 } else {
-                    //                        self.sites.append(data)
-                    SitesDataSource.sharedInstance.addSite(data, atIndex: nil)
+                    // self.sites.append(data)
+                    SitesDataSource.sharedInstance.addSite(site, atIndex: nil)
                     
                     let indexPath = NSIndexPath(forRow: 0, inSection: 0)
                     self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
@@ -266,7 +272,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
                 // Add a new site.
                 editing = false
                 let newIndexPath = NSIndexPath(forRow: 0, inSection: 0)
-                SitesDataSource.sharedInstance.sites.insert(site, atIndex: newIndexPath.row)
+                SitesDataSource.sharedInstance.addSite(site, atIndex: newIndexPath.row)
                 
                 tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Automatic)
                 accessoryIndexPath = nil
