@@ -64,11 +64,15 @@ public class SitesDataSource: SitesDataSourceProvider{
     }
     
     public func updateSite(site: Site)  ->  Bool {
+        
+        defer {
+            archiveSites()
+        }
+
         if let index = sites.indexOf(site) {
             sites[index] = site
             return true
         }
-        archiveSites()
         return false
     }
     
@@ -83,6 +87,7 @@ public class SitesDataSource: SitesDataSourceProvider{
             lastViewedSiteUUID = nil
             siteForComplication = nil
         }
-                archiveSites()
+
+        archiveSites()
     }
 }

@@ -54,6 +54,7 @@ class SiteListPageViewController: UIViewController, SitesDataSourceProvider, UIP
         goToListButton.hidden = true
         
         setupNotifications()
+        updateNavigationController()
     }
     
     override func didReceiveMemoryWarning() {
@@ -90,6 +91,7 @@ class SiteListPageViewController: UIViewController, SitesDataSourceProvider, UIP
             let viewControllers: [UIViewController] = [currentViewController]
             self.pageViewController!.setViewControllers(viewControllers, direction: .Forward, animated: true, completion: {done in })
             self.pageViewController!.doubleSided = false
+
             return .Min
         }
         
