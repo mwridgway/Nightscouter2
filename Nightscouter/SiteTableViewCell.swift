@@ -45,7 +45,7 @@ class SiteTableViewCell: UITableViewCell {
         siteRawHeader?.hidden = dataSource.rawHidden
         
         siteRawLabel.text = dataSource.rawLabel
-        siteRawLabel.textColor = delegate?.batteryColor
+        siteRawLabel.textColor = delegate?.rawColor
         
         
         siteNameLabel.text = dataSource.nameLabel
