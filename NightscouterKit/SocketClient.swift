@@ -24,7 +24,7 @@ public class NightscoutSocketIOClient {
     private var site: Site
     
     private var apiSecret: String
-    private let socket: SocketIOClient
+    public let socket: SocketIOClient
     private var authorizationJSON: AnyObject {
         // Turn the the authorization dictionary into a JSON object.
         
@@ -38,9 +38,9 @@ public class NightscoutSocketIOClient {
     public init(site: Site) {
         
         self.site = site
-        self.url = site.url
+        self.url = site.url.URLByDeletingTrailingSlash
         self.apiSecret = site.apiSecret ?? ""
-
+        
         // Create a socket.io client with a url string.
         self.socket = SocketIOClient(socketURL: url.absoluteString, options: [.Log(true), .ForcePolling(false)])
         
