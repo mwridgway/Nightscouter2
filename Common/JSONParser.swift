@@ -196,7 +196,20 @@ extension Site: Encodable {
     }
     
     func encode() -> [String: AnyObject] {
-        return [JSONKey.url : url, JSONKey.overrideScreenLock : overrideScreenLock, JSONKey.disabled: disabled, JSONKey.uuid: uuid]
+        return [JSONKey.url : url.absoluteString, JSONKey.overrideScreenLock : overrideScreenLock, JSONKey.disabled: disabled, JSONKey.uuid: uuid.UUIDString, JSONKey.configuration: configuration?.encode() ?? ""]
+    }
+    
+    func decode(dict: [String: AnyObject]) -> Site? {
+        
+        guard let urlString = dict[JSONKey.url] as? String, url = NSURL(string: urlString), uuidString = dict[JSONKey.uuid] as? String, uuid = NSUUID(UUIDString: uuidString) else {
+            return nil
+        }
+        
+
+        
+        let site = Site(url: url, uuid: uuid)
+        
+        return site
     }
     
     func siteJSON(config: JSON?, socket: JSON?) -> JSON {
@@ -313,7 +326,11 @@ extension Site {
         }
         
         let sgvs = json[JSONPropertyKey.sgvs]
-        for (_, subJson) in sgvs {
+        print("sgv count: \(sgvs.count)")
+
+        for (index, subJson) in sgvs {
+            print("working on sgv[\(index)]")
+
             if let deviceString = subJson[SensorGlucoseValue.JSONKey.device].string, rssi = subJson[SensorGlucoseValue.JSONKey.rssi].int, unfiltered = subJson[SensorGlucoseValue.JSONKey.unfiltered].double, directionString = subJson[SensorGlucoseValue.JSONKey.direction].string, filtered = subJson[SensorGlucoseValue.JSONKey.filtered].double, noiseInt = subJson[SensorGlucoseValue.JSONKey.noise].int, mills = subJson[SensorGlucoseValue.JSONKey.mills].double, mgdl = subJson[SensorGlucoseValue.JSONKey.mgdl].double {
                 
                 let device = Device(rawValue: deviceString) ?? Device.Unknown

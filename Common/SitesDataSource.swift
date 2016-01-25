@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 public protocol SitesDataSourceProvider: Dateable {
     var sites: [Site] { get }
@@ -32,12 +33,22 @@ public class SitesDataSource: SitesDataSourceProvider{
     public static let sharedInstance = SitesDataSource()
     private init(){
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        if let sites = userDefaults.valueForKey("sites") as? [Site] {
-            self.sites = sites
+        if let sites = userDefaults.valueForKey("sites") as? [[String: AnyObject]] {
+            self.sites = sites.flatMap { Site().decode($0) }
         } else {
             // add default data
             sites = []
         }
+    }
+    
+    
+    // MARK: Persistence
+    
+    public func archiveSites() {
+        let siteDict = sites.map { $0.encode() }
+        
+        NSUserDefaults.standardUserDefaults().setObject(siteDict, forKey: "sites")
+        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
     public func addSite(site: Site, atIndex: Int?) {
@@ -48,6 +59,8 @@ public class SitesDataSource: SitesDataSourceProvider{
         } else {
             sites.append(site)
         }
+        
+        archiveSites()
     }
     
     public func updateSite(site: Site)  ->  Bool {
@@ -55,7 +68,7 @@ public class SitesDataSource: SitesDataSourceProvider{
             sites[index] = site
             return true
         }
-        
+        archiveSites()
         return false
     }
     
@@ -70,5 +83,6 @@ public class SitesDataSource: SitesDataSourceProvider{
             lastViewedSiteUUID = nil
             siteForComplication = nil
         }
+                archiveSites()
     }
 }
