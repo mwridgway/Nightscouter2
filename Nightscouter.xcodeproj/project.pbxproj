@@ -63,6 +63,7 @@
 		1742F0401C458765008DED3F /* NSURL-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1742F03F1C458765008DED3F /* NSURL-Extensions.swift */; };
 		1742F0411C458765008DED3F /* NSURL-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1742F03F1C458765008DED3F /* NSURL-Extensions.swift */; };
 		1742F0431C45889D008DED3F /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1742F0421C45889D008DED3F /* FormViewController.swift */; };
+		17490CA21C56BE1800389C7C /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17490CA11C56BE1800389C7C /* AppTheme.swift */; };
 		174EE7041C4F11FB00C7E44E /* Shared Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174EE7031C4F11FB00C7E44E /* Shared Assets.xcassets */; };
 		174EE7051C4F11FB00C7E44E /* Shared Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174EE7031C4F11FB00C7E44E /* Shared Assets.xcassets */; };
 		174EE7061C4F134100C7E44E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 177054891C49601B00302D83 /* Localizable.strings */; };
@@ -263,6 +264,7 @@
 		1742F03C1C458475008DED3F /* NightscouterAssetKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscouterAssetKit.swift; sourceTree = "<group>"; };
 		1742F03F1C458765008DED3F /* NSURL-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURL-Extensions.swift"; sourceTree = "<group>"; };
 		1742F0421C45889D008DED3F /* FormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
+		17490CA11C56BE1800389C7C /* AppTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		174EE7031C4F11FB00C7E44E /* Shared Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Shared Assets.xcassets"; sourceTree = "<group>"; };
 		175DDBF21C48236C0083CC8C /* SiteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewCell.swift; sourceTree = "<group>"; };
 		176BE2751C496A330040F1B7 /* ModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelController.swift; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 		1735807F1C4435BD00E893DB /* NightscouterKit Framework (iOS) */ = {
 			isa = PBXGroup;
 			children = (
+				17490CA11C56BE1800389C7C /* AppTheme.swift */,
 				173A0B7B1C4D25F5005B74FC /* SocketClient.swift */,
 				17D0EB661C53C82E007F21FC /* SocketIOClient+Signal.swift */,
 				176BE2821C497D0C0040F1B7 /* Protocols */,
@@ -1174,6 +1177,7 @@
 				1770545E1C489AD500302D83 /* SiteSummaryModelViewModel.swift in Sources */,
 				177054621C489BBF00302D83 /* Double+Extension.swift in Sources */,
 				1742F0401C458765008DED3F /* NSURL-Extensions.swift in Sources */,
+				17490CA21C56BE1800389C7C /* AppTheme.swift in Sources */,
 				17292ECB1C4FD9B800538D01 /* JSONParser.swift in Sources */,
 				176BE27E1C496E060040F1B7 /* SegueHandlerType.swift in Sources */,
 				173A0B7D1C4D25F5005B74FC /* SocketClient.swift in Sources */,
