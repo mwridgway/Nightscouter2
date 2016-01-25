@@ -329,7 +329,7 @@ extension Site {
         print("sgv count: \(sgvs.count)")
 
         for (index, subJson) in sgvs {
-            print("working on sgv[\(index)]")
+            // print("working on sgv[\(index)]")
 
             if let deviceString = subJson[SensorGlucoseValue.JSONKey.device].string, rssi = subJson[SensorGlucoseValue.JSONKey.rssi].int, unfiltered = subJson[SensorGlucoseValue.JSONKey.unfiltered].double, directionString = subJson[SensorGlucoseValue.JSONKey.direction].string, filtered = subJson[SensorGlucoseValue.JSONKey.filtered].double, noiseInt = subJson[SensorGlucoseValue.JSONKey.noise].int, mills = subJson[SensorGlucoseValue.JSONKey.mills].double, mgdl = subJson[SensorGlucoseValue.JSONKey.mgdl].double {
                 
@@ -343,6 +343,8 @@ extension Site {
         }
         
         let mbgs = json[JSONPropertyKey.mbgs]
+        print("mbgs count: \(mbgs.count)")
+
         for (_, subJson) in mbgs {
             if let deviceString = subJson[MeteredGlucoseValue.JSONKey.device].string, mills = subJson[MeteredGlucoseValue.JSONKey.mills].double, mgdl = subJson[MeteredGlucoseValue.JSONKey.mgdl].double {
                 let device = Device(rawValue: deviceString) ?? Device.Unknown
@@ -352,6 +354,8 @@ extension Site {
         }
         
         let cals = json[JSONPropertyKey.cals]
+        print("cals count: \(cals.count)")
+
         for (_, subJson) in cals {
             if let slope = subJson[Calibration.JSONKey.slope].double, intercept = subJson[Calibration.JSONKey.intercept].double, scale = subJson[Calibration.JSONKey.scale].double, mills = subJson[Calibration.JSONKey.mills].double {
                 let calibration = Calibration(slope: slope, intercept: intercept, scale: scale, milliseconds: mills)
