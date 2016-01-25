@@ -17,6 +17,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        customizeAppAppearance()
+
+        // Register for intial settings.
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        registerInitialSettings(userDefaults)
+        
+        // Register for settings changes as store might have changed
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: Selector("userDefaultsDidChange:"),
+            name: NSUserDefaultsDidChangeNotification,
+            object: nil)
+
         return true
     }
     
@@ -25,23 +38,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
     
-    func applicationDidEnterBackground(application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    }
-    
-    func applicationWillEnterForeground(application: UIApplication) {
-        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-    }
-    
-    func applicationDidBecomeActive(application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    }
-    
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        
+        // Save data.
     }
-    
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
         #if DEBUG
@@ -52,7 +53,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if (!schemes.contains((url.scheme))) { // If the incoming scheme is not contained within the array of supported schemes return false.
             return false
         }
-        
         
         // We now have an acceptable scheme. Pass the URL to the deep linking handler.
         deepLinkToURL(url)
@@ -136,7 +136,39 @@ extension AppDelegate {
         return nil
     }
     
+    private func customizeAppAppearance() {
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
+        // Change the font and size of nav bar text.
+        window?.tintColor = Theme.Color.windowTintColor
+
+        if let navBarFont = Theme.Font.navBarTitleFont {
+            
+            let navBarColor: UIColor = Theme.Color.navBarColor
+            UINavigationBar.appearance().barTintColor = navBarColor
+            UINavigationBar.appearance().tintColor = Theme.Color.windowTintColor
+
+            let navBarAttributesDictionary: [String: AnyObject]? = [
+                NSForegroundColorAttributeName: Theme.Color.navBarTextColor,
+                NSFontAttributeName: navBarFont
+            ]
+            
+            UINavigationBar.appearance().titleTextAttributes = navBarAttributesDictionary
+        }
+    }
+
     
+    // MARK: Notifications
     
+    func userDefaultsDidChange(notification: NSNotification) {
+        if let _ = notification.object as? NSUserDefaults {
+            // archiveStoreIfLocal()
+            // store = storeForUserDefaults(userDefaults)
+            // tabBarController.viewControllers = tabViewControllersForStore(store)
+        }
+    }
+ 
+    private func registerInitialSettings(userDefaults: NSUserDefaults) {
+    }
+
 }
 
