@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		17196DAF1C57F2EB0051F287 /* SiteSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17196DAE1C57F2EB0051F287 /* SiteSettingsTableViewController.swift */; };
 		17292EC71C4FD6D400538D01 /* DictionaryRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17292EC61C4FD6D400538D01 /* DictionaryRepresentable.swift */; };
 		17292EC81C4FD6D400538D01 /* DictionaryRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17292EC61C4FD6D400538D01 /* DictionaryRepresentable.swift */; };
 		17292EC91C4FD6D400538D01 /* DictionaryRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17292EC61C4FD6D400538D01 /* DictionaryRepresentable.swift */; };
@@ -209,6 +210,7 @@
 		01885EF18C4C6177DED89006 /* Pods-NightscouterKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NightscouterKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-NightscouterKit/Pods-NightscouterKit.release.xcconfig"; sourceTree = "<group>"; };
 		0517B0CAAFBC5B79CC2C9081 /* Pods-Nightscouter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter/Pods-Nightscouter.release.xcconfig"; sourceTree = "<group>"; };
 		0BFD910FBCCE4AEC9AC07A53 /* Pods_Nightscouter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nightscouter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		17196DAE1C57F2EB0051F287 /* SiteSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1723E48B1C46D5B600EB4C8F /* SitesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SitesTableViewController.swift; sourceTree = "<group>"; };
 		17292EC61C4FD6D400538D01 /* DictionaryRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryRepresentable.swift; sourceTree = "<group>"; };
 		17292ECA1C4FD9B800538D01 /* JSONParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONParser.swift; sourceTree = "<group>"; };
@@ -642,6 +644,7 @@
 				176BE2771C496A3F0040F1B7 /* SiteDetailViewController.swift */,
 				176BE2781C496A3F0040F1B7 /* SiteListPageViewController.swift */,
 				1723E48B1C46D5B600EB4C8F /* SitesTableViewController.swift */,
+				17196DAE1C57F2EB0051F287 /* SiteSettingsTableViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1157,6 +1160,7 @@
 				176BE27A1C496A3F0040F1B7 /* SiteListPageViewController.swift in Sources */,
 				176BE2791C496A3F0040F1B7 /* SiteDetailViewController.swift in Sources */,
 				173580511C44354200E893DB /* AppDelegate.swift in Sources */,
+				17196DAF1C57F2EB0051F287 /* SiteSettingsTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
