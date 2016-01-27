@@ -41,12 +41,29 @@ extension ServerConfiguration: Encodable {
         dict[JSONKey.serverTime] = serverTime
         dict[JSONKey.careportalEnabled] = careportalEnabled
         dict[JSONKey.boluscalcEnabled] = boluscalcEnabled
-        dict[JSONKey.settings] = settings?.description
+        dict[JSONKey.settings] = settings?.encode()
         dict[JSONKey.head] = head
         dict[JSONKey.version] = version
         dict[JSONKey.name] = name
-        
+
         return dict
+    }
+   func decode(dict: [String: AnyObject]) -> ServerConfiguration? {
+        
+    guard let status = dict[JSONKey.status] as? String, apiEnabled = dict[JSONKey.apiEnabled] as? Bool, serverTime = dict[JSONKey.serverTime] as? String, careportalEnabled = dict[JSONKey.careportalEnabled] as? Bool, boluscalcEnabled = dict[JSONKey.boluscalcEnabled] as? Bool, head = dict[JSONKey.head] as? String, version = dict[JSONKey.version] as? String, name = dict[JSONKey.name] as? String else {
+        return nil
+    }
+    
+    var settings: Settings?
+
+    if let settingsDict = dict[JSONKey.settings] {
+        settings = nil
+    }
+
+    var config = ServerConfiguration(status: status, version: version, name: name, serverTime: serverTime, api: apiEnabled, carePortal: careportalEnabled, boluscalc: boluscalcEnabled, settings: settings, head: head)
+    
+    
+    return config
     }
 }
 
@@ -78,6 +95,7 @@ extension Settings: Encodable {
         static let alarmType = "alarmType"
         static let heartbeat = "heartbeat"
         static let baseURL = "baseURL"
+        static let thresholds = "thresholds"
         
     }
     func encode() -> [String : AnyObject] {
@@ -99,16 +117,17 @@ extension Settings: Encodable {
             JSONKey.alarmUrgentLowMins: alarms.urgentLowMins,
             JSONKey.language: language,
             JSONKey.scaleY: scaleY,
-            JSONKey.enable : enable.description,
+            JSONKey.enable : enable.flatMap { $0.rawValue },
             JSONKey.alarmType: alarmType.description,
             JSONKey.heartbeat: heartbeat,
-            JSONKey.baseURL: baseURL]
+            JSONKey.baseURL: baseURL,
+            JSONKey.thresholds: thresholds.encode()
+        ]
     }
 }
 
 extension Thresholds: Encodable {
     struct JSONKey {
-        static let thresholds = "thresholds"
         static let bgHigh = "bgHigh"
         static let bgLow = "bgLow"
         static let bgTargetBottom = "bgTargetBottom"
@@ -117,12 +136,10 @@ extension Thresholds: Encodable {
     }
     func encode() -> [String : AnyObject] {
         return [
-            JSONKey.thresholds: [
-                JSONKey.bgHigh: bgHigh,
-                JSONKey.bgLow: bgLow,
-                JSONKey.bgTargetBottom: targetBottom,
-                JSONKey.bgTargetTop: targetTop
-            ]
+            JSONKey.bgHigh: bgHigh,
+            JSONKey.bgLow: bgLow,
+            JSONKey.bgTargetBottom: targetBottom,
+            JSONKey.bgTargetTop: targetTop
         ]
     }
 }
@@ -205,9 +222,12 @@ extension Site: Encodable {
             return nil
         }
         
-
+        var site = Site(url: url, uuid: uuid)
         
-        let site = Site(url: url, uuid: uuid)
+        site.overrideScreenLock = dict[JSONKey.overrideScreenLock] as? Bool ?? false
+        site.disabled = dict[JSONKey.disabled] as? Bool ?? false
+        
+        site.configuration = nil //dict[JSONKey.configuration] as? ServerConfiguration
         
         return site
     }
@@ -283,11 +303,11 @@ extension Site {
         let language = settingsJSON[Settings.JSONKey.language].string ?? "en"
         let scaleY = settingsJSON[Settings.JSONKey.scaleY].string ?? "log"
         
-        let enabled: [ShowPlugins] = settingsJSON[Settings.JSONKey.enable].arrayValue.flatMap {
-            ShowPlugins(rawValue: $0.stringValue)
+        let enabled: [Plugin] = settingsJSON[Settings.JSONKey.enable].arrayValue.flatMap {
+            Plugin(rawValue: $0.stringValue)
         }
         
-        let thresholdsJSON = settingsJSON[Thresholds.JSONKey.thresholds]
+        let thresholdsJSON = settingsJSON[Settings.JSONKey.thresholds]
         let thresholds = Thresholds(bgHigh: thresholdsJSON[Thresholds.JSONKey.bgHigh].doubleValue, bgLow: thresholdsJSON[Thresholds.JSONKey.bgLow].doubleValue, bgTargetBottom: thresholdsJSON[Thresholds.JSONKey.bgTargetBottom].doubleValue, bgTargetTop: thresholdsJSON[Thresholds.JSONKey.bgTargetTop].doubleValue)
         
         let alarmType = AlarmType(rawValue: settingsJSON[Settings.JSONKey.alarmType].stringValue) ?? .simple
@@ -327,10 +347,10 @@ extension Site {
         
         let sgvs = json[JSONPropertyKey.sgvs]
         print("sgv count: \(sgvs.count)")
-
-        for (index, subJson) in sgvs {
+        
+        for (_, subJson) in sgvs {
             // print("working on sgv[\(index)]")
-
+            
             if let deviceString = subJson[SensorGlucoseValue.JSONKey.device].string, rssi = subJson[SensorGlucoseValue.JSONKey.rssi].int, unfiltered = subJson[SensorGlucoseValue.JSONKey.unfiltered].double, directionString = subJson[SensorGlucoseValue.JSONKey.direction].string, filtered = subJson[SensorGlucoseValue.JSONKey.filtered].double, noiseInt = subJson[SensorGlucoseValue.JSONKey.noise].int, mills = subJson[SensorGlucoseValue.JSONKey.mills].double, mgdl = subJson[SensorGlucoseValue.JSONKey.mgdl].double {
                 
                 let device = Device(rawValue: deviceString) ?? Device.Unknown
@@ -344,7 +364,7 @@ extension Site {
         
         let mbgs = json[JSONPropertyKey.mbgs]
         print("mbgs count: \(mbgs.count)")
-
+        
         for (_, subJson) in mbgs {
             if let deviceString = subJson[MeteredGlucoseValue.JSONKey.device].string, mills = subJson[MeteredGlucoseValue.JSONKey.mills].double, mgdl = subJson[MeteredGlucoseValue.JSONKey.mgdl].double {
                 let device = Device(rawValue: deviceString) ?? Device.Unknown
@@ -355,7 +375,7 @@ extension Site {
         
         let cals = json[JSONPropertyKey.cals]
         print("cals count: \(cals.count)")
-
+        
         for (_, subJson) in cals {
             if let slope = subJson[Calibration.JSONKey.slope].double, intercept = subJson[Calibration.JSONKey.intercept].double, scale = subJson[Calibration.JSONKey.scale].double, mills = subJson[Calibration.JSONKey.mills].double {
                 let calibration = Calibration(slope: slope, intercept: intercept, scale: scale, milliseconds: mills)
