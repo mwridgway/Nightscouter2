@@ -35,7 +35,14 @@ public class SitesDataSource: SitesDataSourceProvider{
             saveSitesToDefaults()
         }
     }
-    public var siteForComplication: NSUUID?
+    public var siteForComplication: NSUUID? {
+        didSet {
+            if let uuid = sites.first?.uuid where siteForComplication == nil{
+                siteForComplication = uuid
+            }
+            saveSitesToDefaults()
+        }
+    }
     //public var milliseconds: Double = AppConfiguration.Constant.knownMilliseconds
     
     public static let sharedInstance = SitesDataSource()
