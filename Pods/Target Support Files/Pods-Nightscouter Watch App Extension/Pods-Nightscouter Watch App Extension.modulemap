@@ -1,6 +1,0 @@
-framework module Pods_Nightscouter_Watch_App_Extension {
-  umbrella header "Pods-Nightscouter Watch App Extension-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -1,6 +1,0 @@
-framework module Alamofire {
-  umbrella header "Pods-NightscouterWatchKit-Alamofire-umbrella.h"
-
-  export *
-  module * { export * }
-}
