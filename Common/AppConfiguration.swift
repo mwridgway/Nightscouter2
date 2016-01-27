@@ -61,4 +61,12 @@ public class AppConfiguration {
         dateFormatter.timeZone = NSTimeZone.localTimeZone()
         return dateFormatter
     }()
+    
+    public static let serverTimeDateFormatter: NSDateFormatter = {
+        // Sample String: "2016-01-13T15:31:11.023Z"
+        let formatString = "yyyy-MM-dd'T'HH:mm:ss.sss'Z'"
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = formatString
+        return dateFormatter
+    }()
 }

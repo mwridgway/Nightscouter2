@@ -32,7 +32,11 @@ class SiteDetailViewController: UIViewController, UIWebViewDelegate {
         }
     }
     //var nsApi: NightscoutAPIClient?
-    var data = [AnyObject]()
+    var data = [AnyObject]() {
+        didSet{
+            loadWebView()
+        }
+    }
     
     // MARK: View Lifecycle
     override func viewDidLoad() {
@@ -70,7 +74,7 @@ extension SiteDetailViewController{
         // print("\(segue)")
     }
     @IBAction func launchSiteSettings(sender: UIBarButtonItem) {
-     presentSettings(sender)
+        presentSettings(sender)
     }
 }
 
@@ -86,6 +90,7 @@ extension SiteDetailViewController {
         }
         webView.stringByEvaluatingJavaScriptFromString(updateData)
         webView.hidden = false
+        siteActivityView?.stopAnimating()
     }
     
 }
@@ -94,9 +99,12 @@ extension SiteDetailViewController {
     
     func configureView() {
         if let site = site {
-        let dataSource = SiteSummaryModelViewModel(withSite: site)
-            siteLastReadingLabel?.text = dataSource.lastReadingDate.description
-            siteLastReadingLabel?.textColor = dataSource.batteryColor
+            
+            UIApplication.sharedApplication().idleTimerDisabled = site.overrideScreenLock
+            
+            let dataSource = SiteSummaryModelViewModel(withSite: site)
+            siteLastReadingLabel?.text = dataSource.lastReadingDate.timeAgoSinceNow()
+            siteLastReadingLabel?.textColor = dataSource.lastReadingColor
             
             siteBatteryLabel?.text = dataSource.batteryLabel
             siteBatteryLabel?.textColor = dataSource.batteryColor
@@ -105,10 +113,15 @@ extension SiteDetailViewController {
             siteRawHeader?.hidden = dataSource.rawHidden
             
             siteRawLabel?.text = dataSource.rawLabel
-            siteRawLabel?.textColor = dataSource.batteryColor
-    
+            siteRawLabel?.textColor = dataSource.sgvColor
+            
             siteNameLabel?.text = dataSource.nameLabel
             siteCompassControl?.configure(withDataSource: dataSource, delegate: dataSource)
+            
+            self.updateTitles(dataSource.nameLabel)
+            
+            data = site.sgvs.map{ $0.jsonForChart }
+            
         }
         
     }
@@ -139,14 +152,11 @@ extension SiteDetailViewController {
     }
     
     func updateScreenOverride(shouldOverride: Bool) {
-        if let site = self.site {
-            //            site.overrideScreenLock = shouldOverride
-            
-            //            AppDataManageriOS.sharedInstance.shouldDisableIdleTimer = site.overrideScreenLock
-            //            AppDataManageriOS.sharedInstance.updateSite(site)
-            UIApplication.sharedApplication().idleTimerDisabled = site.overrideScreenLock
-        }
-        
+
+            self.site?.overrideScreenLock = shouldOverride
+            SitesDataSource.sharedInstance.updateSite(self.site!)
+            UIApplication.sharedApplication().idleTimerDisabled = site?.overrideScreenLock ?? false
+
         #if DEBUG
             print("{site.overrideScreenLock:\(site?.overrideScreenLock), AppDataManageriOS.shouldDisableIdleTimer:\(AppDataManageriOS.sharedInstance.shouldDisableIdleTimer), UIApplication.idleTimerDisabled:\(UIApplication.sharedApplication().idleTimerDisabled)}")
         #endif
@@ -154,48 +164,59 @@ extension SiteDetailViewController {
     
     func presentSettings(sender: UIBarButtonItem) {
         
-        let alertController = UIAlertController(title: LocalizedString.uiAlertScreenOverrideTitle.localized, message: LocalizedString.uiAlertScreenOverrideMessage.localized, preferredStyle: .ActionSheet)
+        //        let alertController = UIAlertController(title: LocalizedString.uiAlertScreenOverrideTitle.localized, message: LocalizedString.uiAlertScreenOverrideMessage.localized, preferredStyle: .ActionSheet)
+        //
+        //        let cancelAction = UIAlertAction(title: LocalizedString.generalCancelLabel.localized, style: .Cancel) { (action) in
+        //            #if DEBUG
+        //                print("Canceled action: \(action)")
+        //            #endif
+        //        }
+        //        alertController.addAction(cancelAction)
+        //
+        //        let checkEmoji = "✓ "
+        //        var yesString = "   "
+        //        if site?.overrideScreenLock == true {
+        //            yesString = checkEmoji
+        //        }
+        //
+        //        let yesAction = UIAlertAction(title: "\(yesString)\(LocalizedString.generalYesLabel.localized)", style: .Default) { (action) -> Void in
+        //            self.updateScreenOverride(true)
+        //            #if DEBUG
+        //                print("Yes action: \(action)")
+        //            #endif
+        //        }
+        //
+        //        alertController.addAction(yesAction)
+        //
+        //        alertController.preferredAction = yesAction
+        //
+        //        var noString = "   "
+        //        if (site!.overrideScreenLock == false) {
+        //            noString = checkEmoji
+        //        }
+        //
+        //        let noAction = UIAlertAction(title: "\(noString)\(LocalizedString.generalNoLabel.localized)", style: .Destructive) { (action) -> Void in
+        //            self.updateScreenOverride(false)
+        //            #if DEBUG
+        //                print("No action: \(action)")
+        //            #endif
+        //        }
+        //        alertController.addAction(noAction)
+        //
+        //        alertController.view.tintColor = NightscouterAssetKit.darkNavColor
+        //
+        //        self.view.window?.tintColor = nil
         
-        let cancelAction = UIAlertAction(title: LocalizedString.generalCancelLabel.localized, style: .Cancel) { (action) in
-            #if DEBUG
-                print("Canceled action: \(action)")
-            #endif
+        
+        guard let alertController = self.storyboard?.instantiateViewControllerWithIdentifier("SiteSettingsNavigationViewController") as? UINavigationController else {
+            return
         }
-        alertController.addAction(cancelAction)
         
-        let checkEmoji = "✓ "
-        var yesString = "   "
-        if site?.overrideScreenLock == true {
-            yesString = checkEmoji
+        if let vc = alertController.viewControllers.first as? SiteSettingsTableViewController {
+            vc.delegate = self
         }
         
-        let yesAction = UIAlertAction(title: "\(yesString)\(LocalizedString.generalYesLabel.localized)", style: .Default) { (action) -> Void in
-            //self.updateScreenOverride(true)
-            #if DEBUG
-                print("Yes action: \(action)")
-            #endif
-        }
         
-        alertController.addAction(yesAction)
-        
-        alertController.preferredAction = yesAction
-        
-        var noString = "   "
-        if (site!.overrideScreenLock == false) {
-            noString = checkEmoji
-        }
-        
-        let noAction = UIAlertAction(title: "\(noString)\(LocalizedString.generalNoLabel.localized)", style: .Destructive) { (action) -> Void in
-            //self.updateScreenOverride(false)
-            #if DEBUG
-                print("No action: \(action)")
-            #endif
-        }
-        alertController.addAction(noAction)
-        
-        alertController.view.tintColor = NightscouterAssetKit.darkNavColor
-        
-        self.view.window?.tintColor = nil
         
         if let popoverController = alertController.popoverPresentationController {
             popoverController.barButtonItem = sender
@@ -208,4 +229,36 @@ extension SiteDetailViewController {
         }
     }
     
+}
+
+extension SiteDetailViewController: SiteSettingsDelegate {
+    
+    var settings: [SettingsModelViewModel] {
+        
+        var tempSettings: [SettingsModelViewModel] = []
+        if let site = site {
+            
+            let defaultSite = site.uuid == SitesDataSource.sharedInstance.siteForComplication
+            
+            tempSettings.append(SettingsModelViewModel(title: "Prevent Screen from Locking?", subTitle: nil, switchOn: site.overrideScreenLock))
+            tempSettings.append(SettingsModelViewModel(title: "Use as Default Site", subTitle: "\nWhen enabled, this site's information will be proiritized for the watch.\n", switchOn: defaultSite , cellIdentifier: .cellSubtitle))
+            tempSettings.append(SettingsModelViewModel(title: "Edit", subTitle: "Change any available settings for connecting to the site.", cellIdentifier: .cellBasicDisclosure))
+        }
+        return tempSettings
+    }
+    
+    
+    func settingDidChange(setting: SettingsModelViewModel, atIndexPath: NSIndexPath, inViewController: SiteSettingsTableViewController) {
+        if atIndexPath.row == 0 {
+            self.updateScreenOverride(setting.switchOn ?? false)
+        } else if atIndexPath.row == 1 {
+            if let boolSetting = setting.switchOn where boolSetting == true {
+                SitesDataSource.sharedInstance.siteForComplication = site?.uuid
+            } else {
+                SitesDataSource.sharedInstance.siteForComplication = nil
+            }
+        }
+        
+        print("setting changed for site")
+    }
 }

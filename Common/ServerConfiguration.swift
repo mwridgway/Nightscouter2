@@ -41,15 +41,19 @@ public struct ServerConfiguration: CustomStringConvertible {
         self.name = "NightscoutTest"
         self.serverTime = "2016-01-13T15:04:59.059Z"
         self.apiEnabled = true
-        self.careportalEnabled = true
-        self.boluscalcEnabled = true
+        self.careportalEnabled = false
+        self.boluscalcEnabled = false
         
-        let alrm = Alarm(urgentHigh: true, urgentHighMins: [1,2,3], high: true, highMins: [1,2,3], low: true, lowMins: [1,2,3], urgentLow: true, urgentLowMins: [1,2,3], warnMins: [1,2,3])
-        let timeAgo = TimeAgoAlert(warn: true, warnMins: 5, urgent: true, urgentMins: 10)
-        let plugins: [ShowPlugins] = [ShowPlugins.delta, ShowPlugins.rawbg]
+        let placeholderAlarm1 = [15, 30, 45, 60]
+        let placeholderAlarm2 = [30, 60, 90, 120]
+
+        
+        let alrm = Alarm(urgentHigh: true, urgentHighMins: placeholderAlarm2, high: true, highMins: placeholderAlarm2, low: true, lowMins: placeholderAlarm1, urgentLow: true, urgentLowMins: placeholderAlarm1, warnMins: placeholderAlarm2)
+        let timeAgo = TimeAgoAlert(warn: true, warnMins: 10, urgent: true, urgentMins: 15)
+        let plugins: [Plugin] = [Plugin.delta, Plugin.rawbg]
         let thre = Thresholds(bgHigh: 300, bgLow: 70, bgTargetBottom: 60, bgTargetTop: 250)
         let atype = AlarmType.predict
-        self.settings = Settings(units: .Mgdl, timeFormat: 12, nightMode: false, editMode: false, showRawbg: RawBGMode.Always, customTitle: "CustomTitle", theme: "color", alarms: alrm, timeAgo: timeAgo, scaleY: " ", language: "en", showPlugins: plugins, enable: plugins, thresholds: thre, baseURL: " ", alarmType: atype, heartbeat: 10)
+        self.settings = Settings(units: .Mgdl, timeFormat: 12, nightMode: false, editMode: false, showRawbg: RawBGMode.Always, customTitle: "NightscoutDefault", theme: "color", alarms: alrm, timeAgo: timeAgo, scaleY: "log", language: "en", showPlugins: plugins, enable: plugins, thresholds: thre, baseURL: "", alarmType: atype, heartbeat: 60)
 
         self.head = "EMPTY"
     }
@@ -57,10 +61,8 @@ public struct ServerConfiguration: CustomStringConvertible {
     public init(status: String, version: String, name: String, serverTime: String, api: Bool, carePortal: Bool, boluscalc: Bool, settings: Settings?, head: String) {
         self.status = "okToTest"
         self.version = "0.0.0test"
-        self.name = "NightscoutTest"
-        
-        // let testString = "yyyy-MM-dd'T'HH:mm:ss.sss'Z'"
-        self.serverTime = "2016-01-13T15:04:59.059Z"
+        self.name = "NightscoutDefault"
+        self.serverTime = AppConfiguration.serverTimeDateFormatter.stringFromDate(NSDate())
         self.apiEnabled = true
         self.careportalEnabled = true
         self.boluscalcEnabled = true
@@ -81,7 +83,7 @@ extension ServerConfiguration {
     
     public var displayRawData: Bool {
         if let settings = settings {
-            let rawEnabled = settings.enable.contains(ShowPlugins.rawbg)
+            let rawEnabled = settings.enable.contains(Plugin.rawbg)
             if rawEnabled {
                 switch settings.showRawbg {
                 case .Noise:
@@ -118,8 +120,8 @@ public struct Settings: CustomStringConvertible {
     public let timeAgo: TimeAgoAlert
     public let scaleY: String
     public let language: String
-    public let showPlugins: [ShowPlugins]
-    public let enable: [ShowPlugins]
+    public let showPlugins: [Plugin]
+    public let enable: [Plugin]
     public let thresholds: Thresholds
     public let baseURL: String
     public let alarmType: AlarmType
@@ -131,7 +133,7 @@ public struct Settings: CustomStringConvertible {
     }
 }
 
-public enum ShowPlugins: String, CustomStringConvertible {
+public enum Plugin: String, CustomStringConvertible, RawRepresentable {
     case careportal = "careportal"
     case rawbg = "rawbg"
     case iob = "iob"

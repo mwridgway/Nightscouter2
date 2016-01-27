@@ -24,7 +24,6 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         return SitesDataSource.sharedInstance.sites
     }
     
-    
     var milliseconds: Double = 0 {
         didSet{
             let str = String(stringInterpolation:LocalizedString.lastUpdatedDateLabel.localized, AppConfiguration.lastUpdatedDateFormatter.stringFromDate(date))
@@ -61,25 +60,26 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             let socketClient = NightscoutSocketIOClient(site: site)
             
             socketClient.mapToSite().observeNext { data in
-                
+                var site = data
+                // FIXME: Configuration is not being returned for some reason... adding a default one for now.
+                if site.configuration == nil {
+                    site.configuration = ServerConfiguration()
+                }
                 self.milliseconds = NSDate().timeIntervalSince1970 * 1000
                 
-                if let siteIndex = self.sites.indexOf(data) {
-                    //                        self.sites[siteIndex] = data
-                    SitesDataSource.sharedInstance.updateSite(data)
-                    let indexPath = NSIndexPath(forRow: siteIndex, inSection: 0)
+                if let index = SitesDataSource.sharedInstance.sites.indexOf(site) {
+                    SitesDataSource.sharedInstance.updateSite(site)
+                    let indexPath = NSIndexPath(forRow: index, inSection: 0)
                     self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
                 } else {
-                    //                        self.sites.append(data)
-                    SitesDataSource.sharedInstance.addSite(data, atIndex: nil)
-                    
+                    // self.sites.append(data)
                     let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+                    SitesDataSource.sharedInstance.addSite(site, atIndex: indexPath.row)
                     self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
                 }
+                
             }
-            
-            
-            
+            self.tableView.reloadData()
         }
         
         // Check if we should display a form.
@@ -198,6 +198,9 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             if let selectedSiteCell = sender as? UITableViewCell {
                 let indexPath = tableView.indexPathForCell(selectedSiteCell)!
                 let selectedSite = sites[indexPath.row]
+                
+                SitesDataSource.sharedInstance.lastViewedSiteIndex = indexPath.row
+                SitesDataSource.sharedInstance.lastViewedSiteUUID = selectedSite.uuid
                 siteDetailViewController.site = selectedSite
             }
             
@@ -266,8 +269,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
                 // Add a new site.
                 editing = false
                 let newIndexPath = NSIndexPath(forRow: 0, inSection: 0)
-                SitesDataSource.sharedInstance.sites.insert(site, atIndex: newIndexPath.row)
-                
+                SitesDataSource.sharedInstance.addSite(site, atIndex: newIndexPath.row)
                 tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Automatic)
                 accessoryIndexPath = nil
             }
@@ -278,6 +280,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             // let site = modelController.sites[pageViewController.lastViewedSiteIndex]
             tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: pageViewController.lastViewedSiteIndex, inSection: 0)], withRowAnimation: .Automatic)
         }
+
         shouldIShowNewSiteForm()
     }
     
@@ -292,7 +295,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         // Configure table view properties.
         tableView.rowHeight = 240
         tableView.backgroundView = BackgroundView() // TODO: Move this out to a theme manager.
-        tableView.separatorColor = NightscouterAssetKit.darkNavColor
+        tableView.separatorColor = Theme.Color.navBarColor
         
         // Position refresh control above background view
         refreshControl?.tintColor = UIColor.whiteColor()
@@ -345,10 +348,9 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         
         let retryAction = UIAlertAction(title: LocalizedString.generalRetryLabel.localized, style: .Default) { (action) in
             let indexPath = NSIndexPath(forRow: index, inSection: 0)
-            //let site = AppDataManageriOS.sharedInstance.sites[indexPath.row]
+            let site = SitesDataSource.sharedInstance.sites[indexPath.row]
             //site.disabled = false
-            //AppDataManageriOS.sharedInstance.updateSite(site)
-            
+            SitesDataSource.sharedInstance.updateSite(site)
             self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
         }
         alertController.addAction(retryAction)
@@ -363,7 +365,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         
         let removeAction = UIAlertAction(title: LocalizedString.tableViewCellRemove.localized, style: .Destructive) { (action) in
             self.tableView.beginUpdates()
-            //AppDataManageriOS.sharedInstance.deleteSiteAtIndex(index)
+            SitesDataSource.sharedInstance.removeSite(index)
             self.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
             self.tableView.endUpdates()
         }
@@ -380,6 +382,4 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             // ...
         }
     }
-    
-    
 }

@@ -50,10 +50,11 @@ class SiteListPageViewController: UIViewController, SitesDataSourceProvider, UIP
         // Add the page view controller's gesture recognizers to the book view controller's view so that the gestures are started more easily.
         view.gestureRecognizers = pageViewController!.gestureRecognizers
         
-        view.bringSubviewToFront(self.goToListButton)
+        // view.bringSubviewToFront(self.goToListButton)
         goToListButton.hidden = true
         
         setupNotifications()
+        updateNavigationController()
     }
     
     override func didReceiveMemoryWarning() {
@@ -90,6 +91,7 @@ class SiteListPageViewController: UIViewController, SitesDataSourceProvider, UIP
             let viewControllers: [UIViewController] = [currentViewController]
             self.pageViewController!.setViewControllers(viewControllers, direction: .Forward, animated: true, completion: {done in })
             self.pageViewController!.doubleSided = false
+
             return .Min
         }
         
