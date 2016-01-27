@@ -41,8 +41,8 @@ public struct ServerConfiguration: CustomStringConvertible {
         self.name = "NightscoutTest"
         self.serverTime = "2016-01-13T15:04:59.059Z"
         self.apiEnabled = true
-        self.careportalEnabled = true
-        self.boluscalcEnabled = true
+        self.careportalEnabled = false
+        self.boluscalcEnabled = false
         
         let placeholderAlarm1 = [15, 30, 45, 60]
         let placeholderAlarm2 = [30, 60, 90, 120]
@@ -50,7 +50,7 @@ public struct ServerConfiguration: CustomStringConvertible {
         
         let alrm = Alarm(urgentHigh: true, urgentHighMins: placeholderAlarm2, high: true, highMins: placeholderAlarm2, low: true, lowMins: placeholderAlarm1, urgentLow: true, urgentLowMins: placeholderAlarm1, warnMins: placeholderAlarm2)
         let timeAgo = TimeAgoAlert(warn: true, warnMins: 10, urgent: true, urgentMins: 15)
-        let plugins: [ShowPlugins] = [ShowPlugins.delta, ShowPlugins.rawbg]
+        let plugins: [Plugin] = [Plugin.delta, Plugin.rawbg]
         let thre = Thresholds(bgHigh: 300, bgLow: 70, bgTargetBottom: 60, bgTargetTop: 250)
         let atype = AlarmType.predict
         self.settings = Settings(units: .Mgdl, timeFormat: 12, nightMode: false, editMode: false, showRawbg: RawBGMode.Always, customTitle: "NightscoutDefault", theme: "color", alarms: alrm, timeAgo: timeAgo, scaleY: "log", language: "en", showPlugins: plugins, enable: plugins, thresholds: thre, baseURL: "", alarmType: atype, heartbeat: 60)
@@ -83,7 +83,7 @@ extension ServerConfiguration {
     
     public var displayRawData: Bool {
         if let settings = settings {
-            let rawEnabled = settings.enable.contains(ShowPlugins.rawbg)
+            let rawEnabled = settings.enable.contains(Plugin.rawbg)
             if rawEnabled {
                 switch settings.showRawbg {
                 case .Noise:
@@ -120,8 +120,8 @@ public struct Settings: CustomStringConvertible {
     public let timeAgo: TimeAgoAlert
     public let scaleY: String
     public let language: String
-    public let showPlugins: [ShowPlugins]
-    public let enable: [ShowPlugins]
+    public let showPlugins: [Plugin]
+    public let enable: [Plugin]
     public let thresholds: Thresholds
     public let baseURL: String
     public let alarmType: AlarmType
@@ -133,7 +133,7 @@ public struct Settings: CustomStringConvertible {
     }
 }
 
-public enum ShowPlugins: String, CustomStringConvertible {
+public enum Plugin: String, CustomStringConvertible, RawRepresentable {
     case careportal = "careportal"
     case rawbg = "rawbg"
     case iob = "iob"
