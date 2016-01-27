@@ -280,6 +280,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             // let site = modelController.sites[pageViewController.lastViewedSiteIndex]
             tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: pageViewController.lastViewedSiteIndex, inSection: 0)], withRowAnimation: .Automatic)
         }
+
         shouldIShowNewSiteForm()
     }
     
@@ -294,7 +295,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         // Configure table view properties.
         tableView.rowHeight = 240
         tableView.backgroundView = BackgroundView() // TODO: Move this out to a theme manager.
-        tableView.separatorColor = NightscouterAssetKit.darkNavColor
+        tableView.separatorColor = Theme.Color.navBarColor
         
         // Position refresh control above background view
         refreshControl?.tintColor = UIColor.whiteColor()
