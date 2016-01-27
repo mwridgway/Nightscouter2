@@ -72,7 +72,7 @@ public class SitesDataSource: SitesDataSourceProvider{
     
     public func loadSitesFromDefaults() {
         if let sites = defaults.valueForKey(DefaultKey.sites.rawValue) as? [[String: AnyObject]] {
-            self.sites = sites.flatMap { Site().decode($0) }
+            self.sites = sites.flatMap { Site.decode($0) }
         }
         
         lastViewedSiteIndex = defaults.integerForKey(DefaultKey.lastViewedSiteIndex.rawValue)

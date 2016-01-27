@@ -77,7 +77,9 @@ extension NightscoutSocketIOClient {
         
         self.makeHTTPGetRequest(configurationURL, parameters: nil, headers:  headers, completetion: { (result) -> Void in
             if let jsonDict = result.dictionaryObject {
-                self.site.parseJSONforConfiugration(JSON(jsonDict))
+                let configuration = ServerConfiguration.decode(jsonDict)
+                // self.site.parseJSONforConfiugration(JSON(jsonDict))
+                self.site.configuration = configuration
             }
         })
     }
@@ -134,6 +136,7 @@ extension NightscoutSocketIOClient {
                     print(error)
                     break
                 }
+                
         }
     }
     
