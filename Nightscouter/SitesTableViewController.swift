@@ -8,7 +8,6 @@
 
 import UIKit
 import NightscouterKit
-import ReactiveCocoa
 
 class SitesTableViewController: UITableViewController, SitesDataSourceProvider, SegueHandlerType {
     
@@ -38,15 +37,10 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
      Used for triggering a transition into edit mode.
      */
     var accessoryIndexPath: NSIndexPath?
+    var sockets = [NightscoutSocketIOClient]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         // Common setup.
         configureView()
@@ -54,33 +48,6 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        if let site = SitesDataSource.sharedInstance.sites.first {
-            // TODO: REMOVE
-            let socketClient = NightscoutSocketIOClient(site: site)
-            
-            socketClient.mapToSite().observeNext { data in
-                var site = data
-                // FIXME: Configuration is not being returned for some reason... adding a default one for now.
-                if site.configuration == nil {
-                    site.configuration = ServerConfiguration()
-                }
-                self.milliseconds = NSDate().timeIntervalSince1970 * 1000
-                
-                if let index = SitesDataSource.sharedInstance.sites.indexOf(site) {
-                    SitesDataSource.sharedInstance.updateSite(site)
-                    let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-                } else {
-                    // self.sites.append(data)
-                    let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-                    SitesDataSource.sharedInstance.addSite(site, atIndex: indexPath.row)
-                    self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-                }
-                
-            }
-            self.tableView.reloadData()
-        }
         
         // Check if we should display a form.
         shouldIShowNewSiteForm()
@@ -111,8 +78,10 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         
         let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier.SiteTableViewStyleLarge, forIndexPath: indexPath) as! SiteTableViewCell
         
+        cell.site = sites[indexPath.row]
         let model = sites[indexPath.row].generateSummaryModelViewModel()
         cell.configure(withDataSource: model, delegate: model)
+        
         return cell
     }
     
@@ -280,7 +249,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             // let site = modelController.sites[pageViewController.lastViewedSiteIndex]
             tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: pageViewController.lastViewedSiteIndex, inSection: 0)], withRowAnimation: .Automatic)
         }
-
+        
         shouldIShowNewSiteForm()
     }
     
@@ -313,10 +282,23 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
                 refreshControl?.beginRefreshing()
                 tableView.setContentOffset(CGPointMake(0, tableView.contentOffset.y-refreshControl!.frame.size.height), animated: true)
             }
-            // for (index, site) in sites.enumerate() {
-            //  refreshDataFor(site, index: index)
-            // }
-            // refreshControl?.endRefreshing()
+            //
+            //            for (index, oldSite) in sites.enumerate() {
+            //                let socket = NightscoutSocketIOClient(site: oldSite)
+            //
+            //                sockets.append(socket)
+            //                socket.fetchConfigurationData().startWithNext { site in
+            //                    if let site = site {
+            //                        SitesDataSource.sharedInstance.updateSite(site)
+            //                    }
+            //                }
+            //                socket.fetchSocketData().observeNext { site in
+            //                    SitesDataSource.sharedInstance.updateSite(site)
+            //                    self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
+            //                }
+            //            }
+            
+            self.tableView.reloadData()
         }
         
         defer {

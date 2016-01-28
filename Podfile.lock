@@ -15,7 +15,7 @@ PODS:
     - ReactiveCocoa/Core
     - Result (~> 1.0)
   - Result (1.0.1)
-  - Socket.IO-Client-Swift (4.1.6)
+  - Socket.IO-Client-Swift (5.3.0)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
@@ -24,7 +24,7 @@ DEPENDENCIES:
   - DateTools
   - KeychainAccess
   - ReactiveCocoa (= 4.0.0-RC.2)
-  - Socket.IO-Client-Swift (~> 4.1.6)
+  - Socket.IO-Client-Swift
   - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
 
 EXTERNAL SOURCES:
@@ -33,7 +33,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   SwiftyJSON:
-    :commit: 929539eb6a3304eaa9153ca44041a78b85bf2ee5
+    :commit: 42bdb102d2624b143c07850ebdc1537d5b6579b6
     :git: https://github.com/SwiftyJSON/SwiftyJSON.git
 
 SPEC CHECKSUMS:
@@ -43,9 +43,9 @@ SPEC CHECKSUMS:
   KeychainAccess: 9b7e49e48277e329b1b3195e54697ed313d30acf
   ReactiveCocoa: 0d875167414bfe743bc5bf544ae5b05fddaf757d
   Result: caef80340451e1f07492fa1e89117f83613bce24
-  Socket.IO-Client-Swift: 5e8aa2961d1f32e5c0e104c00c9f192133a92d11
+  Socket.IO-Client-Swift: d3589e7c2b9410d17ec12ded0b0a58ffa2406584
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
-PODFILE CHECKSUM: b81fd70af8d5e60803513c1b011b2ee3170dd821
+PODFILE CHECKSUM: 75dbe186697b000e8a654e40be0a02093268d331
 
 COCOAPODS: 1.0.0.beta.2

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Socket_IO_Client_Swift
+import SocketIOClientSwift
 import ReactiveCocoa
 
 private var signal : Signal<[AnyObject], NSError>? = nil
@@ -26,7 +26,7 @@ public extension SocketIOClient {
             }
             
             self.on(WebEvents.dataUpdate.rawValue) { data, ack in
-                print("socketSignal dataUpdate")
+                print("socketSignal dataUpdate for \(self.socketURL)")
                 observer.sendNext(data)
             }
             

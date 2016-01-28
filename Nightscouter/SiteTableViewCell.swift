@@ -21,7 +21,7 @@ class SiteTableViewCell: UITableViewCell {
     @IBOutlet private weak var siteColorBlockView: UIView!
     @IBOutlet private weak var siteUrlLabel: UILabel!
     @IBOutlet private weak var siteCompassControl: CompassControl!
-
+    
     private var dataSource: TableViewRowWithCompassDataSource?
     private var delegate: TableViewRowWithCompassDelegate?
     
@@ -30,6 +30,34 @@ class SiteTableViewCell: UITableViewCell {
         // Initialization code
         self.backgroundColor = UIColor.clearColor()
     }
+    var site: Site? {
+        didSet{
+            self.client?.fetchConfigurationData().startWithNext { site in
+                if let site = site {
+                    SitesDataSource.sharedInstance.updateSite(site)
+                }
+            }
+            
+            self.client?.fetchSocketData().observeNext { site in
+                SitesDataSource.sharedInstance.updateSite(site)
+                
+                let model = site.generateSummaryModelViewModel()
+                self.configure(withDataSource: model, delegate: model)
+            }
+            
+
+        }
+    }
+    lazy var client: NightscoutSocketIOClient? = self.initalizeClient()
+    
+    func initalizeClient() -> NightscoutSocketIOClient? {
+        
+        if let site = site {
+            return NightscoutSocketIOClient(site: site)
+        }
+        return nil
+    }
+    
     
     func configure(withDataSource dataSource: TableViewRowWithCompassDataSource, delegate: TableViewRowWithCompassDelegate?) {
         self.dataSource = dataSource
@@ -54,6 +82,6 @@ class SiteTableViewCell: UITableViewCell {
         siteColorBlockView.backgroundColor = delegate?.sgvColor
         
         siteCompassControl.configure(withDataSource: dataSource, delegate: delegate)
-    
+        
     }
 }

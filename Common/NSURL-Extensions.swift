@@ -111,12 +111,12 @@ public extension NSURL
 // Created by Pete
 // inspired by https://github.com/ReactiveCocoa/ReactiveCocoaIO/blob/master/ReactiveCocoaIO/NSURL%2BTrailingSlash.m
 // MARK: Detect and remove trailing forward slash in URL.
-extension NSURL {
-    var hasTrailingSlash: Bool {
+public extension NSURL {
+   public var hasTrailingSlash: Bool {
         return self.absoluteString.hasSuffix("/")
     }
     
-    var URLByAppendingTrailingSlash: NSURL? {
+    public var URLByAppendingTrailingSlash: NSURL? {
         if !self.hasTrailingSlash, let newURL = NSURL(string: self.absoluteString.stringByAppendingString("/")){
             return newURL
         }
@@ -124,7 +124,7 @@ extension NSURL {
         return nil
     }
     
-    var URLByDeletingTrailingSlash: NSURL? {
+    public var URLByDeletingTrailingSlash: NSURL? {
         let urlString = self.absoluteString
         let stepBackOne = urlString.endIndex.advancedBy(-1)
         

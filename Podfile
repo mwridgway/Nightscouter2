@@ -5,7 +5,7 @@ inhibit_all_warnings!
 
 
 def limited_pods
-    pod 'Socket.IO-Client-Swift', '~> 4.1.6' # Or latest version
+    pod 'Socket.IO-Client-Swift' # Or latest version
     pod 'DateTools'
 end
 
