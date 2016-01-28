@@ -59,15 +59,15 @@ public struct ServerConfiguration: CustomStringConvertible {
     }
     
     public init(status: String, version: String, name: String, serverTime: String, api: Bool, carePortal: Bool, boluscalc: Bool, settings: Settings?, head: String) {
-        self.status = "okToTest"
-        self.version = "0.0.0test"
-        self.name = "NightscoutDefault"
-        self.serverTime = AppConfiguration.serverTimeDateFormatter.stringFromDate(NSDate())
-        self.apiEnabled = true
-        self.careportalEnabled = true
-        self.boluscalcEnabled = true
+        self.status = status
+        self.version = version
+        self.name = name
+        self.serverTime = serverTime// AppConfiguration.serverTimeDateFormatter.stringFromDate(NSDate())
+        self.apiEnabled = api
+        self.careportalEnabled = carePortal
+        self.boluscalcEnabled = boluscalc
         self.settings = settings
-        self.head = "ZZZZ"
+        self.head = head
     }
     
 }

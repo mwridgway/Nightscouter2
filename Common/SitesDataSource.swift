@@ -11,30 +11,36 @@ import Foundation
 
 public protocol SitesDataSourceProvider: Dateable {
     var sites: [Site] { get }
-    var lastViewedSiteIndex: Int { get }
+//    var lastViewedSiteIndex: Int { get }
 }
 
 extension SitesDataSourceProvider {
     public var milliseconds: Double {
         return 1168583640000
     }
-    public var lastViewedSiteIndex: Int {
-        return 0
-    }
+//    public var lastViewedSiteIndex: Int {
+//        return 0
+//    }
 }
 
 public class SitesDataSource: SitesDataSourceProvider{
     public var sites = [Site]()
-    public var lastViewedSiteIndex: Int? {
-        didSet {
-            saveSitesToDefaults()
+    
+    public var lastViewedSiteIndex: Int {
+        set {
+            defaults.setInteger(newValue, forKey: DefaultKey.lastViewedSiteIndex.rawValue)
+        }
+        get {
+            return defaults.integerForKey(DefaultKey.lastViewedSiteIndex.rawValue)
         }
     }
+    
     public var lastViewedSiteUUID: NSUUID? {
         didSet {
             saveSitesToDefaults()
         }
     }
+    
     public var siteForComplication: NSUUID? {
         didSet {
             if let uuid = sites.first?.uuid where siteForComplication == nil{

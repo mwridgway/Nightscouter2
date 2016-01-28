@@ -9,3 +9,7 @@
 protocol Encodable {
     func encode() -> [String: AnyObject]
 }
+
+protocol Decodable {
+    static func decode(dict: [String: AnyObject]) -> Self?
+}

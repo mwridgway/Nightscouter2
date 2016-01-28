@@ -19,7 +19,16 @@ class SiteListPageViewController: UIViewController, SitesDataSourceProvider, UIP
     var sites: [Site] {
         return SitesDataSource.sharedInstance.sites
     }
-    var lastViewedSiteIndex: Int = 0
+    
+    var lastViewedSiteIndex: Int {
+        set {
+             SitesDataSource.sharedInstance.lastViewedSiteIndex = lastViewedSiteIndex
+        }
+        get {
+            return SitesDataSource.sharedInstance.lastViewedSiteIndex
+        }
+    }
+
     var milliseconds: Double = 0
     
     override func viewDidLoad() {

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Socket_IO_Client_Swift
+import SocketIOClientSwift
 import SwiftyJSON
 import ReactiveCocoa
 import CryptoSwift
@@ -21,7 +21,7 @@ public class NightscoutSocketIOClient {
     private var url: NSURL!
     
     // TODO: Refactor out...
-    private var site: Site
+    public var site: Site
     
     private var apiSecret: String
     public let socket: SocketIOClient
@@ -42,17 +42,18 @@ public class NightscoutSocketIOClient {
         self.apiSecret = site.apiSecret ?? ""
         
         // Create a socket.io client with a url string.
-        self.socket = SocketIOClient(socketURL: url.absoluteString, options: [.Log(false), .ForcePolling(false)])
+//        self.socket = SocketIOClient(socketURL: url.absoluteString, options: [.Log(true), .ForceNew(true), .ForcePolling(false)])
+        
+        self.socket = SocketIOClient(socketURL: url, options: [.Log(true), .ForceNew(true), .ForcePolling(false)])
         
         // From ericmarkmartin... RAC integration
         self.signal = socket.rac_socketSignal()
         
         self.site.milliseconds = NSDate().timeIntervalSince1970 * 1000
         
-        
         // Listen to connect.
         socket.on(WebEvents.connect.rawValue) { data, ack in
-            print("socket connected")
+            print("socketSignal connected for \(self.socket.socketURL)")
             self.socket.emit(WebEvents.authorize.rawValue, self.authorizationJSON)
         }
         
@@ -60,9 +61,6 @@ public class NightscoutSocketIOClient {
         socket.connect()
     }
     
-    deinit {
-        socket.close()
-    }
 }
 
 // TODO: Refactor out of this class...
@@ -70,76 +68,52 @@ public class NightscoutSocketIOClient {
 
 extension NightscoutSocketIOClient {
     
-    private func addConfigurationDataToSite(site: Site) {
+    public func fetchConfigurationData() -> SignalProducer<Site?, NSError> {
         var headers: [String: String] = ["Content-Type": "application/json"]
         headers["api-secret"] = self.apiSecret.sha1()
         let configurationURL = self.url.URLByAppendingPathComponent("api/v1/status").URLByAppendingPathExtension("json")
+        let request = NSMutableURLRequest(URL: configurationURL)
         
-        self.makeHTTPGetRequest(configurationURL, parameters: nil, headers:  headers, completetion: { (result) -> Void in
-            if let jsonDict = result.dictionaryObject {
-                let configuration = ServerConfiguration.decode(jsonDict)
-                // self.site.parseJSONforConfiugration(JSON(jsonDict))
-                self.site.configuration = configuration
-            }
-        })
-    }
-    
-    private func addValuesFromJson(site: Site, data: [AnyObject]) {
-        let json = JSON(data[0])
-        
-        self.site.parseJSONforSocketData(json)
-    }
-    
-    public func mapConfigurationValues() -> SignalProducer<Site, NSError> {
-        self.addConfigurationDataToSite(self.site)
-        
-        return SignalProducer(value: site)
-        
-        
-    }
-    
-    
-    public func mapToJsonValues() -> Signal<Site, NSError> {
-        return self.signal.map { data in
-            
-            self.addValuesFromJson(self.site, data: data)
-            
-            return self.site
+        for (headerField, headerValue) in headers {
+            request.setValue(headerValue, forHTTPHeaderField: headerField)
         }
-    }
-    
-    public func mapToSite() -> Signal<Site, NSError> {
-        return self.signal.map { data in
-            self.addConfigurationDataToSite(self.site)
-            self.addValuesFromJson(self.site, data: data)
-            
-            return self.site
-        }
-    }
-    
-    private func makeHTTPGetRequest (url: NSURL, parameters: [String: String]?, headers: [String: String]?, completetion:(result: JSON) -> Void) {
-        Alamofire.Manager.sharedInstance.request(.GET, url,  parameters: parameters, headers: headers)
-            /// Becuase Nightscout uses scientific notation in the json for some numbers. for example, intercept":-1.7976931348623157e+308, I can't use the json response handler. Instead I need to take the raw data, convert it to a string, remove the "+" and then create json.
-            .responseData { (response: Response<NSData, NSError>) -> Void in
-                switch response.result {
-                case .Success(let data):
-                    guard var stringVersion = NSString(data: data, encoding: NSUTF8StringEncoding) else {
-                        break
-                    }
-                    stringVersion = stringVersion.stringByReplacingOccurrencesOfString("+", withString: "")
-                    
-                    if let newData = stringVersion.dataUsingEncoding(NSUTF8StringEncoding) {
-                        let json = JSON(data: newData)
-                        completetion(result: json)
-                    }
-                case .Failure(let error):
-                    print(error)
-                    break
+        
+        return NSURLSession.sharedSession().rac_dataWithRequest(request)
+            .map { data, response in
+                guard var stringVersion = NSString(data: data, encoding: NSUTF8StringEncoding) else {
+                    return nil
                 }
+                stringVersion = stringVersion.stringByReplacingOccurrencesOfString("+", withString: "")
                 
+                guard let newData = stringVersion.dataUsingEncoding(NSUTF8StringEncoding), json = JSON(data: newData).dictionaryObject else {
+                    return nil
+                }
+                self.site.configuration = ServerConfiguration.decode(json)
+                return self.site
         }
     }
     
+    
+    public func fetchSocketData() -> Signal<Site, NSError> {
+        return self.signal.map { data in
+            let json = JSON(data[0])
+            
+            self.site.parseJSONforSocketData(json)
+            
+            return self.site
+        }
+    }
+    
+    //    public func mapToSite() -> Signal<Site, NSError> {
+    //        return self.signal.map { data in
+    //            self.addConfigurationDataToSite(self.site)
+    //            self.addValuesFromJson(self.site, data: data)
+    //
+    //            SitesDataSource.sharedInstance.updateSite(self.site)
+    //
+    //            return self.site
+    //        }
+    //    }
     
 }
 
