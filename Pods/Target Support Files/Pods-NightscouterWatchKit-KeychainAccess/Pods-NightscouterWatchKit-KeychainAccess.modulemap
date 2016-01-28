@@ -1,6 +1,0 @@
-framework module KeychainAccess {
-  umbrella header "Pods-NightscouterWatchKit-KeychainAccess-umbrella.h"
-
-  export *
-  module * { export * }
-}

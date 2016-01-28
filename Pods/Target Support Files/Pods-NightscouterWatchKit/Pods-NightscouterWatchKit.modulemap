@@ -1,6 +1,0 @@
-framework module Pods_NightscouterWatchKit {
-  umbrella header "Pods-NightscouterWatchKit-umbrella.h"
-
-  export *
-  module * { export * }
-}
