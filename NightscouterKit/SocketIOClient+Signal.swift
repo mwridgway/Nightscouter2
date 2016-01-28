@@ -15,9 +15,9 @@ private var signal : Signal<[AnyObject], NSError>? = nil
 public extension SocketIOClient {
     
     public func rac_socketSignal() -> Signal<[AnyObject], NSError> {
-        if let signal = signal {
-            return signal
-        } else {
+        // if let signal = signal {
+           // return signal
+        // } else {
             let (tmpSignal, observer) = Signal<[AnyObject], NSError>.pipe()
             
             self.on(WebEvents.disconnect.rawValue) { data, ack in
@@ -35,5 +35,5 @@ public extension SocketIOClient {
             return tmpSignal
             
         }
-    }
+    //}
 }

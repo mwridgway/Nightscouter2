@@ -26,8 +26,18 @@ class SiteDetailViewController: UIViewController, UIWebViewDelegate {
     // MARK: Properties
     var site: Site? {
         didSet {
-            if (site != nil){
-                configureView()
+            guard let site = site else { return }
+            
+            let socket = NightscoutSocketIOClient(site: site)
+            
+            socket.fetchConfigurationData().startWithNext { racSite in
+                if let racSite = racSite {
+                    SitesDataSource.sharedInstance.updateSite(racSite)
+                }
+            }
+            socket.fetchSocketData().observeNext { racSite in
+                SitesDataSource.sharedInstance.updateSite(racSite)
+                self.configureView()
             }
         }
     }
@@ -152,11 +162,11 @@ extension SiteDetailViewController {
     }
     
     func updateScreenOverride(shouldOverride: Bool) {
-
-            self.site?.overrideScreenLock = shouldOverride
-            SitesDataSource.sharedInstance.updateSite(self.site!)
-            UIApplication.sharedApplication().idleTimerDisabled = site?.overrideScreenLock ?? false
-
+        
+        self.site?.overrideScreenLock = shouldOverride
+        SitesDataSource.sharedInstance.updateSite(self.site!)
+        UIApplication.sharedApplication().idleTimerDisabled = site?.overrideScreenLock ?? false
+        
         #if DEBUG
             print("{site.overrideScreenLock:\(site?.overrideScreenLock), AppDataManageriOS.shouldDisableIdleTimer:\(AppDataManageriOS.sharedInstance.shouldDisableIdleTimer), UIApplication.idleTimerDisabled:\(UIApplication.sharedApplication().idleTimerDisabled)}")
         #endif

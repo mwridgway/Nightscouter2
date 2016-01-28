@@ -324,7 +324,13 @@ extension Site {
         for (_, subJson) in deviceStatus {
             if let mills = subJson[DeviceStatus.JSONKey.mills].double {
                 if let uploaderBattery = subJson[DeviceStatus.JSONKey.uploader, DeviceStatus.JSONKey.battery].int {
-                    self.deviceStatus.append(DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: mills))
+                    let dStatus = DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: mills)
+                    if let index = self.deviceStatus.indexOf(dStatus) {
+                        self.deviceStatus[index] = dStatus
+                    } else {
+                        self.deviceStatus.append(dStatus)
+                    }
+
                 }
             }
         }
@@ -342,7 +348,12 @@ extension Site {
                 let noise = Noise(rawValue: noiseInt) ?? Noise()
                 
                 let sensorValue = SensorGlucoseValue(direction: direction, device: device, rssi: rssi, unfiltered: unfiltered, filtered: filtered, mgdl: mgdl, noise: noise, milliseconds: mills)
-                self.sgvs.append(sensorValue)
+                if let index = self.sgvs.indexOf(sensorValue) {
+                    self.sgvs[index] = sensorValue
+                } else {
+                    self.sgvs.append(sensorValue)
+                }
+
             }
         }
         
@@ -353,7 +364,11 @@ extension Site {
             if let deviceString = subJson[MeteredGlucoseValue.JSONKey.device].string, mills = subJson[MeteredGlucoseValue.JSONKey.mills].double, mgdl = subJson[MeteredGlucoseValue.JSONKey.mgdl].double {
                 let device = Device(rawValue: deviceString) ?? Device.Unknown
                 let meter = MeteredGlucoseValue(milliseconds: mills, device: device, mgdl: mgdl)
-                self.mbgs.append(meter)
+                if let index = self.mbgs.indexOf(meter) {
+                    self.mbgs[index] = meter
+                } else {
+                    self.mbgs.append(meter)
+                }
             }
         }
         
@@ -363,7 +378,12 @@ extension Site {
         for (_, subJson) in cals {
             if let slope = subJson[Calibration.JSONKey.slope].double, intercept = subJson[Calibration.JSONKey.intercept].double, scale = subJson[Calibration.JSONKey.scale].double, mills = subJson[Calibration.JSONKey.mills].double {
                 let calibration = Calibration(slope: slope, intercept: intercept, scale: scale, milliseconds: mills)
-                self.cals.append(calibration)
+                if let index = self.cals.indexOf(calibration) {
+                    self.cals[index] = calibration
+                } else {
+                    self.cals.append(calibration)
+                }
+
             }
         }
         // makes sure things are sorted correctly by date. When delta's come in they might screw up the order.
@@ -389,4 +409,12 @@ func sortDescendingByDate<T: Dateable>(a: [T]) -> [T] {
     return a.sort({ (d1, d2) -> Bool in
         d1.date.compare(d2.date) == NSComparisonResult.OrderedDescending
     })
+}
+
+extension DeviceStatus: Equatable { }
+extension MeteredGlucoseValue: Equatable { }
+extension Calibration: Equatable { }
+extension SensorGlucoseValue: Equatable { }
+public func == <T: Dateable>(lhs: T, rhs: T) -> Bool {
+    return lhs.date == rhs.date
 }
