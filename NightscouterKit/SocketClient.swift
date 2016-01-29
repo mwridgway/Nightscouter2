@@ -41,10 +41,7 @@ public class NightscoutSocketIOClient {
         self.url = site.url.URLByDeletingTrailingSlash
         self.apiSecret = site.apiSecret ?? ""
         
-        // Create a socket.io client with a url string.
-//        self.socket = SocketIOClient(socketURL: url.absoluteString, options: [.Log(true), .ForceNew(true), .ForcePolling(false)])
-        
-        self.socket = SocketIOClient(socketURL: url, options: [.Log(true), .ForceNew(true), .ForcePolling(false)])
+        self.socket = SocketIOClient(socketURL: url, options: [.Log(false), .ForceNew(false), .ForcePolling(false)])
         
         // From ericmarkmartin... RAC integration
         self.signal = socket.rac_socketSignal()

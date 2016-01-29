@@ -49,6 +49,8 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
+        updateData()
+        
         // Check if we should display a form.
         shouldIShowNewSiteForm()
     }
@@ -78,7 +80,6 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         
         let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier.SiteTableViewStyleLarge, forIndexPath: indexPath) as! SiteTableViewCell
         
-        cell.site = sites[indexPath.row]
         let model = sites[indexPath.row].generateSummaryModelViewModel()
         cell.configure(withDataSource: model, delegate: model)
         
@@ -282,23 +283,21 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
                 refreshControl?.beginRefreshing()
                 tableView.setContentOffset(CGPointMake(0, tableView.contentOffset.y-refreshControl!.frame.size.height), animated: true)
             }
-            //
-            //            for (index, oldSite) in sites.enumerate() {
-            //                let socket = NightscoutSocketIOClient(site: oldSite)
-            //
-            //                sockets.append(socket)
-            //                socket.fetchConfigurationData().startWithNext { site in
-            //                    if let site = site {
-            //                        SitesDataSource.sharedInstance.updateSite(site)
-            //                    }
-            //                }
-            //                socket.fetchSocketData().observeNext { site in
-            //                    SitesDataSource.sharedInstance.updateSite(site)
-            //                    self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
-            //                }
-            //            }
             
-            self.tableView.reloadData()
+            for (index, oldSite) in sites.enumerate() {
+                let socket = NightscoutSocketIOClient(site: oldSite)
+                
+                sockets.append(socket)
+                socket.fetchConfigurationData().startWithNext { site in
+                    if let site = site {
+                        SitesDataSource.sharedInstance.updateSite(site)
+                    }
+                }
+                socket.fetchSocketData().observeNext { site in
+                    SitesDataSource.sharedInstance.updateSite(site)
+                    self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
+                }
+            }
         }
         
         defer {
