@@ -29,10 +29,18 @@ extension Site: Encodable, Decodable {
         static let uuid = "uuid"
         static let configuration = "configuration"
         static let data = "data"
+        static let sgvs = "sgvs"
+        static let mbgs = "mbgs"
+        static let cals = "cals"
+
     }
     
     func encode() -> [String: AnyObject] {
-        return [JSONKey.url : url.absoluteString, JSONKey.overrideScreenLock : overrideScreenLock, JSONKey.disabled: disabled, JSONKey.uuid: uuid.UUIDString, JSONKey.configuration: configuration?.encode() ?? ""]
+        let encodedSgvs: [[String : AnyObject]] = sgvs.flatMap{ $0.encode() }
+         let encodedCals: [[String : AnyObject]] = cals.flatMap{ $0.encode() }
+         let encodedMgbs: [[String : AnyObject]] = mbgs.flatMap{ $0.encode() }
+        
+        return [JSONKey.url : url.absoluteString, JSONKey.overrideScreenLock : overrideScreenLock, JSONKey.disabled: disabled, JSONKey.uuid: uuid.UUIDString, JSONKey.configuration: configuration?.encode() ?? "", JSONKey.sgvs: encodedSgvs, JSONKey.cals: encodedCals, JSONKey.mbgs: encodedMgbs]//, "tempSocketData" : [JSONKey.sgvs: encodedSgvs, JSONKey.cals: encodedCals, JSONKey.mbgs: encodedMgbs]]
     }
     
     static func decode(dict: [String: AnyObject]) -> Site? {
@@ -44,6 +52,21 @@ extension Site: Encodable, Decodable {
         var site = Site(url: url, uuid: uuid)
         site.overrideScreenLock = dict[JSONKey.overrideScreenLock] as? Bool ?? false
         site.disabled = dict[JSONKey.disabled] as? Bool ?? false
+        
+        var rootDictForData = dict
+        if let dataDict = dict["tempSocketData"] as? [String: AnyObject] {
+            rootDictForData = dataDict
+        }
+        
+        if let sgvs = rootDictForData[JSONKey.sgvs] as? [[String: AnyObject]] {
+            site.sgvs = sgvs.flatMap { SensorGlucoseValue.decode($0) }
+        }
+        if let mbgs = rootDictForData[JSONKey.mbgs] as? [[String: AnyObject]] {
+            site.mbgs = mbgs.flatMap { MeteredGlucoseValue.decode($0) }
+        }
+        if let cals = rootDictForData[JSONKey.cals] as? [[String: AnyObject]] {
+            site.cals = cals.flatMap { Calibration.decode($0) }
+        }
         
         if let config = dict[JSONKey.configuration] as? [String: AnyObject] {
             site.configuration = ServerConfiguration.decode(config)
@@ -242,7 +265,7 @@ extension Thresholds: Encodable, Decodable {
     }
 }
 
-extension Calibration: Encodable {
+extension Calibration: Encodable, Decodable {
     struct JSONKey {
         static let slope = "slope"
         static let intercept = "intercept"
@@ -251,7 +274,19 @@ extension Calibration: Encodable {
     }
     
     func encode() -> [String : AnyObject] {
-        return [JSONKey.slope : slope, JSONKey.intercept: intercept, JSONKey.mills: milliseconds, JSONKey.scale: scale, JSONKey.slope: slope]
+        return [JSONKey.slope : slope, JSONKey.intercept: intercept, JSONKey.mills: milliseconds, JSONKey.scale: scale]
+    }
+    static func decode(dict: [String : AnyObject]) -> Calibration? {
+        let json = JSON(dict)
+        
+        guard let slope = json[JSONKey.slope].double,
+            intercept = json[JSONKey.intercept].double,
+            scale = json[JSONKey.scale].double,
+            mill = json[JSONKey.mills].double else {
+            return nil
+        }
+        
+        return Calibration(slope: slope, intercept: intercept, scale: scale, milliseconds: mill)
     }
 }
 
@@ -265,9 +300,22 @@ extension MeteredGlucoseValue: Encodable {
     func encode() -> [String : AnyObject] {
         return [JSONKey.mills: milliseconds, JSONKey.mgdl: mgdl, JSONKey.device: device.description]
     }
+    
+    static func decode(dict: [String : AnyObject]) -> MeteredGlucoseValue? {
+        let json = JSON(dict)
+        
+        guard let deviceString = json[JSONKey.device].string, mgdl = json[JSONKey.mgdl].double, mill = json[JSONKey.mills].double else {
+            return nil
+        }
+        
+        let device = Device(rawValue: deviceString) ?? .Unknown
+        
+        return MeteredGlucoseValue(milliseconds: mill, device: device, mgdl: mgdl)
+    }
+
 }
 
-extension SensorGlucoseValue: Encodable {
+extension SensorGlucoseValue: Encodable, Decodable {
     struct JSONKey {
         static let device = "device"
         static let rssi = "rssi"
@@ -280,11 +328,25 @@ extension SensorGlucoseValue: Encodable {
     }
     
     func encode() -> [String : AnyObject] {
-        return [JSONKey.device: device.description, JSONKey.direction: direction.description, JSONKey.filtered: filtered, JSONKey.mills: milliseconds, JSONKey.noise: noise.description, JSONKey.rssi: rssi, JSONKey.unfiltered: unfiltered, JSONKey.mgdl: mgdl]
+        return [JSONKey.device: device.description, JSONKey.direction: direction.rawValue, JSONKey.filtered: filtered, JSONKey.mills: milliseconds, JSONKey.noise: noise.rawValue, JSONKey.rssi: rssi, JSONKey.unfiltered: unfiltered, JSONKey.mgdl: mgdl]
+    }
+    
+    static func decode(dict: [String : AnyObject]) -> SensorGlucoseValue? {
+        
+        let json = JSON(dict)
+        guard let deviceString = json[JSONKey.device].string, mgdl = json[JSONKey.mgdl].double, mill = json[JSONKey.mills].double, directionString = json[JSONKey.direction].string, rssi = json[JSONKey.rssi].int, unfiltered = json[JSONKey.unfiltered].double, filtered = json[JSONKey.filtered].double, noiseInt = json[JSONKey.noise].int else {
+            return nil
+        }
+        
+        let device = Device(rawValue: deviceString) ?? .Unknown
+        let direction = Direction(rawValue: directionString) ?? .None
+        let noise = Noise(rawValue: noiseInt) ?? .Unknown
+        
+        return SensorGlucoseValue(direction: direction, device: device, rssi: rssi, unfiltered: unfiltered, filtered: filtered, mgdl: mgdl, noise: noise, milliseconds: mill)
     }
 }
 
-extension DeviceStatus: Encodable {
+extension DeviceStatus: Encodable, Decodable {
     struct JSONKey {
         static let devicestatus = "devicestatus"
         static let mills = "mills"
@@ -296,6 +358,16 @@ extension DeviceStatus: Encodable {
     
     func encode() -> [String : AnyObject] {
         return [JSONKey.mills: milliseconds, JSONKey.uploader: uploaderBattery]
+    }
+    
+    static func decode(dict: [String : AnyObject]) -> DeviceStatus? {
+        let json = JSON(dict)
+        
+        guard let mills = json[JSONKey.mills].double, uploaderBattery = json[JSONKey.uploaderBattery].int else {
+            return nil
+        }
+        
+        return DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: mills)
     }
 }
 
@@ -315,7 +387,7 @@ extension Site {
         }
         
         if let uploaderBattery = json[DeviceStatus.JSONKey.devicestatus][DeviceStatus.JSONKey.uploaderBattery].int {
-            self.deviceStatus.append(DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: 0))
+            self.deviceStatus.insertOrUpdate(DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: 0))
         }
         
         let deviceStatus = json[DeviceStatus.JSONKey.devicestatus]
@@ -325,12 +397,7 @@ extension Site {
             if let mills = subJson[DeviceStatus.JSONKey.mills].double {
                 if let uploaderBattery = subJson[DeviceStatus.JSONKey.uploader, DeviceStatus.JSONKey.battery].int {
                     let dStatus = DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: mills)
-                    if let index = self.deviceStatus.indexOf(dStatus) {
-                        self.deviceStatus[index] = dStatus
-                    } else {
-                        self.deviceStatus.append(dStatus)
-                    }
-
+                    self.deviceStatus.insertOrUpdate(dStatus)
                 }
             }
         }
@@ -348,12 +415,7 @@ extension Site {
                 let noise = Noise(rawValue: noiseInt) ?? Noise()
                 
                 let sensorValue = SensorGlucoseValue(direction: direction, device: device, rssi: rssi, unfiltered: unfiltered, filtered: filtered, mgdl: mgdl, noise: noise, milliseconds: mills)
-                if let index = self.sgvs.indexOf(sensorValue) {
-                    self.sgvs[index] = sensorValue
-                } else {
-                    self.sgvs.append(sensorValue)
-                }
-
+                self.sgvs.insertOrUpdate(sensorValue)
             }
         }
         
@@ -364,11 +426,7 @@ extension Site {
             if let deviceString = subJson[MeteredGlucoseValue.JSONKey.device].string, mills = subJson[MeteredGlucoseValue.JSONKey.mills].double, mgdl = subJson[MeteredGlucoseValue.JSONKey.mgdl].double {
                 let device = Device(rawValue: deviceString) ?? Device.Unknown
                 let meter = MeteredGlucoseValue(milliseconds: mills, device: device, mgdl: mgdl)
-                if let index = self.mbgs.indexOf(meter) {
-                    self.mbgs[index] = meter
-                } else {
-                    self.mbgs.append(meter)
-                }
+                self.mbgs.insertOrUpdate(meter)
             }
         }
         
@@ -378,43 +436,18 @@ extension Site {
         for (_, subJson) in cals {
             if let slope = subJson[Calibration.JSONKey.slope].double, intercept = subJson[Calibration.JSONKey.intercept].double, scale = subJson[Calibration.JSONKey.scale].double, mills = subJson[Calibration.JSONKey.mills].double {
                 let calibration = Calibration(slope: slope, intercept: intercept, scale: scale, milliseconds: mills)
-                if let index = self.cals.indexOf(calibration) {
-                    self.cals[index] = calibration
-                } else {
-                    self.cals.append(calibration)
-                }
-
+                self.cals.insertOrUpdate(calibration)
             }
         }
         // makes sure things are sorted correctly by date. When delta's come in they might screw up the order.
-        self.sgvs.sortDate()
-        self.cals.sortDate()
-        self.mbgs.sortDate()
-        self.deviceStatus.sortDate()
+        self.sgvs.sortByDate()
+        self.cals.sortByDate()
+        self.mbgs.sortByDate()
+        self.deviceStatus.sortByDate()
         
     }
 }
 
 
 
-extension Array where Element: Dateable {
-    mutating func sortDate(orderDescending descending: Bool = true) {
-        let compare: NSComparisonResult = descending ? .OrderedDescending :.OrderedAscending
-        self = self.sort({ (d1, d2) -> Bool in
-            d1.date.compare(d2.date) == compare
-        })
-    }
-}
-func sortDescendingByDate<T: Dateable>(a: [T]) -> [T] {
-    return a.sort({ (d1, d2) -> Bool in
-        d1.date.compare(d2.date) == NSComparisonResult.OrderedDescending
-    })
-}
 
-extension DeviceStatus: Equatable { }
-extension MeteredGlucoseValue: Equatable { }
-extension Calibration: Equatable { }
-extension SensorGlucoseValue: Equatable { }
-public func == <T: Dateable>(lhs: T, rhs: T) -> Bool {
-    return lhs.date == rhs.date
-}

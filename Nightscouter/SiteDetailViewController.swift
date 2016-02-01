@@ -8,6 +8,7 @@
 
 import UIKit
 import NightscouterKit
+import SafariServices
 
 class SiteDetailViewController: UIViewController, UIWebViewDelegate {
     
@@ -33,11 +34,12 @@ class SiteDetailViewController: UIViewController, UIWebViewDelegate {
             socket.fetchConfigurationData().startWithNext { racSite in
                 if let racSite = racSite {
                     SitesDataSource.sharedInstance.updateSite(racSite)
+                    
                 }
             }
             socket.fetchSocketData().observeNext { racSite in
                 SitesDataSource.sharedInstance.updateSite(racSite)
-                self.configureView()
+                self.configureView(withSite: racSite)
             }
         }
     }
@@ -59,7 +61,7 @@ class SiteDetailViewController: UIViewController, UIWebViewDelegate {
             self.siteNameLabel?.removeFromSuperview()
         }
         
-        configureView()
+        configureView(withSite: self.site ?? Site())
     }
     
     override func didReceiveMemoryWarning() {
@@ -107,32 +109,31 @@ extension SiteDetailViewController {
 
 extension SiteDetailViewController {
     
-    func configureView() {
-        if let site = site {
-            
-            UIApplication.sharedApplication().idleTimerDisabled = site.overrideScreenLock
-            
-            let dataSource = SiteSummaryModelViewModel(withSite: site)
-            siteLastReadingLabel?.text = dataSource.lastReadingDate.timeAgoSinceNow()
-            siteLastReadingLabel?.textColor = dataSource.lastReadingColor
-            
-            siteBatteryLabel?.text = dataSource.batteryLabel
-            siteBatteryLabel?.textColor = dataSource.batteryColor
-            
-            siteRawLabel?.hidden = dataSource.rawHidden
-            siteRawHeader?.hidden = dataSource.rawHidden
-            
-            siteRawLabel?.text = dataSource.rawLabel
-            siteRawLabel?.textColor = dataSource.sgvColor
-            
-            siteNameLabel?.text = dataSource.nameLabel
-            siteCompassControl?.configure(withDataSource: dataSource, delegate: dataSource)
-            
-            self.updateTitles(dataSource.nameLabel)
-            
-            data = site.sgvs.map{ $0.jsonForChart }
-            
-        }
+    func configureView(withSite site: Site) {
+        
+        
+        UIApplication.sharedApplication().idleTimerDisabled = site.overrideScreenLock
+        
+        let dataSource = site.generateSummaryModelViewModel()
+        siteLastReadingLabel?.text = dataSource.lastReadingDate.timeAgoSinceNow()
+        siteLastReadingLabel?.textColor = dataSource.lastReadingColor
+        
+        siteBatteryLabel?.text = dataSource.batteryLabel
+        siteBatteryLabel?.textColor = dataSource.batteryColor
+        
+        siteRawLabel?.hidden = dataSource.rawHidden
+        siteRawHeader?.hidden = dataSource.rawHidden
+        
+        siteRawLabel?.text = dataSource.rawLabel
+        siteRawLabel?.textColor = dataSource.sgvColor
+        
+        siteNameLabel?.text = dataSource.nameLabel
+        siteCompassControl?.configure(withDataSource: dataSource, delegate: dataSource)
+        
+        self.updateTitles(dataSource.nameLabel)
+        
+        data = site.sgvs.map{ $0.jsonForChart }
+        
         
     }
     
@@ -226,8 +227,6 @@ extension SiteDetailViewController {
             vc.delegate = self
         }
         
-        
-        
         if let popoverController = alertController.popoverPresentationController {
             popoverController.barButtonItem = sender
         }
@@ -248,27 +247,43 @@ extension SiteDetailViewController: SiteSettingsDelegate {
         var tempSettings: [SettingsModelViewModel] = []
         if let site = site {
             
-            let defaultSite = site.uuid == SitesDataSource.sharedInstance.siteForComplication
+            let defaultSite = (site.uuid == SitesDataSource.sharedInstance.primarySiteUUID)
             
-            tempSettings.append(SettingsModelViewModel(title: "Prevent Screen from Locking?", subTitle: nil, switchOn: site.overrideScreenLock))
-            tempSettings.append(SettingsModelViewModel(title: "Use as Default Site", subTitle: "\nWhen enabled, this site's information will be proiritized for the watch.\n", switchOn: defaultSite , cellIdentifier: .cellSubtitle))
-            tempSettings.append(SettingsModelViewModel(title: "Edit", subTitle: "Change any available settings for connecting to the site.", cellIdentifier: .cellBasicDisclosure))
+            tempSettings.append(SettingsModelViewModel(title: "Prevent Screen from Locking?", intent: SettingIntent.PreventLocking , subTitle: nil, switchOn: site.overrideScreenLock))
+            tempSettings.append(SettingsModelViewModel(title: "Use as Default Site", intent: SettingIntent.SetDefault , subTitle: "\nWhen enabled, this site's information will be proiritized for the watch.\n", switchOn: defaultSite , cellIdentifier: .cellSubtitle))
+            tempSettings.append(SettingsModelViewModel(title: "Edit", intent: SettingIntent.Edit, subTitle: "Change any available settings for connecting to the site.", cellIdentifier: .cellBasicDisclosure))
+            tempSettings.append(SettingsModelViewModel(title: "Goto Website", intent: SettingIntent.GoToSafari, cellIdentifier: .cellBasic))
         }
         return tempSettings
     }
     
     
     func settingDidChange(setting: SettingsModelViewModel, atIndexPath: NSIndexPath, inViewController: SiteSettingsTableViewController) {
-        if atIndexPath.row == 0 {
-            self.updateScreenOverride(setting.switchOn ?? false)
-        } else if atIndexPath.row == 1 {
-            if let boolSetting = setting.switchOn where boolSetting == true {
-                SitesDataSource.sharedInstance.siteForComplication = site?.uuid
-            } else {
-                SitesDataSource.sharedInstance.siteForComplication = nil
-            }
-        }
         
-        print("setting changed for site")
+        switch setting.intent {
+        case .PreventLocking:
+            self.updateScreenOverride(setting.switchOn ?? false)
+        case .SetDefault:
+            if let boolSetting = setting.switchOn where boolSetting == true {
+                SitesDataSource.sharedInstance.primarySiteUUID = site?.uuid
+            } else {
+                SitesDataSource.sharedInstance.primarySiteUUID = nil
+            }
+        case .Edit:
+            print("Edit")
+            inViewController.dismissViewControllerAnimated(false, completion: { () -> Void in
+                let formViewController = self.storyboard?.instantiateViewControllerWithIdentifier(StoryboardIdentifier.FormViewController.rawValue) as! FormViewController
+                
+                    formViewController.site = self.site!
+                
+                self.navigationController?.pushViewController(formViewController, animated: true)
+                
+            })
+        case .GoToSafari:
+            inViewController.dismissViewControllerAnimated(false, completion: { () -> Void in
+                let svc = SFSafariViewController(URL: self.site!.url)
+                self.presentViewController(svc, animated: true, completion: nil)
+            })
+        }
     }
 }

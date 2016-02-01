@@ -11,7 +11,7 @@ import Foundation
 public struct MeteredGlucoseValue: CustomStringConvertible, Dateable, GlucoseValueHolder, DeviceOwnable {
     public let milliseconds: Double
     public let device: Device
-    public let mgdl: mgdlValue
+    public let mgdl: MgdlValue
     
     public init() {
         milliseconds = AppConfiguration.Constant.knownMilliseconds
@@ -19,7 +19,7 @@ public struct MeteredGlucoseValue: CustomStringConvertible, Dateable, GlucoseVal
         mgdl = AppConfiguration.Constant.knownMgdl
     }
     
-    public init(milliseconds: Double, device: Device, mgdl: mgdlValue) {
+    public init(milliseconds: Double, device: Device, mgdl: MgdlValue) {
         self.milliseconds = milliseconds
         self.device = device
         self.mgdl = mgdl

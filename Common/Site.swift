@@ -48,15 +48,6 @@ public struct Site: Dateable, CustomStringConvertible {
         self.uuid = NSUUID()
     }
 
-//    public init(url: NSURL, uuid: NSUUID){
-//        self.configuration = nil
-//        self.milliseconds = NSDate().timeIntervalSince1970.millisecond
-//        self.url = url
-//        self.overrideScreenLock = false
-//        self.disabled = false
-//        
-//        self.uuid = uuid
-//    }
     /**
      Resets the underlying identity of the `Site`. If a copy of this item is made, and a call
      to refreshIdentity() is made afterward, the items will no longer be equal.

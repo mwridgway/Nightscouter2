@@ -29,24 +29,7 @@ public extension Range
     }
 }
 
-
-public extension Double {
-    public func millisecondsToSecondsTimeInterval() -> NSTimeInterval {
-        return round(self/1000)
-    }
-    
-    public var inThePast: NSTimeInterval {
-        return -self
-    }
-    
-    public func toDateUsingSeconds() -> NSDate {
-        let date = NSDate(timeIntervalSince1970:millisecondsToSecondsTimeInterval())
-        return date
-    }
-    
-}
-
-public extension mgdlValue {
+public extension MgdlValue {
     public var toMmol: Double {
         get{
             return (self / 18)
@@ -113,6 +96,22 @@ public extension Double {
     var isInteger: Bool {
         return rint(self) == self
     }
+}
+
+public extension Double {
+    public func millisecondsToSecondsTimeInterval() -> NSTimeInterval {
+        return round(self/1000)
+    }
+    
+    public var inThePast: NSTimeInterval {
+        return -self
+    }
+    
+    public func toDateUsingMilliseconds() -> NSDate {
+        let date = NSDate(timeIntervalSince1970:millisecondsToSecondsTimeInterval())
+        return date
+    }
+    
 }
 
 extension NSTimeInterval {

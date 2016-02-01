@@ -35,21 +35,11 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
         // tableView.rowHeight = UITableViewAutomaticDimension
         tableView.backgroundColor = UIColor.clearColor()
         
-        /*
-        if let  sitesData = AppDataManageriOS.sharedInstance.defaults.dataForKey(DefaultKey.sitesArrayObjectsKey) {
-        if let sitesArray = NSKeyedUnarchiver.unarchiveObjectWithData(sitesData) as? [Site] {
-        sites = sitesArray
-        }
-        }
-        */
-        
-        var sites: [Site] {
-            return SitesDataSource.sharedInstance.sites
-        }
-        
         let itemCount = sites.isEmpty ? 1 : sites.count
         
         preferredContentSize = CGSize(width: preferredContentSize.width, height: CGFloat(itemCount * TableViewConstants.todayRowHeight))
+        
+        updateData()
     }
     
     override func didReceiveMemoryWarning() {
@@ -90,22 +80,14 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if sites.isEmpty {
             let cell = tableView.dequeueReusableCellWithIdentifier(TableViewConstants.CellIdentifiers.message, forIndexPath: indexPath)
-            
             cell.textLabel!.text = NSLocalizedString("No Nightscout sites were found.", comment: "")
             
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier(TableViewConstants.CellIdentifiers.content, forIndexPath: indexPath) as! SiteNSNowTableViewCell
             let site = sites[indexPath.row]
-            
-            let model = SiteSummaryModelViewModel(withSite: sites[indexPath.row])
+            let model = site.generateSummaryModelViewModel()
             cell.configure(withDataSource: model, delegate: model)
-            
-            if (lastUpdatedTime?.timeIntervalSinceNow > 60 || lastUpdatedTime == nil || site.configuration == nil) {
-                // No configuration was there... go get some.
-                // println("Attempting to get configuration data from site...")
-                refreshDataFor(site, index: indexPath.row)
-            }
             
             return cell
         }
@@ -121,43 +103,25 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
     
     func updateData(){
         // Do not allow refreshing to happen if there is no data in the sites array.
-        if sites.isEmpty == false {
+        if !sites.isEmpty {
             for (index, site) in sites.enumerate() {
                 refreshDataFor(site, index: index)
             }
-        } else {
-            // No data in the sites array. Cancel the refreshing!
         }
     }
     
     func refreshDataFor(site: Site, index: Int){
         // Start up the API
-        
-        /*
-        loadDataFor(site, index: index) { (returnedModel, returnedSite, returnedIndex, returnedError) -> Void in
-        
-        if let error = returnedError {
-        print("\(__FUNCTION__) ERROR recieved: \(error)")
-        
-        } else {
-        if let returnedSite = returnedSite, returnedIndex = returnedIndex {
-        
-        self.lastUpdatedTime = returnedSite.lastConnectedDate
-        self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: returnedIndex, inSection: 0)], withRowAnimation: .Automatic)
-        
-        AppDataManageriOS.sharedInstance.updateSite(returnedSite)
-        }
-        }
-        }
-        */
     }
     
     func openApp(with indexPath: NSIndexPath) {
         if let context = extensionContext {
             
             let site = sites[indexPath.row], uuidString = site.uuid.UUIDString
-            //AppDataManageriOS.sharedInstance.currentSiteIndex = indexPath.row
-            
+
+            SitesDataSource.sharedInstance.lastViewedSiteIndex = indexPath.row
+            SitesDataSource.sharedInstance.lastViewedSiteUUID = site.uuid
+
             let url = NSURL(string: "nightscouter://link/\(StoryboardIdentifier.SiteListPageViewController.rawValue)/\(uuidString)")
             context.openURL(url!, completionHandler: nil)
         }

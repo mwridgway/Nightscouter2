@@ -54,5 +54,13 @@ class SiteNSNowTableViewCell: UITableViewCell {
                 
         siteNameLabel.text = dataSource.nameLabel
         siteColorBlockView.backgroundColor = delegate?.sgvColor
+        
+        let sgvString = dataSource.sgvLabel + " " + dataSource.direction.emojiForDirection
+
+        siteSgvLabel.text = sgvString
+        siteSgvLabel.textColor = delegate?.sgvColor
+        
+        siteDirectionLabel.text = dataSource.deltaLabel
+        siteDirectionLabel.textColor = delegate?.sgvColor
     }
 }

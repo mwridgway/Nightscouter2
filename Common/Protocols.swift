@@ -13,25 +13,36 @@
 #endif
 //import Foundation
 
+public typealias Mills = Double
+
 // MARK: - Dateable. Store values in milliseconds, get a date back.
 public protocol Dateable {
-    var milliseconds: Double { get }
+    var milliseconds: Mills { get }
 }
+
 public extension Dateable {
     public var date: NSDate {
         return NSDate(timeIntervalSince1970: (NSTimeInterval(milliseconds) / 1000))
     }
 }
+public func == <T: Dateable>(lhs: T, rhs: T) -> Bool {
+    return lhs.date == rhs.date
+}
+extension DeviceStatus: Equatable { }
+extension MeteredGlucoseValue: Equatable { }
+extension Calibration: Equatable { }
+extension SensorGlucoseValue: Equatable { }
+
 
 // Common fields for holding a glucose value.
-public typealias mgdlValue = Double
+public typealias MgdlValue = Double
 public protocol GlucoseValueHolder {
-    var mgdl: mgdlValue { get }
+    var mgdl: MgdlValue { get }
     var isSGVOk: Bool { get }
 }
 
 public extension GlucoseValueHolder {
-    public var reservedValueUpperEnd: mgdlValue { return 17 }
+    public var reservedValueUpperEnd: MgdlValue { return 17 }
     
     public var isSGVOk: Bool {
         return mgdl >= reservedValueUpperEnd
@@ -82,7 +93,7 @@ public protocol DeviceOwnable {
 }
 
 public enum Device: String, CustomStringConvertible {
-    case Unknown = "unknown", Dexcom = "dexcom", xDripDexcomShare = "xDrip-DexcomShare", WatchFace = "watchFace", Share2 = "share2", TestDevice = "testDevice"
+    case Unknown, Dexcom = "dexcom", xDripDexcomShare = "xDrip-DexcomShare", WatchFace = "watchFace", Share2 = "share2", TestDevice = "testDevice", Paradigm = "connect://paradigm"
     
     public var description: String {
         return self.rawValue
@@ -111,13 +122,7 @@ extension DeltaDisplayable {
     }
 }
 
-//public protocol RawCalculable{
-//    func calculateRawBG(fromSensorGlucoseValue sgv: SensorGlucoseValue, calibration cal: Calibration) -> mgdlValue
-//}
-
-//extension RawCalculable {
-
-public func calculateRawBG(fromSensorGlucoseValue sgv: SensorGlucoseValue, calibration cal: Calibration) -> mgdlValue {
+public func calculateRawBG(fromSensorGlucoseValue sgv: SensorGlucoseValue, calibration cal: Calibration) -> MgdlValue {
     var raw: Double = 0
     
     let unfiltered = sgv.unfiltered
@@ -142,7 +147,6 @@ public func calculateRawBG(fromSensorGlucoseValue sgv: SensorGlucoseValue, calib
     
     return round(raw)
 }
-//}
 
 // Provide a private typealias for a platform specific color.
 #if os(iOS) || os(watchOS)
@@ -151,7 +155,7 @@ public func calculateRawBG(fromSensorGlucoseValue sgv: SensorGlucoseValue, calib
     private typealias AppColor = NSColor
 #endif
 public extension DesiredColorState {
-
+    
     private static let colorMapping = [
         DesiredColorState.Neutral: AppColor(red: 0.851, green: 0.851, blue: 0.851, alpha: 1.000),
         DesiredColorState.Alert: AppColor(red: 1.000, green: 0.067, blue: 0.310, alpha: 1.000),
@@ -164,31 +168,14 @@ public extension DesiredColorState {
     public var colorValue: UIColor {
         return DesiredColorState.colorMapping[self]!
     }
-    
     #elseif os(OSX)
     public var colorValue: NSColor {
-    return DesiredColorState.colorMapping[self]!
+        return DesiredColorState.colorMapping[self]!
     }
-
     #endif
 }
-/*
-public func colorForDesiredColorState(state:DesiredColorState) -> UIColor {
-    switch (state) {
-    case .Neutral:
-    return UIColor.grayColor()//NSAssetKit.predefinedNeutralColor
-    case .Alert:
-    return UIColor.redColor()//NSAssetKit.predefinedAlertColor
-    case .Positive:
-    return UIColor.greenColor()//NSAssetKit.predefinedPostiveColor
-    case .Warning:
-    return UIColor.orangeColor()//NSAssetKit.predefinedWarningColor
-    }
-}
-*/
 
-
-
+// Iterates srtuct properties
 func iterateEnum<T: Hashable>(_: T.Type) -> AnyGenerator<T> {
     var i = 0
     return anyGenerator {

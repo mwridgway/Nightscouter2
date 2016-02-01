@@ -10,7 +10,7 @@ import Foundation
 
 public struct SensorGlucoseValue: CustomStringConvertible, Dateable, GlucoseValueHolder, DeviceOwnable {
     public let device: Device, direction: Direction
-    public let rssi: Int, unfiltered: Double, filtered: Double, mgdl: mgdlValue
+    public let rssi: Int, unfiltered: Double, filtered: Double, mgdl: MgdlValue
     public let noise: Noise
     public let milliseconds: Double
     
@@ -29,7 +29,7 @@ public struct SensorGlucoseValue: CustomStringConvertible, Dateable, GlucoseValu
         milliseconds = AppConfiguration.Constant.knownMilliseconds
     }
     
-    public init(direction: Direction, device: Device, rssi: Int, unfiltered: Double, filtered: Double, mgdl: mgdlValue, noise: Noise, milliseconds: Double) {
+    public init(direction: Direction, device: Device, rssi: Int, unfiltered: Double, filtered: Double, mgdl: MgdlValue, noise: Noise, milliseconds: Double) {
         self.direction = direction
         self.filtered = filtered
         self.unfiltered = unfiltered
@@ -41,7 +41,7 @@ public struct SensorGlucoseValue: CustomStringConvertible, Dateable, GlucoseValu
     }
 }
 
-public enum ReservedValues: mgdlValue, CustomStringConvertible {
+public enum ReservedValues: MgdlValue, CustomStringConvertible {
     case NoGlucose=0, SensoreNotActive=1, MinimalDeviation=2, NoAntenna=3, SensorNotCalibrated=5, CountsDeviation=6, AbsoluteDeviation=9, PowerDeviation=10, BadRF=12, HupHolland=17, Low=30
     
     public var description: String {
@@ -73,7 +73,7 @@ public enum ReservedValues: mgdlValue, CustomStringConvertible {
 }
 
 extension ReservedValues {
-    init?(mgdl: mgdlValue) {
+    init?(mgdl: MgdlValue) {
         if mgdl >= 30 && mgdl < 40 {
             self.init(rawValue: 30)
         } else {
