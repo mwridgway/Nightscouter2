@@ -26,9 +26,12 @@ target 'Nightscouter' do
 end
 
 # iOS9 Today Extension with some UI.
-#target 'Nightscouter Today' do
-#    platform :ios, '9.0'
-#end
+target 'Nightscouter Today' do
+    platform :ios, '9.0'
+    limited_pods
+    global_pods
+
+end
 
 # iOS9 Based Cocoa Touch Framework used in 'Nightscouter' and 'Nightscouter Today'.
 target 'NightscouterKit' do

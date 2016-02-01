@@ -7,23 +7,21 @@
 //
 
 import Foundation
-//import SwiftyJSON
+
+
 
 public protocol SitesDataSourceProvider: Dateable {
     var sites: [Site] { get }
-//    var lastViewedSiteIndex: Int { get }
 }
-
 extension SitesDataSourceProvider {
     public var milliseconds: Double {
         return 1168583640000
     }
-//    public var lastViewedSiteIndex: Int {
-//        return 0
-//    }
 }
 
 public class SitesDataSource: SitesDataSourceProvider{
+    private static let sharedAppGrouSuiteName: String = "group.com.nothingonline.nightscouter"
+    
     public var sites = [Site]()
     
     public var lastViewedSiteIndex: Int {
@@ -36,29 +34,35 @@ public class SitesDataSource: SitesDataSourceProvider{
     }
     
     public var lastViewedSiteUUID: NSUUID? {
-        didSet {
-            saveSitesToDefaults()
+        set {
+            defaults.setObject(newValue?.UUIDString, forKey: DefaultKey.lastViewedSiteUUID.rawValue)
+        }
+        get {
+            guard let uuidString = defaults.objectForKey(DefaultKey.lastViewedSiteUUID.rawValue) as? String else {
+                return nil
+            }
+            
+            return NSUUID(UUIDString: uuidString)
         }
     }
     
-    public var siteForComplication: NSUUID? {
+    public var primarySiteUUID: NSUUID? {
         didSet {
-            if let uuid = sites.first?.uuid where siteForComplication == nil{
-                siteForComplication = uuid
+            if let uuid = sites.first?.uuid where primarySiteUUID == nil{
+                primarySiteUUID = uuid
             }
             saveSitesToDefaults()
         }
     }
-    //public var milliseconds: Double = AppConfiguration.Constant.knownMilliseconds
     
-    public static let sharedInstance = SitesDataSource()
+    private let defaults =  NSUserDefaults(suiteName: sharedAppGrouSuiteName) ?? NSUserDefaults.standardUserDefaults()
     
-    public let defaults =  NSUserDefaults.standardUserDefaults()
-    
-    enum DefaultKey: String, RawRepresentable {
-        case sites,lastViewedSiteIndex,lastViewedSiteUUID, siteForComplication
+    private enum DefaultKey: String, RawRepresentable {
+        case sites, lastViewedSiteIndex, lastViewedSiteUUID, primarySiteUUID
     }
     
+    public static let sharedInstance = SitesDataSource()
+ 
     private init(){
         loadSitesFromDefaults()
     }
@@ -67,16 +71,17 @@ public class SitesDataSource: SitesDataSourceProvider{
     
     public func saveSitesToDefaults() {
         let siteDict = sites.map { $0.encode() }
-        defaults.setObject(siteDict, forKey: DefaultKey.sites.rawValue)
         
+        defaults.setObject(siteDict, forKey: DefaultKey.sites.rawValue)
         defaults.setInteger(lastViewedSiteIndex, forKey: DefaultKey.lastViewedSiteIndex.rawValue)
         defaults.setObject(lastViewedSiteUUID?.UUIDString, forKey: DefaultKey.lastViewedSiteUUID.rawValue)
-        defaults.setObject(siteForComplication?.UUIDString, forKey: DefaultKey.siteForComplication.rawValue)
+        defaults.setObject(primarySiteUUID?.UUIDString, forKey: DefaultKey.primarySiteUUID.rawValue)
         
         defaults.synchronize()
     }
     
     public func loadSitesFromDefaults() {
+     
         if let sites = defaults.valueForKey(DefaultKey.sites.rawValue) as? [[String: AnyObject]] {
             self.sites = sites.flatMap { Site.decode($0) }
         }
@@ -87,8 +92,10 @@ public class SitesDataSource: SitesDataSourceProvider{
             lastViewedSiteUUID = uuid
         }
         
-        if let uuidString = defaults.stringForKey(DefaultKey.siteForComplication.rawValue), uuid = NSUUID(UUIDString: uuidString) {
-            siteForComplication = uuid
+        if let uuidString = defaults.stringForKey(DefaultKey.primarySiteUUID.rawValue), uuid = NSUUID(UUIDString: uuidString) {
+            primarySiteUUID = uuid
+        } else {
+            primarySiteUUID = sites[0].uuid
         }
         
     }
@@ -98,7 +105,10 @@ public class SitesDataSource: SitesDataSourceProvider{
     public func addSite(site: Site, atIndex: Int?) {
         defer {
             saveSitesToDefaults()
+         
         }
+        
+        // FIXME: The site isn't be matched correctly.
         
         if let indexOptional = atIndex where !sites.contains(site){
             if (sites.count >= indexOptional) {
@@ -128,13 +138,28 @@ public class SitesDataSource: SitesDataSourceProvider{
         }
         
         if atIndex <= sites.count - 1 {
+            let site = sites[atIndex]
             sites.removeAtIndex(atIndex)
+            AppConfiguration.keychain[site.uuid.UUIDString] = nil
+            
+            if primarySiteUUID == site.uuid {
+                primarySiteUUID = nil
+            }
         }
         
         if sites.isEmpty {
             lastViewedSiteIndex = 0
             lastViewedSiteUUID = nil
-            siteForComplication = nil
+            primarySiteUUID = nil
         }
+    }
+    
+    
+    public func createComplicationData() {
+        guard let site = sites.filter({ $0.uuid == primarySiteUUID }).first else {
+            return
+        }
+        
+        print(site)
     }
 }

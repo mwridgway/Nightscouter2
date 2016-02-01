@@ -43,8 +43,8 @@ public class AppConfiguration {
     }
     
     public struct Constant {
-        public static let knownMilliseconds: Double = 1168583640000
-        public static let knownMgdl: mgdlValue = 100
+        public static let knownMilliseconds: Mills = 1168583640000
+        public static let knownMgdl: MgdlValue = 100
     }
     
     /**

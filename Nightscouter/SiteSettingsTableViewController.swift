@@ -13,17 +13,24 @@ struct SettingsModelViewModel {
     var subTitle: String?
     var switchOn: Bool?
     var cellIdentifier: Celltype
-    
+    var intent: SettingIntent
+
     enum Celltype: String {
         case cellBasic, cellSubtitle, cellBasicDisclosure
     }
     
-    init(title: String, subTitle: String? = nil, switchOn: Bool? = nil, cellIdentifier: Celltype = .cellBasic){
+    init(title: String, intent: SettingIntent, subTitle: String? = nil, switchOn: Bool? = nil, cellIdentifier: Celltype = .cellBasic){
         self.title = title
         self.subTitle = subTitle
         self.switchOn = switchOn
         self.cellIdentifier = cellIdentifier
+        self.intent = intent
     }
+    
+}
+
+enum SettingIntent: String {
+    case PreventLocking, SetDefault, Edit, GoToSafari
 }
 
 protocol SiteSettingsDelegate {
@@ -38,17 +45,13 @@ class SiteSettingsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         tableView.estimatedRowHeight = 88.0
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = 88.0//UITableViewAutomaticDimension
+        self.tableView.reloadData()
         self.title = "Settings"
         
         if let delegate =  delegate{
             settings = delegate.settings
         }
-//        } else {
-//            settings.append(SettingsModelViewModel(title: "Prevent Screen from Locking?", subTitle: nil, switchOn: false))
-//            settings.append(SettingsModelViewModel(title: "Use as Default Site", subTitle: "\nWhen enabled, this site's information will be proiritized for the watch.\n", switchOn: false, cellIdentifier: .cellSubtitle))
-//            settings.append(SettingsModelViewModel(title: "Edit", subTitle: "Change any available settings for connecting to the site.", cellIdentifier: .cellBasicDisclosure))
-//        }
     }
 
     // MARK: - Table view data source
@@ -96,6 +99,8 @@ class SiteSettingsTableViewController: UITableViewController {
         print("Did select row: \(indexPath.row), which is: \(settings[indexPath.row])")
         
         delegate?.settingDidChange(setting, atIndexPath: indexPath, inViewController: self)
+        
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
 }

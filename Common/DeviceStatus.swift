@@ -20,7 +20,7 @@ public struct DeviceStatus: CustomStringConvertible, Dateable {
      
      */
     public let uploaderBattery: Int
-    public var milliseconds: Double
+    public var milliseconds: Mills
     public var batteryLevel: String {
         get {
             let numFormatter = NSNumberFormatter()

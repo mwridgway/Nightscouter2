@@ -14,7 +14,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     // MARK: - Timeline Configuration
     
     func getSupportedTimeTravelDirectionsForComplication(complication: CLKComplication, withHandler handler: (CLKComplicationTimeTravelDirections) -> Void) {
-        handler([.Forward, .Backward])
+        handler(.Backward) //([.Forward, .Backward])
     }
     
     func getTimelineStartDateForComplication(complication: CLKComplication, withHandler handler: (NSDate?) -> Void) {
@@ -60,4 +60,18 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         handler(nil)
     }
     
+}
+
+extension ComplicationController {
+    static func reloadComplications() {
+        #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
+        #endif
+        
+        if let complicationServer = CLKComplicationServer.sharedInstance() {
+            for complication in complicationServer.activeComplications {
+                complicationServer.reloadTimelineForComplication(complication)
+            }
+        }
+    }
 }
