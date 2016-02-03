@@ -125,7 +125,7 @@ extension NSTimeInterval {
         return self % 60
     }
     var millisecond: Double {
-        return self*1000 % 1000
+        return self*1000
     }
 }
 

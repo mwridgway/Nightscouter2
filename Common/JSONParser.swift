@@ -32,6 +32,7 @@ extension Site: Encodable, Decodable {
         static let sgvs = "sgvs"
         static let mbgs = "mbgs"
         static let cals = "cals"
+        static let deviceStatus = "deviceStatus"
 
     }
     
@@ -39,8 +40,9 @@ extension Site: Encodable, Decodable {
         let encodedSgvs: [[String : AnyObject]] = sgvs.flatMap{ $0.encode() }
          let encodedCals: [[String : AnyObject]] = cals.flatMap{ $0.encode() }
          let encodedMgbs: [[String : AnyObject]] = mbgs.flatMap{ $0.encode() }
+        let encodedDeviceStatus: [[String : AnyObject]] = deviceStatus.flatMap{ $0.encode() }
         
-        return [JSONKey.url : url.absoluteString, JSONKey.overrideScreenLock : overrideScreenLock, JSONKey.disabled: disabled, JSONKey.uuid: uuid.UUIDString, JSONKey.configuration: configuration?.encode() ?? "", JSONKey.sgvs: encodedSgvs, JSONKey.cals: encodedCals, JSONKey.mbgs: encodedMgbs]//, "tempSocketData" : [JSONKey.sgvs: encodedSgvs, JSONKey.cals: encodedCals, JSONKey.mbgs: encodedMgbs]]
+        return [JSONKey.url : url.absoluteString, JSONKey.overrideScreenLock : overrideScreenLock, JSONKey.disabled: disabled, JSONKey.uuid: uuid.UUIDString, JSONKey.configuration: configuration?.encode() ?? "", JSONKey.sgvs: encodedSgvs, JSONKey.cals: encodedCals, JSONKey.mbgs: encodedMgbs, JSONKey.deviceStatus: encodedDeviceStatus] //, "tempSocketData" : [JSONKey.sgvs: encodedSgvs, JSONKey.cals: encodedCals, JSONKey.mbgs: encodedMgbs]]
     }
     
     static func decode(dict: [String: AnyObject]) -> Site? {
@@ -66,6 +68,10 @@ extension Site: Encodable, Decodable {
         }
         if let cals = rootDictForData[JSONKey.cals] as? [[String: AnyObject]] {
             site.cals = cals.flatMap { Calibration.decode($0) }
+        }
+        
+        if let devStatus = rootDictForData[JSONKey.deviceStatus] as? [[String: AnyObject]] {
+            site.deviceStatus = devStatus.flatMap { DeviceStatus.decode($0) }
         }
         
         if let config = dict[JSONKey.configuration] as? [String: AnyObject] {
@@ -357,7 +363,7 @@ extension DeviceStatus: Encodable, Decodable {
     }
     
     func encode() -> [String : AnyObject] {
-        return [JSONKey.mills: milliseconds, JSONKey.uploader: uploaderBattery]
+        return [JSONKey.mills: milliseconds, JSONKey.uploaderBattery: uploaderBattery]
     }
     
     static func decode(dict: [String : AnyObject]) -> DeviceStatus? {

@@ -175,7 +175,7 @@ public enum Noise : Int, CustomStringConvertible {
     
     public var description: String {
         switch (self) {
-        case .None: return NSLocalizedString("noiseNone", tableName: nil, bundle:  NSBundle.mainBundle(), value: "None", comment: "Label used to indicate a direction.")
+        case .None: return NSLocalizedString("noiseNone", tableName: nil, bundle:  NSBundle.mainBundle(), value: "---", comment: "Label used to indicate a direction.")
         case .Clean: return NSLocalizedString("noiseClean", tableName: nil, bundle:  NSBundle.mainBundle(), value: "Clean", comment: "Label used to indicate a direction.")
         case .Light: return NSLocalizedString("noiseLight", tableName: nil, bundle:  NSBundle.mainBundle(), value: "Light", comment: "Label used to indicate a direction.")
         case .Medium: return NSLocalizedString("noiseMedium", tableName: nil, bundle:  NSBundle.mainBundle(), value: "Medium", comment: "Label used to indicate a direction.")

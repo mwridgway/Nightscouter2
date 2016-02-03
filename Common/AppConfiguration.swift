@@ -17,7 +17,7 @@ public struct PlaceHolderStrings {
     public static let date: String = "----"
     public static let delta: String = "- --/--"
     public static let deltaAltJ: String = "∆"
-    public static let raw: String = "--- : ---"
+    public static let raw: String = "---"
     public static let battery: String = "--%"
 
     

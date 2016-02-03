@@ -16,8 +16,12 @@ class SitesTableInterfaceController: WKInterfaceController {
     }
     
     @IBOutlet var sitesTable: WKInterfaceTable!
-    
-    var sites = [Site]() {
+
+//    var sites: [Site] {
+//        return SitesDataSource.sharedInstance.sites
+//    }
+
+    var sites = [Site]()  {
         didSet {
             updateTableData()
         }
@@ -41,7 +45,7 @@ class SitesTableInterfaceController: WKInterfaceController {
         // push controller...
         print(">>> Entering \(__FUNCTION__) <<<")
         let site = sites[rowIndex]
-        let mvm = SiteSummaryModelViewModel(withSite: site)
+        let mvm = site.generateSummaryModelViewModel()
         
         print(mvm)
         // push relevant context over to the detail page.
@@ -68,7 +72,7 @@ class SitesTableInterfaceController: WKInterfaceController {
                 self.sitesTable.setNumberOfRows(self.sites.count, withRowType: rowTypeIdentifier)
                 for (index, site) in self.sites.enumerate() {
                     if let row = self.sitesTable.rowControllerAtIndex(index) as? SiteRowController {
-                        let mvm = SiteSummaryModelViewModel(withSite: site)
+                        let mvm = site.generateSummaryModelViewModel()
                         row.configure(withDataSource: mvm, delegate: mvm)
                         
                     }

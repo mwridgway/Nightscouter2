@@ -7,12 +7,16 @@
 //
 
 import Foundation
-
+// Provide a private typealias for a platform specific color.
 #if os(iOS) || os(watchOS)
     import UIKit
+    public typealias Color = UIColor
+#elseif os(OSX)
+    import Cocoa
+    public typealias Color = NSColor
 #endif
 
-public extension UIColor {
+public extension Color {
     public class func  randomColor() -> UIColor {
         let randomRed:CGFloat = CGFloat(drand48())
         
@@ -20,12 +24,12 @@ public extension UIColor {
         
         let randomBlue:CGFloat = CGFloat(drand48())
         
-        return UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
+        return Color(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
     }
     
 }
 
-extension UIColor {
+extension Color {
     public convenience init(hexString:String) {
         let hexString: String = hexString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
         let scanner            = NSScanner(string: hexString)

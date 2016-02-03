@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1304D68BB1F5C81F77044399 /* Pods_NightscouterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31019C1455131EDC55B151EF /* Pods_NightscouterKit.framework */; };
 		17196DAF1C57F2EB0051F287 /* SiteSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17196DAE1C57F2EB0051F287 /* SiteSettingsTableViewController.swift */; };
 		17292EC71C4FD6D400538D01 /* DictionaryRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17292EC61C4FD6D400538D01 /* DictionaryRepresentable.swift */; };
 		17292EC81C4FD6D400538D01 /* DictionaryRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17292EC61C4FD6D400538D01 /* DictionaryRepresentable.swift */; };
@@ -99,18 +100,25 @@
 		1770548F1C49608400302D83 /* LocalizedStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1770548D1C49608400302D83 /* LocalizedStrings.swift */; };
 		177054911C4963A200302D83 /* SitesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177054901C4963A200302D83 /* SitesDataSource.swift */; };
 		177054921C4963A200302D83 /* SitesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177054901C4963A200302D83 /* SitesDataSource.swift */; };
+		1771F4471C61AA2A004E0437 /* NSDate-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1771F4461C61AA2A004E0437 /* NSDate-Extensions.swift */; };
+		1771F4481C61AA2A004E0437 /* NSDate-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1771F4461C61AA2A004E0437 /* NSDate-Extensions.swift */; };
+		17A3F6651C60E8D400A702F2 /* iCloudStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F6641C60E8D400A702F2 /* iCloudStore.swift */; };
+		17A3F6661C60E8D400A702F2 /* iCloudStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F6641C60E8D400A702F2 /* iCloudStore.swift */; };
+		17A3F6681C60EC4900A702F2 /* Complication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F6671C60EC4900A702F2 /* Complication.swift */; };
+		17A3F6691C60EC4900A702F2 /* Complication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F6671C60EC4900A702F2 /* Complication.swift */; };
+		17A3F66B1C6130D900A702F2 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F66A1C6130D900A702F2 /* WatchSessionManager.swift */; };
+		17A3F66D1C61328000A702F2 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F66C1C61328000A702F2 /* WatchSessionManager.swift */; };
 		17CC72C01C4D3B8C00BA5E5B /* SiteNSNowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CC72BF1C4D3B8C00BA5E5B /* SiteNSNowTableViewCell.swift */; };
 		17D0EB611C52D5D4007F21FC /* Encodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0EB5E1C52D5D4007F21FC /* Encodable.swift */; };
 		17D0EB621C52D5D4007F21FC /* Encodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0EB5E1C52D5D4007F21FC /* Encodable.swift */; };
 		17D0EB641C52D7FC007F21FC /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0EB631C52D7FC007F21FC /* Extensions.swift */; };
 		17D0EB651C52D7FC007F21FC /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0EB631C52D7FC007F21FC /* Extensions.swift */; };
 		17D0EB671C53C82E007F21FC /* SocketIOClient+Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0EB661C53C82E007F21FC /* SocketIOClient+Signal.swift */; };
-		2F3C94E53AFEAE6B8FB6E296 /* Pods_Nightscouter_Watch_App_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439C79B125828258591DC40A /* Pods_Nightscouter_Watch_App_Extension.framework */; };
-		43D2CFA9A38F82A98BD2A839 /* Pods_Nightscouter_Today.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B606B9EA4D3EFC730A3A588E /* Pods_Nightscouter_Today.framework */; };
-		76F3CEA6F5A3720E0EFEB4C5 /* Pods_Nightscouter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BFD910FBCCE4AEC9AC07A53 /* Pods_Nightscouter.framework */; };
-		88F6A34585C6E099AC08E883 /* Pods_NightscouterWatchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB575D9C7DDA9FD04E625EC2 /* Pods_NightscouterWatchKit.framework */; };
-		A01CCC3961BB77C27EF56089 /* Pods_Nightscouter_Watch_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CFA3F1AEB20B30F12C83BA /* Pods_Nightscouter_Watch_App.framework */; };
-		D5CB33BDCA837EAB0FE0F391 /* Pods_NightscouterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E27A97B801EE7CD6BFF65DF /* Pods_NightscouterKit.framework */; };
+		17F4591DD049866582D4ED3C /* Pods_Nightscouter_Watch_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4F5807E5BF333A7E9F1F87 /* Pods_Nightscouter_Watch_App.framework */; };
+		29CAB3B1EB1786BA54462623 /* Pods_Nightscouter_Today.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52A91EF6331A5A71E3407665 /* Pods_Nightscouter_Today.framework */; };
+		44FA00F0D610C8F0DE8E2C84 /* Pods_Nightscouter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323918B18D6D3D560901CB7E /* Pods_Nightscouter.framework */; };
+		8BC368FCC6635FB7D0ACF0E7 /* Pods_Nightscouter_Watch_App_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6705CC9CB3F8BCDC40B7EFA9 /* Pods_Nightscouter_Watch_App_Extension.framework */; };
+		8C0F851AA643541AAC580A90 /* Pods_NightscouterWatchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05CBC2136BF195381C19A4A4 /* Pods_NightscouterWatchKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -210,9 +218,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		01885EF18C4C6177DED89006 /* Pods-NightscouterKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NightscouterKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-NightscouterKit/Pods-NightscouterKit.release.xcconfig"; sourceTree = "<group>"; };
-		0517B0CAAFBC5B79CC2C9081 /* Pods-Nightscouter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter/Pods-Nightscouter.release.xcconfig"; sourceTree = "<group>"; };
-		0BFD910FBCCE4AEC9AC07A53 /* Pods_Nightscouter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nightscouter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05CBC2136BF195381C19A4A4 /* Pods_NightscouterWatchKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NightscouterWatchKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		17196DAE1C57F2EB0051F287 /* SiteSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1723E48B1C46D5B600EB4C8F /* SitesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SitesTableViewController.swift; sourceTree = "<group>"; };
 		17292EC61C4FD6D400538D01 /* DictionaryRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryRepresentable.swift; sourceTree = "<group>"; };
@@ -274,8 +280,6 @@
 		175DDBF21C48236C0083CC8C /* SiteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewCell.swift; sourceTree = "<group>"; };
 		175DE0051C5BC7820031613E /* Nightscouter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Nightscouter.entitlements; sourceTree = "<group>"; };
 		175DE0061C5BC7AF0031613E /* Nightscouter Today.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Nightscouter Today.entitlements"; sourceTree = "<group>"; };
-		175DE0071C5BC7E10031613E /* Nightscouter Watch App Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Nightscouter Watch App Extension.entitlements"; sourceTree = "<group>"; };
-		175DE0081C5BC8020031613E /* Nightscouter Watch App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Nightscouter Watch App.entitlements"; sourceTree = "<group>"; };
 		175DE0091C5BEB010031613E /* Array-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array-Extensions.swift"; sourceTree = "<group>"; };
 		176BE2751C496A330040F1B7 /* ModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelController.swift; sourceTree = "<group>"; };
 		176BE2771C496A3F0040F1B7 /* SiteDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteDetailViewController.swift; sourceTree = "<group>"; };
@@ -293,25 +297,34 @@
 		177054891C49601B00302D83 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		1770548D1C49608400302D83 /* LocalizedStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedStrings.swift; sourceTree = "<group>"; };
 		177054901C4963A200302D83 /* SitesDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SitesDataSource.swift; sourceTree = "<group>"; };
+		1771F4461C61AA2A004E0437 /* NSDate-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate-Extensions.swift"; sourceTree = "<group>"; };
+		17A3F6641C60E8D400A702F2 /* iCloudStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iCloudStore.swift; sourceTree = "<group>"; };
+		17A3F6671C60EC4900A702F2 /* Complication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Complication.swift; sourceTree = "<group>"; };
+		17A3F66A1C6130D900A702F2 /* WatchSessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
+		17A3F66C1C61328000A702F2 /* WatchSessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
 		17CC72BF1C4D3B8C00BA5E5B /* SiteNSNowTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteNSNowTableViewCell.swift; sourceTree = "<group>"; };
 		17D0EB5E1C52D5D4007F21FC /* Encodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Encodable.swift; sourceTree = "<group>"; };
 		17D0EB631C52D7FC007F21FC /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		17D0EB661C53C82E007F21FC /* SocketIOClient+Signal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SocketIOClient+Signal.swift"; sourceTree = "<group>"; };
-		21CFA3F1AEB20B30F12C83BA /* Pods_Nightscouter_Watch_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nightscouter_Watch_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3BF14B3761DDDE33C7867DF7 /* Pods-NightscouterWatchKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NightscouterWatchKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NightscouterWatchKit/Pods-NightscouterWatchKit.debug.xcconfig"; sourceTree = "<group>"; };
-		439C79B125828258591DC40A /* Pods_Nightscouter_Watch_App_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nightscouter_Watch_App_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		46066BCD51220E70EE428C0D /* Pods-NightscouterWatchKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NightscouterWatchKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-NightscouterWatchKit/Pods-NightscouterWatchKit.release.xcconfig"; sourceTree = "<group>"; };
-		46EE91FDBCB79FE239A2F862 /* Pods-Nightscouter Watch App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter Watch App.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter Watch App/Pods-Nightscouter Watch App.release.xcconfig"; sourceTree = "<group>"; };
-		69A172E6EDAF2F248B06D636 /* Pods-Nightscouter Watch App Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter Watch App Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter Watch App Extension/Pods-Nightscouter Watch App Extension.release.xcconfig"; sourceTree = "<group>"; };
-		69FA6DBAD862BE152380F8C8 /* Pods-NightscouterKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NightscouterKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NightscouterKit/Pods-NightscouterKit.debug.xcconfig"; sourceTree = "<group>"; };
-		7222235F1C39D9C707951390 /* Pods-Nightscouter Watch App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter Watch App.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter Watch App/Pods-Nightscouter Watch App.debug.xcconfig"; sourceTree = "<group>"; };
-		72E3A484C33B7C763F80EDB6 /* Pods-Nightscouter Today.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter Today.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter Today/Pods-Nightscouter Today.release.xcconfig"; sourceTree = "<group>"; };
-		7E27A97B801EE7CD6BFF65DF /* Pods_NightscouterKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NightscouterKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B17A79B1318F7DFD50B857E0 /* Pods-Nightscouter Today.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter Today.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter Today/Pods-Nightscouter Today.debug.xcconfig"; sourceTree = "<group>"; };
-		B606B9EA4D3EFC730A3A588E /* Pods_Nightscouter_Today.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nightscouter_Today.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D3F460D84885E9177B9CA1FF /* Pods-Nightscouter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter/Pods-Nightscouter.debug.xcconfig"; sourceTree = "<group>"; };
-		DB861A0AFF29E8F55EF67F6F /* Pods-Nightscouter Watch App Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter Watch App Extension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter Watch App Extension/Pods-Nightscouter Watch App Extension.debug.xcconfig"; sourceTree = "<group>"; };
-		FB575D9C7DDA9FD04E625EC2 /* Pods_NightscouterWatchKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NightscouterWatchKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		17DB4E231C5FF6D200644F29 /* Nightscouter Watch App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Nightscouter Watch App.entitlements"; sourceTree = "<group>"; };
+		17DB4E241C5FF7D600644F29 /* Nightscouter Watch App Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Nightscouter Watch App Extension.entitlements"; sourceTree = "<group>"; };
+		1B8C02256B648ED4DC687C38 /* Pods-Nightscouter Today.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter Today.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter Today/Pods-Nightscouter Today.release.xcconfig"; sourceTree = "<group>"; };
+		2CBA9B6EAF94DCDC5BDE4861 /* Pods-Nightscouter Watch App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter Watch App.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter Watch App/Pods-Nightscouter Watch App.release.xcconfig"; sourceTree = "<group>"; };
+		31019C1455131EDC55B151EF /* Pods_NightscouterKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NightscouterKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		323918B18D6D3D560901CB7E /* Pods_Nightscouter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nightscouter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		52A91EF6331A5A71E3407665 /* Pods_Nightscouter_Today.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nightscouter_Today.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A4F5807E5BF333A7E9F1F87 /* Pods_Nightscouter_Watch_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nightscouter_Watch_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5ABF7D470304503159E840CE /* Pods-NightscouterWatchKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NightscouterWatchKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-NightscouterWatchKit/Pods-NightscouterWatchKit.release.xcconfig"; sourceTree = "<group>"; };
+		5D44F100479ABAA7916EA412 /* Pods-Nightscouter Today.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter Today.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter Today/Pods-Nightscouter Today.debug.xcconfig"; sourceTree = "<group>"; };
+		6705CC9CB3F8BCDC40B7EFA9 /* Pods_Nightscouter_Watch_App_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nightscouter_Watch_App_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E8A66734A7122848CF88D59 /* Pods-NightscouterKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NightscouterKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-NightscouterKit/Pods-NightscouterKit.release.xcconfig"; sourceTree = "<group>"; };
+		994185F7454E49EEBD4043AD /* Pods-Nightscouter Watch App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter Watch App.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter Watch App/Pods-Nightscouter Watch App.debug.xcconfig"; sourceTree = "<group>"; };
+		A54724D0D16F123A4E32BBCC /* Pods-NightscouterWatchKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NightscouterWatchKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NightscouterWatchKit/Pods-NightscouterWatchKit.debug.xcconfig"; sourceTree = "<group>"; };
+		AD399D64D911B7B9E235EF68 /* Pods-Nightscouter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter/Pods-Nightscouter.release.xcconfig"; sourceTree = "<group>"; };
+		B1C5C537592B7DBE442AB330 /* Pods-Nightscouter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter/Pods-Nightscouter.debug.xcconfig"; sourceTree = "<group>"; };
+		D1B386FBAA140DCE2A05473A /* Pods-NightscouterKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NightscouterKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NightscouterKit/Pods-NightscouterKit.debug.xcconfig"; sourceTree = "<group>"; };
+		D611C43D4568C294BABD1FEE /* Pods-Nightscouter Watch App Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter Watch App Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter Watch App Extension/Pods-Nightscouter Watch App Extension.release.xcconfig"; sourceTree = "<group>"; };
+		EF7EBFCB786062B8D072271F /* Pods-Nightscouter Watch App Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter Watch App Extension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter Watch App Extension/Pods-Nightscouter Watch App Extension.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -320,7 +333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				173580851C4435BD00E893DB /* NightscouterKit.framework in Frameworks */,
-				76F3CEA6F5A3720E0EFEB4C5 /* Pods_Nightscouter.framework in Frameworks */,
+				44FA00F0D610C8F0DE8E2C84 /* Pods_Nightscouter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,7 +343,7 @@
 			files = (
 				173F84F61C4D4DE500DCB47D /* NightscouterKit.framework in Frameworks */,
 				173580691C44357D00E893DB /* NotificationCenter.framework in Frameworks */,
-				43D2CFA9A38F82A98BD2A839 /* Pods_Nightscouter_Today.framework in Frameworks */,
+				29CAB3B1EB1786BA54462623 /* Pods_Nightscouter_Today.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,7 +351,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5CB33BDCA837EAB0FE0F391 /* Pods_NightscouterKit.framework in Frameworks */,
+				1304D68BB1F5C81F77044399 /* Pods_NightscouterKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,7 +360,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				173580C21C44375200E893DB /* NightscouterWatchKit.framework in Frameworks */,
-				2F3C94E53AFEAE6B8FB6E296 /* Pods_Nightscouter_Watch_App_Extension.framework in Frameworks */,
+				8BC368FCC6635FB7D0ACF0E7 /* Pods_Nightscouter_Watch_App_Extension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,7 +368,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88F6A34585C6E099AC08E883 /* Pods_NightscouterWatchKit.framework in Frameworks */,
+				8C0F851AA643541AAC580A90 /* Pods_NightscouterWatchKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,7 +376,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A01CCC3961BB77C27EF56089 /* Pods_Nightscouter_Watch_App.framework in Frameworks */,
+				17F4591DD049866582D4ED3C /* Pods_Nightscouter_Watch_App.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,7 +394,7 @@
 				1735808B1C44367F00E893DB /* Shared Framework Code */,
 				173580671C44357D00E893DB /* Frameworks */,
 				1735804E1C44354200E893DB /* Products */,
-				D48357883675903BBCE9EE44 /* Pods */,
+				8BE3CF2B291CB500777D6C26 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -416,12 +429,12 @@
 			isa = PBXGroup;
 			children = (
 				173580681C44357D00E893DB /* NotificationCenter.framework */,
-				0BFD910FBCCE4AEC9AC07A53 /* Pods_Nightscouter.framework */,
-				7E27A97B801EE7CD6BFF65DF /* Pods_NightscouterKit.framework */,
-				FB575D9C7DDA9FD04E625EC2 /* Pods_NightscouterWatchKit.framework */,
-				439C79B125828258591DC40A /* Pods_Nightscouter_Watch_App_Extension.framework */,
-				21CFA3F1AEB20B30F12C83BA /* Pods_Nightscouter_Watch_App.framework */,
-				B606B9EA4D3EFC730A3A588E /* Pods_Nightscouter_Today.framework */,
+				323918B18D6D3D560901CB7E /* Pods_Nightscouter.framework */,
+				52A91EF6331A5A71E3407665 /* Pods_Nightscouter_Today.framework */,
+				5A4F5807E5BF333A7E9F1F87 /* Pods_Nightscouter_Watch_App.framework */,
+				6705CC9CB3F8BCDC40B7EFA9 /* Pods_Nightscouter_Watch_App_Extension.framework */,
+				31019C1455131EDC55B151EF /* Pods_NightscouterKit.framework */,
+				05CBC2136BF195381C19A4A4 /* Pods_NightscouterWatchKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -452,6 +465,7 @@
 		1735807F1C4435BD00E893DB /* NightscouterKit Framework (iOS) */ = {
 			isa = PBXGroup;
 			children = (
+				17A3F66A1C6130D900A702F2 /* WatchSessionManager.swift */,
 				17490CA11C56BE1800389C7C /* AppTheme.swift */,
 				173A0B7B1C4D25F5005B74FC /* SocketClient.swift */,
 				17D0EB661C53C82E007F21FC /* SocketIOClient+Signal.swift */,
@@ -471,6 +485,7 @@
 				17292ECA1C4FD9B800538D01 /* JSONParser.swift */,
 				173581231C44496700E893DB /* AppConfiguration.swift */,
 				177054901C4963A200302D83 /* SitesDataSource.swift */,
+				17A3F6641C60E8D400A702F2 /* iCloudStore.swift */,
 				1742F02C1C449871008DED3F /* Extensions */,
 				177054951C4963D800302D83 /* Models */,
 				1742F02D1C4498B7008DED3F /* Protocols */,
@@ -494,7 +509,7 @@
 		173580901C44370300E893DB /* Main App */ = {
 			isa = PBXGroup;
 			children = (
-				175DE0081C5BC8020031613E /* Nightscouter Watch App.entitlements */,
+				17DB4E231C5FF6D200644F29 /* Nightscouter Watch App.entitlements */,
 				173580911C44370300E893DB /* Interface.storyboard */,
 				173580941C44370300E893DB /* Assets.xcassets */,
 				173580961C44370300E893DB /* Info.plist */,
@@ -506,7 +521,7 @@
 		1735809F1C44370300E893DB /* App Extension */ = {
 			isa = PBXGroup;
 			children = (
-				175DE0071C5BC7E10031613E /* Nightscouter Watch App Extension.entitlements */,
+				17DB4E241C5FF7D600644F29 /* Nightscouter Watch App Extension.entitlements */,
 				173F84F11C4D45FC00DCB47D /* Complication */,
 				173F84F01C4D45DD00DCB47D /* Delegate */,
 				173F84F21C4D461300DCB47D /* Notification */,
@@ -531,6 +546,7 @@
 		173580BC1C44375200E893DB /* NightscouterKit Framework (watchOS) */ = {
 			isa = PBXGroup;
 			children = (
+				17A3F66C1C61328000A702F2 /* WatchSessionManager.swift */,
 				173F84F71C4D4E5800DCB47D /* NSAssetKitWatchOS+Helpers.swift */,
 				173F84F41C4D4D4100DCB47D /* NSAssetKitWatchOS.swift */,
 				173580BD1C44375200E893DB /* NightscouterKit watchOS.h */,
@@ -593,6 +609,7 @@
 				1742F0241C449857008DED3F /* NSCalendar+Extension.swift */,
 				1742F0251C449857008DED3F /* String+Extensions.swift */,
 				1742F0261C449857008DED3F /* UIColor+Extension.swift */,
+				1771F4461C61AA2A004E0437 /* NSDate-Extensions.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -703,25 +720,26 @@
 				173581201C44459E00E893DB /* MeteredGlucoseValue.swift */,
 				173581171C443C3500E893DB /* SensorGlucoseValue.swift */,
 				1742F0321C44A27D008DED3F /* ServerConfiguration.swift */,
+				17A3F6671C60EC4900A702F2 /* Complication.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
 		};
-		D48357883675903BBCE9EE44 /* Pods */ = {
+		8BE3CF2B291CB500777D6C26 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				69FA6DBAD862BE152380F8C8 /* Pods-NightscouterKit.debug.xcconfig */,
-				01885EF18C4C6177DED89006 /* Pods-NightscouterKit.release.xcconfig */,
-				3BF14B3761DDDE33C7867DF7 /* Pods-NightscouterWatchKit.debug.xcconfig */,
-				46066BCD51220E70EE428C0D /* Pods-NightscouterWatchKit.release.xcconfig */,
-				D3F460D84885E9177B9CA1FF /* Pods-Nightscouter.debug.xcconfig */,
-				0517B0CAAFBC5B79CC2C9081 /* Pods-Nightscouter.release.xcconfig */,
-				7222235F1C39D9C707951390 /* Pods-Nightscouter Watch App.debug.xcconfig */,
-				46EE91FDBCB79FE239A2F862 /* Pods-Nightscouter Watch App.release.xcconfig */,
-				DB861A0AFF29E8F55EF67F6F /* Pods-Nightscouter Watch App Extension.debug.xcconfig */,
-				69A172E6EDAF2F248B06D636 /* Pods-Nightscouter Watch App Extension.release.xcconfig */,
-				B17A79B1318F7DFD50B857E0 /* Pods-Nightscouter Today.debug.xcconfig */,
-				72E3A484C33B7C763F80EDB6 /* Pods-Nightscouter Today.release.xcconfig */,
+				B1C5C537592B7DBE442AB330 /* Pods-Nightscouter.debug.xcconfig */,
+				AD399D64D911B7B9E235EF68 /* Pods-Nightscouter.release.xcconfig */,
+				5D44F100479ABAA7916EA412 /* Pods-Nightscouter Today.debug.xcconfig */,
+				1B8C02256B648ED4DC687C38 /* Pods-Nightscouter Today.release.xcconfig */,
+				994185F7454E49EEBD4043AD /* Pods-Nightscouter Watch App.debug.xcconfig */,
+				2CBA9B6EAF94DCDC5BDE4861 /* Pods-Nightscouter Watch App.release.xcconfig */,
+				EF7EBFCB786062B8D072271F /* Pods-Nightscouter Watch App Extension.debug.xcconfig */,
+				D611C43D4568C294BABD1FEE /* Pods-Nightscouter Watch App Extension.release.xcconfig */,
+				D1B386FBAA140DCE2A05473A /* Pods-NightscouterKit.debug.xcconfig */,
+				8E8A66734A7122848CF88D59 /* Pods-NightscouterKit.release.xcconfig */,
+				A54724D0D16F123A4E32BBCC /* Pods-NightscouterWatchKit.debug.xcconfig */,
+				5ABF7D470304503159E840CE /* Pods-NightscouterWatchKit.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -752,15 +770,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1735805F1C44354200E893DB /* Build configuration list for PBXNativeTarget "Nightscouter" */;
 			buildPhases = (
-				BAB61C68B2FB61190A43E22C /* Check Pods Manifest.lock */,
+				3A0CC2D940A62F0678AFEBAE /* Check Pods Manifest.lock */,
 				173580491C44354200E893DB /* Sources */,
 				1735804A1C44354200E893DB /* Frameworks */,
 				1735804B1C44354200E893DB /* Resources */,
 				173580771C44357D00E893DB /* Embed App Extensions */,
 				1735808A1C4435BD00E893DB /* Embed Frameworks */,
 				173580B51C44370300E893DB /* Embed Watch Content */,
-				4E8871E026CA6354EFDB14AA /* Embed Pods Frameworks */,
-				4812EBF117D565F11D63E680 /* Copy Pods Resources */,
+				470C83B6796FF054E9D3DD3A /* Embed Pods Frameworks */,
+				DF9157A5C65D52DB3E756AB2 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -778,12 +796,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 173580741C44357D00E893DB /* Build configuration list for PBXNativeTarget "Nightscouter Today" */;
 			buildPhases = (
-				6649CFF18E296B3D12AE9743 /* Check Pods Manifest.lock */,
+				4D6C71627A9DB5721FDE1A32 /* Check Pods Manifest.lock */,
 				173580621C44357D00E893DB /* Sources */,
 				173580631C44357D00E893DB /* Frameworks */,
 				173580641C44357D00E893DB /* Resources */,
-				24C08997878304429B8242F9 /* Embed Pods Frameworks */,
-				4DAD04B2549C8E57186D3ACF /* Copy Pods Resources */,
+				41989CF954435B357415CB4D /* Embed Pods Frameworks */,
+				E25FB1220BF470ED2F8F0234 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -798,12 +816,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 173580871C4435BD00E893DB /* Build configuration list for PBXNativeTarget "NightscouterKit" */;
 			buildPhases = (
-				E0B1CC9DBB41AA234BE44E46 /* Check Pods Manifest.lock */,
+				0482BD3C0128D5A95CDB06FB /* Check Pods Manifest.lock */,
 				173580791C4435BD00E893DB /* Sources */,
 				1735807A1C4435BD00E893DB /* Frameworks */,
 				1735807B1C4435BD00E893DB /* Headers */,
 				1735807C1C4435BD00E893DB /* Resources */,
-				34F17BA8F316D3B17CE3E630 /* Copy Pods Resources */,
+				86798651DB175A88A1B2E832 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -818,11 +836,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 173580B21C44370300E893DB /* Build configuration list for PBXNativeTarget "Nightscouter Watch App" */;
 			buildPhases = (
-				0B811CDFE7B3C7AFF1238926 /* Check Pods Manifest.lock */,
+				65626AB17E595F5D60DB52A4 /* Check Pods Manifest.lock */,
 				1735808D1C44370300E893DB /* Resources */,
 				173580B11C44370300E893DB /* Embed App Extensions */,
 				4D70BC723D189E2D344D4C47 /* Frameworks */,
-				F3A6F857E70165280D576EF2 /* Copy Pods Resources */,
+				D56D7AE2C74D14DC43C5477E /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -838,13 +856,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 173580AE1C44370300E893DB /* Build configuration list for PBXNativeTarget "Nightscouter Watch App Extension" */;
 			buildPhases = (
-				482DAE31330F4B6D93541C0A /* Check Pods Manifest.lock */,
+				7E27CD6C507507B4E17AC7D5 /* Check Pods Manifest.lock */,
 				173580971C44370300E893DB /* Sources */,
 				173580981C44370300E893DB /* Frameworks */,
 				173580991C44370300E893DB /* Resources */,
 				173580C71C44375200E893DB /* Embed Frameworks */,
-				D5601D1168D6F405AF1B25BD /* Embed Pods Frameworks */,
-				CD681682B97D3E2B74A11CF9 /* Copy Pods Resources */,
+				ED02559F54DC3701DBAFA840 /* Embed Pods Frameworks */,
+				A77492FABA63DC1330C2722B /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -860,12 +878,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 173580C41C44375200E893DB /* Build configuration list for PBXNativeTarget "NightscouterWatchKit" */;
 			buildPhases = (
-				58E30B2043E6C6FC07884E1D /* Check Pods Manifest.lock */,
+				4F0D2E2BAB0DF7D4EFBA6C8F /* Check Pods Manifest.lock */,
 				173580B61C44375200E893DB /* Sources */,
 				173580B71C44375200E893DB /* Frameworks */,
 				173580B81C44375200E893DB /* Headers */,
 				173580B91C44375200E893DB /* Resources */,
-				CEB9C8DBC48981F5322579BE /* Copy Pods Resources */,
+				4DED328F99FB8A8E0946E0C8 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1033,7 +1051,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0B811CDFE7B3C7AFF1238926 /* Check Pods Manifest.lock */ = {
+		0482BD3C0128D5A95CDB06FB /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1048,7 +1066,22 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		24C08997878304429B8242F9 /* Embed Pods Frameworks */ = {
+		3A0CC2D940A62F0678AFEBAE /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		41989CF954435B357415CB4D /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1063,67 +1096,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Today/Pods-Nightscouter Today-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		34F17BA8F316D3B17CE3E630 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NightscouterKit/Pods-NightscouterKit-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		4812EBF117D565F11D63E680 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter/Pods-Nightscouter-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		482DAE31330F4B6D93541C0A /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		4DAD04B2549C8E57186D3ACF /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Today/Pods-Nightscouter Today-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		4E8871E026CA6354EFDB14AA /* Embed Pods Frameworks */ = {
+		470C83B6796FF054E9D3DD3A /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1138,7 +1111,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter/Pods-Nightscouter-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		58E30B2043E6C6FC07884E1D /* Check Pods Manifest.lock */ = {
+		4D6C71627A9DB5721FDE1A32 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1153,52 +1126,7 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		6649CFF18E296B3D12AE9743 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		BAB61C68B2FB61190A43E22C /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		CD681682B97D3E2B74A11CF9 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Watch App Extension/Pods-Nightscouter Watch App Extension-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CEB9C8DBC48981F5322579BE /* Copy Pods Resources */ = {
+		4DED328F99FB8A8E0946E0C8 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1213,22 +1141,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NightscouterWatchKit/Pods-NightscouterWatchKit-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D5601D1168D6F405AF1B25BD /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Watch App Extension/Pods-Nightscouter Watch App Extension-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E0B1CC9DBB41AA234BE44E46 /* Check Pods Manifest.lock */ = {
+		4F0D2E2BAB0DF7D4EFBA6C8F /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1243,7 +1156,67 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		F3A6F857E70165280D576EF2 /* Copy Pods Resources */ = {
+		65626AB17E595F5D60DB52A4 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		7E27CD6C507507B4E17AC7D5 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		86798651DB175A88A1B2E832 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NightscouterKit/Pods-NightscouterKit-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A77492FABA63DC1330C2722B /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Watch App Extension/Pods-Nightscouter Watch App Extension-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D56D7AE2C74D14DC43C5477E /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1256,6 +1229,51 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Watch App/Pods-Nightscouter Watch App-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DF9157A5C65D52DB3E756AB2 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter/Pods-Nightscouter-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E25FB1220BF470ED2F8F0234 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Today/Pods-Nightscouter Today-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ED02559F54DC3701DBAFA840 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Watch App Extension/Pods-Nightscouter Watch App Extension-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1304,7 +1322,9 @@
 				177054641C489BBF00302D83 /* String+Extensions.swift in Sources */,
 				173581181C443C3500E893DB /* SensorGlucoseValue.swift in Sources */,
 				1735812A1C444ED400E893DB /* DeviceStatus.swift in Sources */,
+				1771F4471C61AA2A004E0437 /* NSDate-Extensions.swift in Sources */,
 				1742F0351C44A282008DED3F /* ServerConfiguration.swift in Sources */,
+				17A3F6681C60EC4900A702F2 /* Complication.swift in Sources */,
 				177054791C49304B00302D83 /* BackgroundView.swift in Sources */,
 				177054771C492FDC00302D83 /* CompassControl.swift in Sources */,
 				173581241C44496700E893DB /* AppConfiguration.swift in Sources */,
@@ -1315,9 +1335,11 @@
 				1735811E1C443E8900E893DB /* Calibration.swift in Sources */,
 				177054911C4963A200302D83 /* SitesDataSource.swift in Sources */,
 				176BE2801C4979950040F1B7 /* Chartable.swift in Sources */,
+				17A3F6651C60E8D400A702F2 /* iCloudStore.swift in Sources */,
 				177054631C489BBF00302D83 /* NSCalendar+Extension.swift in Sources */,
 				1735811B1C443C6400E893DB /* Protocols.swift in Sources */,
 				17292EC81C4FD6D400538D01 /* DictionaryRepresentable.swift in Sources */,
+				17A3F66B1C6130D900A702F2 /* WatchSessionManager.swift in Sources */,
 				17D0EB671C53C82E007F21FC /* SocketIOClient+Signal.swift in Sources */,
 				1742F03D1C458475008DED3F /* NightscouterAssetKit.swift in Sources */,
 			);
@@ -1348,12 +1370,15 @@
 				177054921C4963A200302D83 /* SitesDataSource.swift in Sources */,
 				173F84F51C4D4D4100DCB47D /* NSAssetKitWatchOS.swift in Sources */,
 				1770548F1C49608400302D83 /* LocalizedStrings.swift in Sources */,
+				17A3F66D1C61328000A702F2 /* WatchSessionManager.swift in Sources */,
 				1735812B1C444ED400E893DB /* DeviceStatus.swift in Sources */,
 				175DE00C1C5BEB050031613E /* Array-Extensions.swift in Sources */,
 				17D0EB621C52D5D4007F21FC /* Encodable.swift in Sources */,
 				173F84F81C4D4E5800DCB47D /* NSAssetKitWatchOS+Helpers.swift in Sources */,
+				17A3F6691C60EC4900A702F2 /* Complication.swift in Sources */,
 				177054661C489BC000302D83 /* Array+Extensions.swift in Sources */,
 				1742F0341C44A281008DED3F /* ServerConfiguration.swift in Sources */,
+				1771F4481C61AA2A004E0437 /* NSDate-Extensions.swift in Sources */,
 				173581251C44496700E893DB /* AppConfiguration.swift in Sources */,
 				177054681C489BC000302D83 /* NSCalendar+Extension.swift in Sources */,
 				1770545F1C489AD500302D83 /* SiteSummaryModelViewModel.swift in Sources */,
@@ -1363,6 +1388,7 @@
 				176BE2811C4979950040F1B7 /* Chartable.swift in Sources */,
 				173581221C44459E00E893DB /* MeteredGlucoseValue.swift in Sources */,
 				17D0EB651C52D7FC007F21FC /* Extensions.swift in Sources */,
+				17A3F6661C60E8D400A702F2 /* iCloudStore.swift in Sources */,
 				177054671C489BC000302D83 /* Double+Extension.swift in Sources */,
 				1735811F1C443E8900E893DB /* Calibration.swift in Sources */,
 				1735811C1C443C6400E893DB /* Protocols.swift in Sources */,
@@ -1521,7 +1547,7 @@
 		};
 		173580601C44354200E893DB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D3F460D84885E9177B9CA1FF /* Pods-Nightscouter.debug.xcconfig */;
+			baseConfigurationReference = B1C5C537592B7DBE442AB330 /* Pods-Nightscouter.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Nightscouter/Nightscouter.entitlements;
@@ -1534,7 +1560,7 @@
 		};
 		173580611C44354200E893DB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0517B0CAAFBC5B79CC2C9081 /* Pods-Nightscouter.release.xcconfig */;
+			baseConfigurationReference = AD399D64D911B7B9E235EF68 /* Pods-Nightscouter.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Nightscouter/Nightscouter.entitlements;
@@ -1547,7 +1573,7 @@
 		};
 		173580751C44357D00E893DB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B17A79B1318F7DFD50B857E0 /* Pods-Nightscouter Today.debug.xcconfig */;
+			baseConfigurationReference = 5D44F100479ABAA7916EA412 /* Pods-Nightscouter Today.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "Nightscouter Today/Nightscouter Today.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1563,7 +1589,7 @@
 		};
 		173580761C44357D00E893DB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 72E3A484C33B7C763F80EDB6 /* Pods-Nightscouter Today.release.xcconfig */;
+			baseConfigurationReference = 1B8C02256B648ED4DC687C38 /* Pods-Nightscouter Today.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "Nightscouter Today/Nightscouter Today.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1579,7 +1605,7 @@
 		};
 		173580881C4435BD00E893DB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 69FA6DBAD862BE152380F8C8 /* Pods-NightscouterKit.debug.xcconfig */;
+			baseConfigurationReference = D1B386FBAA140DCE2A05473A /* Pods-NightscouterKit.debug.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -1602,7 +1628,7 @@
 		};
 		173580891C4435BD00E893DB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 01885EF18C4C6177DED89006 /* Pods-NightscouterKit.release.xcconfig */;
+			baseConfigurationReference = 8E8A66734A7122848CF88D59 /* Pods-NightscouterKit.release.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -1624,10 +1650,11 @@
 		};
 		173580AF1C44370300E893DB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DB861A0AFF29E8F55EF67F6F /* Pods-Nightscouter Watch App Extension.debug.xcconfig */;
+			baseConfigurationReference = EF7EBFCB786062B8D072271F /* Pods-Nightscouter Watch App Extension.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "Nightscouter Watch App Extension/Nightscouter Watch App Extension.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Nightscouter Watch App Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nothingonline.Nightscouter.watchkitapp.watchkitextension;
@@ -1641,10 +1668,11 @@
 		};
 		173580B01C44370300E893DB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 69A172E6EDAF2F248B06D636 /* Pods-Nightscouter Watch App Extension.release.xcconfig */;
+			baseConfigurationReference = D611C43D4568C294BABD1FEE /* Pods-Nightscouter Watch App Extension.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "Nightscouter Watch App Extension/Nightscouter Watch App Extension.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Nightscouter Watch App Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nothingonline.Nightscouter.watchkitapp.watchkitextension;
@@ -1658,10 +1686,11 @@
 		};
 		173580B31C44370300E893DB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7222235F1C39D9C707951390 /* Pods-Nightscouter Watch App.debug.xcconfig */;
+			baseConfigurationReference = 994185F7454E49EEBD4043AD /* Pods-Nightscouter Watch App.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Nightscouter Watch App/Nightscouter Watch App.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				IBSC_MODULE = Nightscouter_Watch_App_Extension;
 				INFOPLIST_FILE = "Nightscouter Watch App/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nothingonline.Nightscouter.watchkitapp;
@@ -1675,10 +1704,11 @@
 		};
 		173580B41C44370300E893DB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 46EE91FDBCB79FE239A2F862 /* Pods-Nightscouter Watch App.release.xcconfig */;
+			baseConfigurationReference = 2CBA9B6EAF94DCDC5BDE4861 /* Pods-Nightscouter Watch App.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Nightscouter Watch App/Nightscouter Watch App.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				IBSC_MODULE = Nightscouter_Watch_App_Extension;
 				INFOPLIST_FILE = "Nightscouter Watch App/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nothingonline.Nightscouter.watchkitapp;
@@ -1692,7 +1722,7 @@
 		};
 		173580C51C44375200E893DB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3BF14B3761DDDE33C7867DF7 /* Pods-NightscouterWatchKit.debug.xcconfig */;
+			baseConfigurationReference = A54724D0D16F123A4E32BBCC /* Pods-NightscouterWatchKit.debug.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -1718,7 +1748,7 @@
 		};
 		173580C61C44375200E893DB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 46066BCD51220E70EE428C0D /* Pods-NightscouterWatchKit.release.xcconfig */;
+			baseConfigurationReference = 5ABF7D470304503159E840CE /* Pods-NightscouterWatchKit.release.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;

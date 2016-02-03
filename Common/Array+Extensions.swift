@@ -8,9 +8,9 @@
 
 import Foundation
 
-// Thanks Mike Ash
+
 public extension Array {
-    public subscript (safe index: UInt) -> Element? {
-        return Int(index) < count ? self[Int(index)] : nil
+    subscript (safe index: Int) -> Element? {
+        return indices ~= index ? self[index] : nil
     }
 }

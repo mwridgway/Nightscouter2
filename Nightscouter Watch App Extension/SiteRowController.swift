@@ -37,6 +37,8 @@ class SiteRowController: NSObject {
         
         // let timerHidden: Bool = dataSource.lookStale
 
+        siteNameLabel.setText(dataSource.nameLabel)
+        
         // Last reading label
         siteLastReadingLabel.setText(PlaceHolderStrings.date)
         siteLastReadingLabel.setTextColor(PlaceHolderStrings.defaultColor.colorValue)
@@ -52,7 +54,7 @@ class SiteRowController: NSObject {
         
         // Raw data
         siteRawGroup.setHidden(dataSource.rawHidden)
-        siteRawLabel.setText(dataSource.rawLabel)
+        siteRawLabel.setText(dataSource.rawFormatedLabel)
         siteRawLabel.setTextColor(delegate?.rawColor)
         
         let sgvString = dataSource.sgvLabel + " " + dataSource.direction.emojiForDirection

@@ -12,7 +12,7 @@
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)com.nothingonline.Nightscouter.Nightscouter-Today</string>
+		<string>$(AppIdentifierPrefix)com.nothingonline.Nightscouter</string>
 	</array>
 </dict>
 </plist>

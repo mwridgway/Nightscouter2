@@ -9,11 +9,8 @@ import Foundation
 import UIKit
 
 public protocol SiteCommonInfoDataSource {
-    //var lastReadingLabel: String { get }
     var lastReadingDate: NSDate { get }
     var batteryLabel: String { get }
-    var rawHidden: Bool { get }
-    var rawLabel: String { get }
     var nameLabel: String { get }
     var urlLabel: String { get }
     var sgvLabel: String { get }
@@ -21,10 +18,27 @@ public protocol SiteCommonInfoDataSource {
     var lookStale: Bool { get }
 }
 
+public protocol RawDataSource {
+    var rawHidden: Bool { get }
+    var rawLabel: String { get }
+    var rawNoise: Noise { get }
+    
+    var rawFormatedLabel: String { get }
+}
+
+public extension RawDataSource {
+    var rawFormatedLabel: String {
+    return "\(rawLabel) : \(rawNoise.description)"
+    }
+}
+
+public protocol RawDelegate {
+    var rawColor: UIColor { get }
+}
+
 public protocol SiteCommonInfoDelegate {
     var lastReadingColor: UIColor { get }
     var batteryColor: UIColor { get }
-    var rawColor: UIColor { get }
     var sgvColor: UIColor { get }
     var deltaColor: UIColor { get }
 }
@@ -33,37 +47,43 @@ public protocol DirectionDisplayable {
     var direction: Direction { get }
 }
 
-public protocol CompassViewDataSource: SiteCommonInfoDataSource, DirectionDisplayable {
+
+public protocol CompassViewDataSource: SiteCommonInfoDataSource, DirectionDisplayable, RawDataSource {
     var text: String { get }
     var detailText: String { get }
 }
 
-public protocol CompassViewDelegate: SiteCommonInfoDelegate {
+public protocol CompassViewDelegate: SiteCommonInfoDelegate, RawDelegate {
     var desiredColor: DesiredColorState { get }
 }
 
 public typealias TableViewRowWithCompassDataSource = protocol<SiteCommonInfoDataSource, CompassViewDataSource>
 public typealias TableViewRowWithCompassDelegate = protocol<SiteCommonInfoDelegate, CompassViewDelegate>
-public typealias TableViewRowWithOutCompassDataSource = protocol<SiteCommonInfoDataSource, DirectionDisplayable>
-public typealias TableViewRowWithOutCompassDelegate = protocol<SiteCommonInfoDelegate>
+public typealias TableViewRowWithOutCompassDataSource = protocol<SiteCommonInfoDataSource, RawDataSource, DirectionDisplayable>
+public typealias TableViewRowWithOutCompassDelegate = protocol<SiteCommonInfoDelegate, RawDelegate>
 
-public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisplayable, SiteCommonInfoDelegate, CompassViewDataSource, CompassViewDelegate {
+public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, RawDataSource, RawDelegate, DirectionDisplayable, SiteCommonInfoDelegate, CompassViewDataSource, CompassViewDelegate {
 
     public var lastReadingDate: NSDate
     public var batteryLabel: String
-    public var rawHidden: Bool
-    public var rawLabel: String
     public var nameLabel: String
     public var urlLabel: String
     public var sgvLabel: String
     public var deltaLabel: String
     
+    
+    public var rawHidden: Bool
+    public var rawLabel: String
+    public var rawNoise: Noise
+    
     public var lastReadingColor: UIColor
     public var batteryColor: UIColor
-    public var rawColor: UIColor
+
     public var sgvColor: UIColor
     public var deltaColor: UIColor
     
+    public var rawColor: UIColor
+
     public var direction: Direction
     public var text: String
     public var detailText: String
@@ -107,7 +127,8 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
             self.lookStale = false
             self.direction = Direction.None
             self.text = self.sgvLabel
-            
+            self.rawNoise = Noise.None
+
             return
         }
         
@@ -119,6 +140,7 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
         var lastReadingDate: NSDate?
         var sgvString: String?
         var rawString: String?
+        var rawNoise: Noise?
         var batteryString: String?
         var direction: Direction?
         
@@ -135,7 +157,7 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
             
             lastReadingDate = latestSgv.date
             
-            sgvString = "\(latestSgv.mgdl.formattedForMgdl)"
+            sgvString = latestSgv.mgdl.formattedForMgdl
             if units == .Mmol {
                 sgvString = latestSgv.mgdl.formattedForMmol
             }
@@ -156,7 +178,9 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
                     rawFormattedString = raw.formattedForMmol
                 }
                 
-                rawString =  "\(rawFormattedString) : \(latestSgv.noise.description)"
+                // rawString =  "\(rawFormattedString) : \(latestSgv.noise.description)"
+                rawString = rawFormattedString
+                rawNoise = latestSgv.noise
             }
             
             if let deviceStatus = site.deviceStatus.first {
@@ -174,6 +198,7 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
                 
                 rawString = PlaceHolderStrings.raw
                 rawColorVar = DesiredColorState.Neutral
+                rawNoise = Noise.None
                 
                 deltaString = PlaceHolderStrings.delta
                 
@@ -213,6 +238,8 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, DirectionDisp
         self.lookStale = isStaleData.warn
         self.direction = direction ?? Direction.None
         self.text = self.sgvLabel
+        
+        self.rawNoise = rawNoise ?? Noise.None
         
     }
 }

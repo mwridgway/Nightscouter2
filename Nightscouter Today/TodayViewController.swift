@@ -111,17 +111,31 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
     }
     
     func refreshDataFor(site: Site, index: Int){
-        // Start up the API
+        
+        // Do not allow refreshing to happen if there is no data in the sites array.
+        if !sites.isEmpty {
+            let socket = NightscoutSocketIOClient(site: site)
+            socket.fetchConfigurationData().startWithNext { site in
+                if let site = site {
+                    SitesDataSource.sharedInstance.updateSite(site)
+                }
+            }
+            socket.fetchSocketData().observeNext { site in
+                SitesDataSource.sharedInstance.updateSite(site)
+                self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
+            }
+        }
     }
+    
     
     func openApp(with indexPath: NSIndexPath) {
         if let context = extensionContext {
             
             let site = sites[indexPath.row], uuidString = site.uuid.UUIDString
-
+            
             SitesDataSource.sharedInstance.lastViewedSiteIndex = indexPath.row
             SitesDataSource.sharedInstance.lastViewedSiteUUID = site.uuid
-
+            
             let url = NSURL(string: "nightscouter://link/\(StoryboardIdentifier.SiteListPageViewController.rawValue)/\(uuidString)")
             context.openURL(url!, completionHandler: nil)
         }

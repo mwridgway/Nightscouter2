@@ -29,6 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             selector: Selector("userDefaultsDidChange:"),
             name: NSUserDefaultsDidChangeNotification,
             object: nil)
+        
+        // Override point for customization after application launch.
+        WatchSessionManager.sharedManager.startSession()
 
         return true
     }
@@ -160,14 +163,22 @@ extension AppDelegate {
     // MARK: Notifications
     
     func userDefaultsDidChange(notification: NSNotification) {
-        if let _ = notification.object as? NSUserDefaults {
+        if let userDefaults = notification.object as? NSUserDefaults {
             // archiveStoreIfLocal()
             // store = storeForUserDefaults(userDefaults)
             // tabBarController.viewControllers = tabViewControllersForStore(store)
+            
+            print("Defaults Changed")
+            WatchSessionManager.sharedManager.transferUserInfo(userDefaults.dictionaryRepresentation())
+            
+            let item = WatchSessionManager.sharedManager.transferCurrentComplicationUserInfo(userDefaults.dictionaryRepresentation())
+            
+            print(item)
         }
     }
  
     private func registerInitialSettings(userDefaults: NSUserDefaults) {
+  
     }
 
 }
