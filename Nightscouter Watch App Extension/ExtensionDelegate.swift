@@ -13,7 +13,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
-                print("applicationDidFinishLaunching")
+
+        print("applicationDidFinishLaunching")
         // WatchSessionManager.sharedManager.startSession()
     }
 
@@ -22,7 +23,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         print("applicationDidBecomeActive")
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         WatchSessionManager.sharedManager.startSession()
-
     }
 
     func applicationWillResignActive() {

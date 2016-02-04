@@ -14,12 +14,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
-    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
         customizeAppAppearance()
-
+        
         // Register for intial settings.
         let userDefaults = NSUserDefaults.standardUserDefaults()
         registerInitialSettings(userDefaults)
@@ -29,11 +28,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             selector: Selector("userDefaultsDidChange:"),
             name: NSUserDefaultsDidChangeNotification,
             object: nil)
-        
-        // Override point for customization after application launch.
+     
         WatchSessionManager.sharedManager.startSession()
 
         return true
+    }
+    
+    func applicationDidBecomeActive(application: UIApplication) {
+        print("applicationDidBecomeActive")
+
     }
     
     func applicationWillResignActive(application: UIApplication) {
@@ -45,6 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         
         // Save data.
+        SitesDataSource.sharedInstance.saveSitesToDefaults()
     }
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
@@ -143,13 +147,13 @@ extension AppDelegate {
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         // Change the font and size of nav bar text.
         window?.tintColor = Theme.Color.windowTintColor
-
+        
         if let navBarFont = Theme.Font.navBarTitleFont {
             
             let navBarColor: UIColor = Theme.Color.navBarColor
             UINavigationBar.appearance().barTintColor = navBarColor
             UINavigationBar.appearance().tintColor = Theme.Color.windowTintColor
-
+            
             let navBarAttributesDictionary: [String: AnyObject]? = [
                 NSForegroundColorAttributeName: Theme.Color.navBarTextColor,
                 NSFontAttributeName: navBarFont
@@ -158,7 +162,7 @@ extension AppDelegate {
             UINavigationBar.appearance().titleTextAttributes = navBarAttributesDictionary
         }
     }
-
+    
     
     // MARK: Notifications
     
@@ -169,17 +173,15 @@ extension AppDelegate {
             // tabBarController.viewControllers = tabViewControllersForStore(store)
             
             print("Defaults Changed")
-            WatchSessionManager.sharedManager.transferUserInfo(userDefaults.dictionaryRepresentation())
-            
-            let item = WatchSessionManager.sharedManager.transferCurrentComplicationUserInfo(userDefaults.dictionaryRepresentation())
-            
-            print(item)
+//            let userInfo = WatchSessionManager.sharedManager.transferUserInfo(userDefaults.dictionaryRepresentation())
+//            print(userInfo)
+            let compInfo = WatchSessionManager.sharedManager.transferCurrentComplicationUserInfo(userDefaults.dictionaryRepresentation())
+            print(compInfo)
         }
     }
- 
+    
     private func registerInitialSettings(userDefaults: NSUserDefaults) {
-  
+        
     }
-
-}
+ }
 

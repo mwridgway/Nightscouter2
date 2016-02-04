@@ -21,17 +21,17 @@ extension SitesDataSourceProvider {
 
 /* move to a protocal for storage conformance
 public protocol StorageType {
-    func getSites() -> [Site]
-    func createSite(site: Site) -> Bool
-    func updateSite(site: Site)  ->  Bool
-    func deleteSite(atIndex: Int) -> Bool
-    
-    func saveData() -> Bool
-    func loadData() -> Bool
+func getSites() -> [Site]
+func createSite(site: Site) -> Bool
+func updateSite(site: Site)  ->  Bool
+func deleteSite(atIndex: Int) -> Bool
+
+func saveData() -> Bool
+func loadData() -> Bool
 }
 
 public protocol ComplicationGenerator {
-    var primarySite: Site? { set get }
+var primarySite: Site? { set get }
 func createComplicationData() -> [ComplicationModel]
 var oldestComplicationModel: ComplicationModel?
 var latestComplicationModel: ComplicationModel?
@@ -42,7 +42,14 @@ func nearest(calibration cals: [Calibration], forDate date: NSDate) -> Calibrati
 public class SitesDataSource: SitesDataSourceProvider{
     private static let sharedAppGrouSuiteName: String = "group.com.nothingonline.nightscouter"
     
-    public var sites = [Site]()
+    public var sites = [Site]() {
+        didSet {
+            let siteDict = sites.map { $0.encode() }
+            defaults.setObject(siteDict, forKey: DefaultKey.sites.rawValue)
+            
+            createComplicationData()
+        }
+    }
     
     public var milliseconds: Mills = AppConfiguration.Constant.knownMilliseconds.inThePast
     
@@ -67,7 +74,7 @@ public class SitesDataSource: SitesDataSourceProvider{
             return NSUUID(UUIDString: uuidString)
         }
     }
-
+    
     public var primarySiteUUID: NSUUID? {
         set {
             defaults.setObject(newValue?.UUIDString, forKey: DefaultKey.primarySiteUUID.rawValue)
@@ -80,15 +87,6 @@ public class SitesDataSource: SitesDataSourceProvider{
             return NSUUID(UUIDString: uuidString)
         }
     }
-
-//    public var primarySiteUUID: NSUUID? {
-//        didSet {
-//            if let uuid = sites.first?.uuid where primarySiteUUID == nil{
-//                primarySiteUUID = uuid
-//            }
-//            saveSitesToDefaults()
-//        }
-//    }
     
     private let defaults =  NSUserDefaults(suiteName: sharedAppGrouSuiteName) ?? NSUserDefaults.standardUserDefaults()
     
@@ -106,12 +104,10 @@ public class SitesDataSource: SitesDataSourceProvider{
         
         if let sites = dict[DefaultKey.sites.rawValue] as? [[String: AnyObject]] {
             self.sites = sites.flatMap { Site.decode($0) }
-            
             defaults.setObject(sites, forKey: DefaultKey.sites.rawValue)
         }
         
         self.lastViewedSiteIndex = dict[DefaultKey.lastViewedSiteIndex.rawValue] as? Int ?? 0
-        
         if let uuidString = dict[DefaultKey.lastViewedSiteUUID.rawValue] as? String, uuid = NSUUID(UUIDString: uuidString) {
             lastViewedSiteUUID = uuid
         }
@@ -122,11 +118,8 @@ public class SitesDataSource: SitesDataSourceProvider{
             if !sites.isEmpty {
                 primarySiteUUID = sites[0].uuid
             }
-            
         }
         
-        
-        createComplicationData()
     }
     
     // MARK: Persistence
@@ -139,13 +132,10 @@ public class SitesDataSource: SitesDataSourceProvider{
         defaults.setObject(lastViewedSiteUUID?.UUIDString, forKey: DefaultKey.lastViewedSiteUUID.rawValue)
         defaults.setObject(primarySiteUUID?.UUIDString, forKey: DefaultKey.primarySiteUUID.rawValue)
         
-        createComplicationData()
-        
-        defaults.synchronize()
+        // defaults.synchronize()
     }
     
     public func loadSitesFromDefaults() {
-        
         if let sites = defaults.valueForKey(DefaultKey.sites.rawValue) as? [[String: AnyObject]] {
             self.sites = sites.flatMap { Site.decode($0) }
         }
@@ -162,19 +152,12 @@ public class SitesDataSource: SitesDataSourceProvider{
             if !sites.isEmpty {
                 primarySiteUUID = sites[0].uuid
             }
-            
         }
-        
     }
     
     // MARK: Array modification methods
     
     public func addSite(site: Site, atIndex: Int?) {
-        defer {
-            saveSitesToDefaults()
-            
-        }
-        
         // FIXME: The site isn't be matched correctly.
         if sites.isEmpty {
             primarySiteUUID = site.uuid
@@ -189,11 +172,6 @@ public class SitesDataSource: SitesDataSourceProvider{
     }
     
     public func updateSite(site: Site)  ->  Bool {
-        
-        defer {
-            saveSitesToDefaults()
-        }
-        
         if let index = sites.indexOf(site) {
             sites[index] = site
             return true
@@ -202,10 +180,6 @@ public class SitesDataSource: SitesDataSourceProvider{
     }
     
     public func removeSite(atIndex: Int) {
-        defer {
-            saveSitesToDefaults()
-        }
-        
         if atIndex <= sites.count - 1 {
             let site = sites[atIndex]
             sites.removeAtIndex(atIndex)
@@ -215,7 +189,6 @@ public class SitesDataSource: SitesDataSourceProvider{
                 primarySiteUUID = nil
             }
         }
-        
         if sites.isEmpty {
             lastViewedSiteIndex = 0
             lastViewedSiteUUID = nil
@@ -225,13 +198,13 @@ public class SitesDataSource: SitesDataSourceProvider{
     
 }
 
+// MARK: Complication Data Source
 extension SitesDataSource {
-
+    
     public var complicationDataFromDefaults: [ComplicationModel] {
-        
         var complicationModels: [ComplicationModel] = complicationDataDictoinary.flatMap { ComplicationModel.decode($0) }
         complicationModels.sortByDate()
-                
+        
         return complicationModels
     }
     
@@ -239,21 +212,16 @@ extension SitesDataSource {
         set{
             defaults.setObject(newValue, forKey: DefaultKey.complicationData.rawValue)
         }
-        
         get {
             guard let complicationDictArray =  defaults.objectForKey(DefaultKey.complicationData.rawValue) as? [[String: AnyObject]] else {
                 return []
             }
-            
             return complicationDictArray
         }
     }
     
     public var primarySite: Site? {
-        guard let site = sites.filter({ $0.uuid == primarySiteUUID }).first else {
-            return nil
-        }
-        return site
+        return sites.filter{ $0.uuid == primarySiteUUID }.first
     }
     
     private func createComplicationData() -> [ComplicationModel] {
@@ -306,7 +274,7 @@ extension SitesDataSource {
                 }
                 
                 rawString = rawFormattedString
-            
+                
                 
             }
             
@@ -320,24 +288,18 @@ extension SitesDataSource {
         return compModels
     }
     
-
+    
     public var latestComplicationModel: ComplicationModel? {
-        
         guard let _ = primarySite else {
             return nil
         }
-        
-        var sortData = complicationDataFromDefaults
-        sortData.sortByDate()
-        return sortData.first
+        return sortByDate(complicationDataFromDefaults).first
     }
     
     public var oldestComplicationModel: ComplicationModel? {
-        
         guard let _ = primarySite else {
             return nil
         }
-        
         let compModel = complicationDataFromDefaults.minElement { (item1, item2) -> Bool in
             item1.lastReadingDate.timeIntervalSince1970 < item2.lastReadingDate.timeIntervalSince1970
         }

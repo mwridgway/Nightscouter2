@@ -37,9 +37,7 @@ public class WatchSessionManager: NSObject, WCSessionDelegate {
     public func startSession() {
         session?.delegate = self
         session?.activateSession()
-        #if DEBUG
-            print("WCSession.isSupported: \(WCSession.isSupported()), Paired Watch: \(session?.paired), Watch App Installed: \(session?.watchAppInstalled)")
-        #endif
+        print("WCSession.isSupported: \(WCSession.isSupported()), Paired Watch: \(session?.paired), Watch App Installed: \(session?.watchAppInstalled)")
     }
     
 }

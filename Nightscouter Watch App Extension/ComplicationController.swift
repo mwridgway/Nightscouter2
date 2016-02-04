@@ -64,7 +64,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         let dateCompare = model.date.compare(fourMinsAgo)
         
-        if let template = templateForComplication(complication, model: model) where model.date >= fourMinsAgo {
+        if let template = templateForComplication(complication, model: model) where dateCompare == .OrderedDescending {
             timelineEntry = CLKComplicationTimelineEntry(date: model.date, complicationTemplate: template)
         }
         
@@ -184,6 +184,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             template = circularSmall
         }
         
+        // print("Returning PLACEHOLDER \(template)")
         handler(template)
     }
     
@@ -219,11 +220,12 @@ extension ComplicationController {
         case .ModularLarge:
             let modularLarge = CLKComplicationTemplateModularLargeTable()
             modularLarge.headerTextProvider = CLKSimpleTextProvider(text: sgv + " (" + displayName + ")")
-            
-            modularLarge.row1Column1TextProvider = CLKSimpleTextProvider(text:  model.rawFormatedLabel)
+            modularLarge.row1Column1TextProvider = CLKSimpleTextProvider(text: delta, shortText: deltaShort)
+
             modularLarge.row1Column2TextProvider = CLKRelativeDateTextProvider(date: model.lastReadingDate, style: .Natural, units: [.Minute, .Hour, .Day])
             
-            modularLarge.row2Column1TextProvider = CLKSimpleTextProvider(text: delta, shortText: deltaShort)
+            modularLarge.row2Column1TextProvider = CLKSimpleTextProvider(text: model.rawFormatedLabel)
+
             modularLarge.row2Column2TextProvider = CLKSimpleTextProvider(text: "")
             
             modularLarge.tintColor = tintColor
@@ -251,6 +253,7 @@ extension ComplicationController {
             template = circularSmall
         }
         
+        print("returning: \(template.debugDescription)")
         return template
         
     }
