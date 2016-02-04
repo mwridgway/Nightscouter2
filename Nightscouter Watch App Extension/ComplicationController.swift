@@ -54,7 +54,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         dateComponents.minute = Int(minutesToRemove)
         
         // Create a calendar
-        let gregorianCalendar: NSCalendar = NSCalendar(identifier: NSCalendarIdentifierGregorian)!
+        let gregorianCalendar: NSCalendar = NSCalendar.autoupdatingCurrentCalendar() //NSCalendar(identifier: NSCalendarIdentifierGregorian)!
         let fourMinsAgo: NSDate = gregorianCalendar.dateByAddingComponents(dateComponents, toDate: today, options:NSCalendarOptions(rawValue: 0))!
         
         guard let model = SitesDataSource.sharedInstance.latestComplicationModel else {
@@ -120,7 +120,18 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getNextRequestedUpdateDateWithHandler(handler: (NSDate?) -> Void) {
         // Call the handler with the date when you would next like to be given the opportunity to update your complication content
-        handler(NSDate().dateByAddingTimeInterval(240))
+        let today: NSDate = NSDate()
+        let fiveMins = NSTimeInterval(5)
+     
+        // Set up date components
+        let dateComponents: NSDateComponents = NSDateComponents()
+        dateComponents.minute = Int(fiveMins)
+        
+        // Create a calendar
+        let gregorianCalendar: NSCalendar = NSCalendar.autoupdatingCurrentCalendar()
+        let fiveMinsFromNow: NSDate = gregorianCalendar.dateByAddingComponents(dateComponents, toDate: today, options:NSCalendarOptions(rawValue: 0))!
+        
+        handler(fiveMinsFromNow)
     }
     
     // MARK: - Placeholder Templates
@@ -152,7 +163,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         case .UtilitarianSmall:
             let utilitarianSmall = CLKComplicationTemplateUtilitarianSmallFlat()
             utilitarianSmall.textProvider = CLKSimpleTextProvider(text: PlaceHolderStrings.sgv)
-
+            
             template = utilitarianSmall
         case .UtilitarianLarge:
             let utilitarianLarge = CLKComplicationTemplateUtilitarianLargeFlat()
@@ -166,7 +177,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             
             template = circularSmall
         }
-
+        
         handler(template)
     }
 }
@@ -204,7 +215,7 @@ extension ComplicationController {
             modularLarge.row2Column1TextProvider = CLKSimpleTextProvider(text: model.rawFormatedLabel)
             modularLarge.row2Column2TextProvider = CLKSimpleTextProvider(text: "")
             modularLarge.tintColor = tintColor
-
+            
             template = modularLarge
         case .UtilitarianSmall:
             let utilitarianSmall = CLKComplicationTemplateUtilitarianSmallFlat()
@@ -215,14 +226,14 @@ extension ComplicationController {
             let utilitarianLarge = CLKComplicationTemplateUtilitarianLargeFlat()
             utilitarianLarge.textProvider = CLKSimpleTextProvider(text: utilLargeSting, shortText: utilLargeStingShort)
             utilitarianLarge.tintColor = tintColor
-
+            
             template = utilitarianLarge
         case .CircularSmall:
             let circularSmall = CLKComplicationTemplateCircularSmallStackText()
             circularSmall.line1TextProvider = CLKSimpleTextProvider(text: sgv)
             circularSmall.line2TextProvider = CLKSimpleTextProvider(text: delta, shortText: deltaShort)
             circularSmall.tintColor = tintColor
-
+            
             template = circularSmall
         }
         
