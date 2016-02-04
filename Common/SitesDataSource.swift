@@ -19,25 +19,25 @@ extension SitesDataSourceProvider {
 }
 
 
-/* move to a protocal for storage conformance
+// move to a protocol for storage conformance
 public protocol StorageType {
-func getSites() -> [Site]
-func createSite(site: Site) -> Bool
-func updateSite(site: Site)  ->  Bool
-func deleteSite(atIndex: Int) -> Bool
-
-func saveData() -> Bool
-func loadData() -> Bool
+    func getSites() -> [Site]
+    func createSite(site: Site) -> Bool
+    func updateSite(site: Site)  ->  Bool
+    func deleteSite(atIndex: Int) -> Bool
+    
+    func saveData() -> Bool
+    func loadData() -> Bool
 }
 
-public protocol ComplicationGenerator {
-var primarySite: Site? { set get }
-func createComplicationData() -> [ComplicationModel]
-var oldestComplicationModel: ComplicationModel?
-var latestComplicationModel: ComplicationModel?
-func nearest(calibration cals: [Calibration], forDate date: NSDate) -> Calibration?
+public protocol ComplicationCreator {
+    var primarySite: Site? { get }
+    var oldestComplicationModel: ComplicationModel? { set get }
+    var latestComplicationModel: ComplicationModel? { set get }
+    func createComplicationData() -> [ComplicationModel]
+    func nearest(calibration cals: [Calibration], forDate date: NSDate) -> Calibration?
 }
-*/
+
 
 public class SitesDataSource: SitesDataSourceProvider{
     private static let sharedAppGrouSuiteName: String = "group.com.nothingonline.nightscouter"
@@ -131,8 +131,6 @@ public class SitesDataSource: SitesDataSourceProvider{
         defaults.setInteger(lastViewedSiteIndex, forKey: DefaultKey.lastViewedSiteIndex.rawValue)
         defaults.setObject(lastViewedSiteUUID?.UUIDString, forKey: DefaultKey.lastViewedSiteUUID.rawValue)
         defaults.setObject(primarySiteUUID?.UUIDString, forKey: DefaultKey.primarySiteUUID.rawValue)
-        
-        // defaults.synchronize()
     }
     
     public func loadSitesFromDefaults() {
@@ -247,7 +245,6 @@ extension SitesDataSource {
             
             let previousIndex: Int = index + 1
             
-            
             var delta: MgdlValue?
             if let previousSgv = site.sgvs[safe: previousIndex] where sgv.isSGVOk {
                 delta = sgv.mgdl - previousSgv.mgdl
@@ -259,7 +256,6 @@ extension SitesDataSource {
                 deltaString = "\(delta.formattedForBGDelta) \(units.description)"
                 //  deltaStringShort = "\(delta.formattedForBGDelta) Δ"
             }
-            
             
             var rawColorVar = DesiredColorState.Neutral
             var rawString: String = ""
@@ -274,8 +270,6 @@ extension SitesDataSource {
                 }
                 
                 rawString = rawFormattedString
-                
-                
             }
             
             let compModel = ComplicationModel(lastReadingDate: date, rawHidden: configuration.displayRawData, rawLabel: rawString, nameLabel: configuration.displayName, sgvLabel: sgvString, deltaLabel: deltaString, rawColor: rawColorVar.colorValue, sgvColor: sgvColor.colorValue, units: units, direction: sgv.direction, noise: sgv.noise)
@@ -287,7 +281,6 @@ extension SitesDataSource {
         
         return compModels
     }
-    
     
     public var latestComplicationModel: ComplicationModel? {
         guard let _ = primarySite else {

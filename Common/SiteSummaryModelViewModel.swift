@@ -47,7 +47,6 @@ public protocol DirectionDisplayable {
     var direction: Direction { get }
 }
 
-
 public protocol CompassViewDataSource: SiteCommonInfoDataSource, DirectionDisplayable, RawDataSource {
     var text: String { get }
     var detailText: String { get }
