@@ -71,7 +71,6 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, RawDataSource
     public var sgvLabel: String
     public var deltaLabel: String
     
-    
     public var rawHidden: Bool
     public var rawLabel: String
     public var rawNoise: Noise

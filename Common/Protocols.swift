@@ -11,7 +11,6 @@
 #elseif os(OSX)
     import Cocoa
 #endif
-//import Foundation
 
 public typealias Mills = Double
 
@@ -28,6 +27,7 @@ public extension Dateable {
 public func == <T: Dateable>(lhs: T, rhs: T) -> Bool {
     return lhs.date == rhs.date
 }
+
 extension DeviceStatus: Equatable { }
 extension MeteredGlucoseValue: Equatable { }
 extension Calibration: Equatable { }
@@ -106,19 +106,34 @@ public enum Device: String, CustomStringConvertible {
 
 // TODO: Create Struct to hold wacth or now data like delta, current bg, raw and battery....
 public protocol DeltaDisplayable {
-    var delta: Int { get }
+    var delta: MgdlValue { get set }
     var deltaNumberFormatter: NSNumberFormatter { get }
+    func deltaString(forUnits units: Units) -> String
 }
 
 extension DeltaDisplayable {
-    var deltaNumberFormatter: NSNumberFormatter {
+    public var deltaNumberFormatter: NSNumberFormatter {
         
         let formatter = NSNumberFormatter()
         formatter.numberStyle = .DecimalStyle
         formatter.positivePrefix = formatter.plusSign
         formatter.negativePrefix = formatter.minusSign
+        formatter.minimumFractionDigits = 1
+        formatter.maximumFractionDigits = 1
+        formatter.secondaryGroupingSize = 1
         
         return formatter
+    }
+    
+    public func deltaString(forUnits units: Units) -> String {
+        var rawDelta: MgdlValue = 0
+        switch units {
+        case .Mgdl:
+            rawDelta = delta
+        case .Mmol:
+            rawDelta = delta.toMmol
+        }
+        return deltaNumberFormatter.stringFromNumber(rawDelta) ?? PlaceHolderStrings.delta
     }
 }
 
@@ -170,7 +185,7 @@ public extension DesiredColorState {
     }
     #elseif os(OSX)
     public var colorValue: NSColor {
-        return DesiredColorState.colorMapping[self]!
+    return DesiredColorState.colorMapping[self]!
     }
     #endif
 }

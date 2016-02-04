@@ -248,7 +248,7 @@ extension SitesDataSource {
             let previousIndex: Int = index + 1
             
             
-            var delta: Double?
+            var delta: MgdlValue?
             if let previousSgv = site.sgvs[safe: previousIndex] where sgv.isSGVOk {
                 delta = sgv.mgdl - previousSgv.mgdl
             }

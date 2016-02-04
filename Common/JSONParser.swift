@@ -6,6 +6,8 @@
 //  Copyright © 2016 Nothingonline. All rights reserved.
 //
 
+// All the Additions for JSON Processing happens here.
+
 import Foundation
 import SwiftyJSON
 
@@ -33,7 +35,6 @@ extension Site: Encodable, Decodable {
         static let mbgs = "mbgs"
         static let cals = "cals"
         static let deviceStatus = "deviceStatus"
-
     }
     
     func encode() -> [String: AnyObject] {
@@ -42,7 +43,7 @@ extension Site: Encodable, Decodable {
          let encodedMgbs: [[String : AnyObject]] = mbgs.flatMap{ $0.encode() }
         let encodedDeviceStatus: [[String : AnyObject]] = deviceStatus.flatMap{ $0.encode() }
         
-        return [JSONKey.url : url.absoluteString, JSONKey.overrideScreenLock : overrideScreenLock, JSONKey.disabled: disabled, JSONKey.uuid: uuid.UUIDString, JSONKey.configuration: configuration?.encode() ?? "", JSONKey.sgvs: encodedSgvs, JSONKey.cals: encodedCals, JSONKey.mbgs: encodedMgbs, JSONKey.deviceStatus: encodedDeviceStatus] //, "tempSocketData" : [JSONKey.sgvs: encodedSgvs, JSONKey.cals: encodedCals, JSONKey.mbgs: encodedMgbs]]
+        return [JSONKey.url : url.absoluteString, JSONKey.overrideScreenLock : overrideScreenLock, JSONKey.disabled: disabled, JSONKey.uuid: uuid.UUIDString, JSONKey.configuration: configuration?.encode() ?? "", JSONKey.sgvs: encodedSgvs, JSONKey.cals: encodedCals, JSONKey.mbgs: encodedMgbs, JSONKey.deviceStatus: encodedDeviceStatus]
     }
     
     static func decode(dict: [String: AnyObject]) -> Site? {
@@ -55,10 +56,7 @@ extension Site: Encodable, Decodable {
         site.overrideScreenLock = dict[JSONKey.overrideScreenLock] as? Bool ?? false
         site.disabled = dict[JSONKey.disabled] as? Bool ?? false
         
-        var rootDictForData = dict
-        if let dataDict = dict["tempSocketData"] as? [String: AnyObject] {
-            rootDictForData = dataDict
-        }
+        let rootDictForData = dict
         
         if let sgvs = rootDictForData[JSONKey.sgvs] as? [[String: AnyObject]] {
             site.sgvs = sgvs.flatMap { SensorGlucoseValue.decode($0) }
@@ -212,33 +210,21 @@ extension Settings: Encodable, Decodable {
         let alarmHighMins: [Int] = json[Settings.JSONKey.alarmHighMins].arrayValue.map { $0.int! } ?? placeholderAlarm2
         let alarmLowMins: [Int] = json[Settings.JSONKey.alarmLowMins].arrayValue.map { $0.int! } ?? placeholderAlarm1
         let alarmUrgentLowMins: [Int] = json[Settings.JSONKey.alarmUrgentLowMins].arrayValue.map { $0.int! } ?? placeholderAlarm1
-        
         let alarmWarnMins: [Int] = json[Settings.JSONKey.alarmWarnMins].arrayValue.map { $0.int! } ?? placeholderAlarm2
-        
         let alarmTimeagoWarn = json[Settings.JSONKey.alarmTimeagoWarn].bool ?? true
         let alarmTimeagoWarnMins = (json[Settings.JSONKey.alarmTimeagoWarnMins].double ?? 15) * 60
-        
         let alarmTimeagoUrgent = json[Settings.JSONKey.alarmTimeagoUrgent].bool ?? true
         let alarmTimeagoUrgentMins = (json[Settings.JSONKey.alarmTimeagoUrgentMins].double ?? 30) * 60
-        
         let language = json[Settings.JSONKey.language].string ?? "en"
         let scaleY = json[Settings.JSONKey.scaleY].string ?? "log"
-        
-        let enabled: [Plugin] = json[Settings.JSONKey.enable].arrayValue.flatMap {
-            Plugin(rawValue: $0.stringValue)
-        }
-        
+        let enabled: [Plugin] = json[Settings.JSONKey.enable].arrayValue.flatMap { Plugin(rawValue: $0.stringValue) }
         let thresholdsJSON = json[Settings.JSONKey.thresholds]
         let thresholds = Thresholds(bgHigh: thresholdsJSON[Thresholds.JSONKey.bgHigh].doubleValue, bgLow: thresholdsJSON[Thresholds.JSONKey.bgLow].doubleValue, bgTargetBottom: thresholdsJSON[Thresholds.JSONKey.bgTargetBottom].doubleValue, bgTargetTop: thresholdsJSON[Thresholds.JSONKey.bgTargetTop].doubleValue)
-        
         let alarmType = AlarmType(rawValue: json[Settings.JSONKey.alarmTypes].stringValue) ?? .simple
         let hreartbeat = json[Settings.JSONKey.heartbeat].int ?? 60
         let baseURL = json[Settings.JSONKey.baseURL].stringValue
-        
         let timeAgo = TimeAgoAlert(warn: alarmTimeagoWarn, warnMins: alarmTimeagoWarnMins, urgent: alarmTimeagoUrgent, urgentMins: alarmTimeagoUrgentMins)
-        
         let alarms = Alarm(urgentHigh: alarmUrgentHigh, urgentHighMins: alarmUrgentHighMins, high: alarmHigh, highMins: alarmHighMins, low: alarmLow, lowMins: alarmLowMins, urgentLow: alarmUrgentLow, urgentLowMins: alarmUrgentLowMins, warnMins: alarmWarnMins)
-        
         let settings = Settings(units: units, timeFormat: timeFormat, nightMode: nightMode, editMode: editMode, showRawbg: showRawbg, customTitle: customtitle, theme: theme, alarms: alarms, timeAgo: timeAgo, scaleY: scaleY, language: language, showPlugins: enabled, enable: enabled, thresholds: thresholds, baseURL: baseURL, alarmType: alarmType, heartbeat: hreartbeat)
         
         return settings
