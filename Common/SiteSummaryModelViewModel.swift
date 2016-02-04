@@ -28,7 +28,7 @@ public protocol RawDataSource {
 
 public extension RawDataSource {
     var rawFormatedLabel: String {
-    return "\(rawLabel) : \(rawNoise.description)"
+        return "\(rawLabel) : \(rawNoise.description)"
     }
 }
 
@@ -63,7 +63,7 @@ public typealias TableViewRowWithOutCompassDataSource = protocol<SiteCommonInfoD
 public typealias TableViewRowWithOutCompassDelegate = protocol<SiteCommonInfoDelegate, RawDelegate>
 
 public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, RawDataSource, RawDelegate, DirectionDisplayable, SiteCommonInfoDelegate, CompassViewDataSource, CompassViewDelegate {
-
+    
     public var lastReadingDate: NSDate
     public var batteryLabel: String
     public var nameLabel: String
@@ -78,12 +78,12 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, RawDataSource
     
     public var lastReadingColor: UIColor
     public var batteryColor: UIColor
-
+    
     public var sgvColor: UIColor
     public var deltaColor: UIColor
     
     public var rawColor: UIColor
-
+    
     public var direction: Direction
     public var text: String
     public var detailText: String
@@ -128,7 +128,7 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, RawDataSource
             self.direction = Direction.None
             self.text = self.sgvLabel
             self.rawNoise = Noise.None
-
+            
             return
         }
         
@@ -157,17 +157,21 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, RawDataSource
             
             lastReadingDate = latestSgv.date
             
-            sgvString = latestSgv.mgdl.formattedForMgdl
-            if units == .Mmol {
-                sgvString = latestSgv.mgdl.formattedForMmol
-            }
-            
             direction = latestSgv.direction
             
+            var delta: MgdlValue = 0
             if let previousSgv = site.sgvs[safe:1] where latestSgv.isSGVOk {
-                let delta = latestSgv.mgdl - previousSgv.mgdl
-                deltaString = "\(delta.formattedForBGDelta) \(units.description)"
+                delta = latestSgv.mgdl - previousSgv.mgdl
             }
+            
+            sgvString = latestSgv.mgdl.formattedForMgdl
+
+            if units == .Mmol {
+                sgvString = latestSgv.mgdl.formattedForMmol
+                delta = delta.toMmol
+            }
+            
+            deltaString = "\(delta.formattedForBGDelta) \(units.description)"
             
             if let latestCalibration = site.cals.first {
                 let raw = calculateRawBG(fromSensorGlucoseValue: latestSgv, calibration: latestCalibration)
@@ -178,7 +182,6 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, RawDataSource
                     rawFormattedString = raw.formattedForMmol
                 }
                 
-                // rawString =  "\(rawFormattedString) : \(latestSgv.noise.description)"
                 rawString = rawFormattedString
                 rawNoise = latestSgv.noise
             }
@@ -231,7 +234,6 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, RawDataSource
         
         self.deltaLabel = deltaString ?? PlaceHolderStrings.delta
         self.deltaColor = sgvColorVar?.colorValue ?? PlaceHolderStrings.defaultColor.colorValue
-        
         
         self.detailText = self.deltaLabel
         self.desiredColor = sgvColorVar ?? PlaceHolderStrings.defaultColor

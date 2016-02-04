@@ -18,9 +18,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
     
     func getTimelineStartDateForComplication(complication: CLKComplication, withHandler handler: (NSDate?) -> Void) {
-        
         var date: NSDate? = nil
-        
         let model = SitesDataSource.sharedInstance.oldestComplicationModel
         date = model?.lastReadingDate
         
@@ -29,7 +27,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getTimelineEndDateForComplication(complication: CLKComplication, withHandler handler: (NSDate?) -> Void) {
         var date: NSDate? = nil
-        
         let model = SitesDataSource.sharedInstance.latestComplicationModel
         date = model?.lastReadingDate
         
@@ -122,7 +119,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         // Call the handler with the date when you would next like to be given the opportunity to update your complication content
         let today: NSDate = NSDate()
         let fiveMins = NSTimeInterval(5)
-     
+        
         // Set up date components
         let dateComponents: NSDateComponents = NSDateComponents()
         dateComponents.minute = Int(fiveMins)
