@@ -14,7 +14,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     // MARK: - Timeline Configuration
     
     func getSupportedTimeTravelDirectionsForComplication(complication: CLKComplication, withHandler handler: (CLKComplicationTimeTravelDirections) -> Void) {
-        handler(.Backward) //([.Forward, .Backward])
+        handler(.Backward)
     }
     
     func getTimelineStartDateForComplication(complication: CLKComplication, withHandler handler: (NSDate?) -> Void) {
@@ -28,7 +28,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     func getTimelineEndDateForComplication(complication: CLKComplication, withHandler handler: (NSDate?) -> Void) {
         var date: NSDate? = nil
         let model = SitesDataSource.sharedInstance.latestComplicationModel
-        date = model?.lastReadingDate
+        date = model?.lastReadingDate.dateByAddingTimeInterval(60.0 * 4.0)
         
         handler(date)
     }
@@ -41,31 +41,9 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getCurrentTimelineEntryForComplication(complication: CLKComplication, withHandler handler: ((CLKComplicationTimelineEntry?) -> Void)) {
         // Call the handler with the current timeline entry
-        
-        var timelineEntry : CLKComplicationTimelineEntry? = nil
-        
-        let today: NSDate = NSDate()
-        let minutesToRemove = NSTimeInterval(4).inThePast
-        // Set up date components
-        let dateComponents: NSDateComponents = NSDateComponents()
-        dateComponents.minute = Int(minutesToRemove)
-        
-        // Create a calendar
-        let gregorianCalendar: NSCalendar = NSCalendar.autoupdatingCurrentCalendar() //NSCalendar(identifier: NSCalendarIdentifierGregorian)!
-        let fourMinsAgo: NSDate = gregorianCalendar.dateByAddingComponents(dateComponents, toDate: today, options:NSCalendarOptions(rawValue: 0))!
-        
-        guard let model = SitesDataSource.sharedInstance.latestComplicationModel else {
-            handler(nil)
-            return
+        getTimelineEntriesForComplication(complication, beforeDate: NSDate(), limit: 1) { (timelineEntries) -> Void in
+            handler(timelineEntries?.first)
         }
-        
-        let dateCompare = model.date.compare(fourMinsAgo)
-        
-        if let template = templateForComplication(complication, model: model) where dateCompare == .OrderedDescending {
-            timelineEntry = CLKComplicationTimelineEntry(date: model.date, complicationTemplate: template)
-        }
-        
-        handler(timelineEntry)
     }
     
     func getTimelineEntriesForComplication(complication: CLKComplication, beforeDate date: NSDate, limit: Int, withHandler handler: (([CLKComplicationTimelineEntry]?) -> Void)) {
@@ -76,11 +54,10 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         for entry in entries {
             let entryDate = entry.date
-            if entryDate < date {
+            if date.compare(entryDate) == .OrderedDescending {
                 if let template = templateForComplication(complication, model: entry) {
                     let entry = CLKComplicationTimelineEntry(date: entryDate, complicationTemplate: template)
                     timelineEntries.append(entry)
-                    
                     if timelineEntries.count == limit {
                         break
                     }
@@ -98,11 +75,10 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         for entry in entries {
             let entryDate = entry.date
-            if entryDate > date {
+            if date.compare(entryDate) == .OrderedAscending {
                 if let template = templateForComplication(complication, model: entry) {
                     let entry = CLKComplicationTimelineEntry(date: entryDate, complicationTemplate: template)
                     timelineEntries.append(entry)
-                    
                     if timelineEntries.count == limit {
                         break
                     }

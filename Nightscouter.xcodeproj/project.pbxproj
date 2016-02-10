@@ -602,6 +602,7 @@
 		1742F02C1C449871008DED3F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				175DE0091C5BEB010031613E /* Array-Extensions.swift */,
 				17D0EB631C52D7FC007F21FC /* Extensions.swift */,
 				1742F03F1C458765008DED3F /* NSURL-Extensions.swift */,
 				1742F0221C449857008DED3F /* Array+Extensions.swift */,
@@ -621,7 +622,6 @@
 				17292EC61C4FD6D400538D01 /* DictionaryRepresentable.swift */,
 				176BE27F1C4979950040F1B7 /* Chartable.swift */,
 				1735811A1C443C6400E893DB /* Protocols.swift */,
-				175DE0091C5BEB010031613E /* Array-Extensions.swift */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
