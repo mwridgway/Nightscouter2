@@ -32,9 +32,13 @@ public protocol StorageType {
 
 public protocol ComplicationCreator {
     var primarySite: Site? { get }
-    var oldestComplicationModel: ComplicationModel? { set get }
-    var latestComplicationModel: ComplicationModel? { set get }
-    func createComplicationData() -> [ComplicationModel]
+    var oldestComplicationModel: ComplicationTimelineEntry? { set get }
+    var latestComplicationModel: ComplicationTimelineEntry? { set get }
+    
+    func generateComplicationModelsForPrimarySite() -> [ComplicationTimelineEntry]
+    func generateComplicationModels(forSite site: Site, calibrations: [Calibration]) -> [ComplicationTimelineEntry]
+    func generateComplicationModels(forConfiguration configuration: ServerConfiguration, sgvs:[SensorGlucoseValue], calibrations:[Calibration]) -> [ComplicationTimelineEntry]
+    
     func nearest(calibration cals: [Calibration], forDate date: NSDate) -> Calibration?
 }
 
@@ -47,7 +51,7 @@ public class SitesDataSource: SitesDataSourceProvider{
             let siteDict = sites.map { $0.encode() }
             defaults.setObject(siteDict, forKey: DefaultKey.sites.rawValue)
             
-            createComplicationData()
+            generateComplicationModelsForPrimarySite()
         }
     }
     
@@ -199,8 +203,8 @@ public class SitesDataSource: SitesDataSourceProvider{
 // MARK: Complication Data Source
 extension SitesDataSource {
     
-    public var complicationDataFromDefaults: [ComplicationModel] {
-        var complicationModels: [ComplicationModel] = complicationDataDictoinary.flatMap { ComplicationModel.decode($0) }
+    public var complicationDataFromDefaults: [ComplicationTimelineEntry] {
+        var complicationModels: [ComplicationTimelineEntry] = primarySite?.complicationTimeline ?? []
         complicationModels.sortByDate()
         
         return complicationModels
@@ -222,81 +226,131 @@ extension SitesDataSource {
         return sites.filter{ $0.uuid == primarySiteUUID }.first
     }
     
-    private func createComplicationData() -> [ComplicationModel] {
-        guard let site = primarySite else {
+    
+    // MARK: Convenience methods for generating complication data.
+    
+    private func generateComplicationModelsForPrimarySite() -> [ComplicationTimelineEntry] {
+        guard let site = primarySite, configuration = site.configuration else {
             return []
         }
+        return generateComplicationModels(forConfiguration: configuration, sgvs: site.sgvs, calibrations: site.cals)
+    }
+    
+    private func generateComplicationModels(forSite site: Site, calibrations: [Calibration]) -> [ComplicationTimelineEntry] {
+        return generateComplicationModels(forConfiguration: site.configuration ?? ServerConfiguration(), sgvs: site.sgvs, calibrations: site.cals)
+    }
+    
+    public func generateComplicationModels(forConfiguration configuration: ServerConfiguration, sgvs:[SensorGlucoseValue], calibrations:[Calibration]) -> [ComplicationTimelineEntry] {
         
-        var compModels: [ComplicationModel] = []
+        // Init Complication Model Array for return as Timeline.
+        var compModels: [ComplicationTimelineEntry] = []
         
-        let configuration = site.configuration ?? ServerConfiguration()
+        // Get prfered Units for site.
         let units = configuration.displayUnits
+        
+        // Setup thresholds for proper color coding.
         let thresholds: Thresholds = configuration.settings?.thresholds ?? Thresholds(bgHigh: 300, bgLow: 70, bgTargetBottom: 60, bgTargetTop: 250)
         
-        for (index, sgv) in site.sgvs.enumerate() {
+        // Iterate through provided Sensor Glucose Values to create a timeline.
+        for (index, sgv) in sgvs.enumerate() {
             
+            // Create a color for a given SGV value.
             let sgvColor = thresholds.desiredColorState(forValue: sgv.mgdl)
+            
+            // Set the date required by the Complication Data Source (for Timeline)
             let date = sgv.date
             
+            // Convet Sensor Glucose Value to a proper string. Always start with a mgd/L number then convert to a mmol/L
             var sgvString = sgv.mgdl.formattedForMgdl
             if units == .Mmol {
                 sgvString = sgv.mgdl.formattedForMmol
             }
             
-            let previousIndex: Int = index + 1
+            //
+            // END of Delta Calculation
+            //
+            // Init Delta var.
+            var delta: MgdlValue = 0
             
-            var delta: MgdlValue?
-            if let previousSgv = site.sgvs[safe: previousIndex] where sgv.isSGVOk {
+            // Get the next index position which would be a previous or older reading.
+            let previousIndex: Int = index + 1
+            // If the next index is a valid object and the number is safe.
+            if let previousSgv = sgvs[safe: previousIndex] where sgv.isSGVOk {
                 delta = sgv.mgdl - previousSgv.mgdl
             }
-            
-            var deltaString: String = delta?.formattedForBGDelta ?? PlaceHolderStrings.delta
-            //var deltaStringShort: String = ""
-            if let delta = delta {
-                deltaString = "\(delta.formattedForBGDelta) \(units.description)"
-                //  deltaStringShort = "\(delta.formattedForBGDelta) Δ"
+            // Convert to proper units
+            if units == .Mmol {
+                delta = delta.toMmol
             }
             
-            var rawColorVar = DesiredColorState.Neutral
+            // Create strings if the sgv is ok. Otherwise clear it out.
+            let deltaString = sgv.isSGVOk ? "(" + delta.formattedBGDelta(forUnits: units) + ")" : ""
+            
+            // END of Delta Calculation
+            //
+            
+            //
+            // Start of Raw Calculation
+            //
+            // Init Raw String var
             var rawString: String = ""
-            if let calibration = nearest(calibration: site.cals, forDate: sgv.date) {
+            
+            // Get nearest calibration for a given sensor glucouse value's date.
+            if let calibration = nearest(calibration: calibrations, forDate: sgv.date) {
                 
+                // Calculate Raw BG for a given calibration.
                 let raw = calculateRawBG(fromSensorGlucoseValue: sgv, calibration: calibration)
-                rawColorVar = thresholds.desiredColorState(forValue: raw)
-                
                 var rawFormattedString = raw.formattedForMgdl
-                if configuration.displayUnits == .Mmol {
+                // Convert to correct units.
+                if units == .Mmol {
                     rawFormattedString = raw.formattedForMmol
                 }
-                
+                // Create string representation of raw data.
                 rawString = rawFormattedString
             }
             
-            let compModel = ComplicationModel(lastReadingDate: date, rawHidden: configuration.displayRawData, rawLabel: rawString, nameLabel: configuration.displayName, sgvLabel: sgvString, deltaLabel: deltaString, rawColor: rawColorVar.colorValue, sgvColor: sgvColor.colorValue, units: units, direction: sgv.direction, noise: sgv.noise)
+            let compModel = ComplicationTimelineEntry(date: date, rawLabel: rawString, nameLabel: configuration.displayName, sgvLabel: sgvString, deltaLabel: deltaString, tintColor: sgvColor.colorValue, units: units, direction: sgv.direction, noise: sgv.noise)
             
             compModels.append(compModel)
         }
         
-        self.complicationDataDictoinary = compModels.flatMap{ $0.encode() }
+        
+        let settings = configuration.settings ?? ServerConfiguration().settings!
+        
+        // Get the latest model and use to create stale complication timeline entries.
+        let model = compModels.maxElement{ (lModel, rModel) -> Bool in
+            return rModel.date.compare(lModel.date) == .OrderedDescending
+        }
+        
+        if let model = model {
+            // take last date and extend out 15 minutes.
+            if settings.timeAgo.warn {
+                let warnTime = settings.timeAgo.warnMins
+                let warningStaleDate = model.date.dateByAddingTimeInterval(warnTime)
+                let warnItem = ComplicationTimelineEntry(date: warningStaleDate, rawLabel: "Please update.", nameLabel: "Data missing.", sgvLabel: "Warning", deltaLabel: "", tintColor: DesiredColorState.Warning.colorValue, units: .Mgdl, direction: .None, noise: .None)
+                compModels.append(warnItem)
+            }
+            
+            if settings.timeAgo.urgent {
+                // take last date and extend out 30 minutes.
+                let urgentTime = settings.timeAgo.urgentMins
+                let urgentStaleDate = model.date.dateByAddingTimeInterval(urgentTime)
+                let urgentItem = ComplicationTimelineEntry(date: urgentStaleDate, rawLabel: "Please update.", nameLabel: "Data missing.", sgvLabel: "Urgent", deltaLabel: "", tintColor: DesiredColorState.Alert.colorValue, units: .Mgdl, direction: .None, noise: .None)
+                compModels.append(urgentItem)
+            }
+        }
+        
+        compModels.sortByDate()
         
         return compModels
     }
     
-    public var latestComplicationModel: ComplicationModel? {
-        guard let _ = primarySite else {
-            return nil
-        }
+    public var latestComplicationModel: ComplicationTimelineEntry? {
         return sortByDate(complicationDataFromDefaults).first
     }
     
-    public var oldestComplicationModel: ComplicationModel? {
-        guard let _ = primarySite else {
-            return nil
-        }
-        let compModel = complicationDataFromDefaults.minElement { (item1, item2) -> Bool in
-            item1.lastReadingDate.timeIntervalSince1970 < item2.lastReadingDate.timeIntervalSince1970
-        }
-        return compModel
+    public var oldestComplicationModel: ComplicationTimelineEntry? {
+        return sortByDate(complicationDataFromDefaults).last
     }
     
     public func nearest(calibration cals: [Calibration], forDate date: NSDate) -> Calibration? {
@@ -311,9 +365,19 @@ extension SitesDataSource {
             }
         }
         guard let index = desiredIndex else {
-            print("no valid index was found... return last calibration")
+            print("NON-FATAL ERROR: No valid index was found... return first calibration if its there.")
             return cals.first
         }
         return cals[safe: index]
+    }
+}
+
+extension Site {
+    mutating func generateTimeline() {
+        guard let configuration = self.configuration else {
+            return
+        }
+        
+        self.complicationTimeline = SitesDataSource.sharedInstance.generateComplicationModels(forConfiguration:configuration, sgvs: self.sgvs, calibrations: self.cals)
     }
 }

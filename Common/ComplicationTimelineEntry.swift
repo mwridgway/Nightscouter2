@@ -18,44 +18,53 @@ import SwiftyJSON
 
 #endif
 
-public struct ComplicationModel: SiteCommonInfoDataSource, SiteCommonInfoDelegate, DirectionDisplayable, RawDataSource, RawDelegate, Dateable {
+public struct ComplicationTimelineEntry: SiteCommonInfoDataSource, SiteCommonInfoDelegate, DirectionDisplayable, RawDataSource, Dateable {
     
     public var milliseconds: Mills
     public var lastReadingDate: NSDate
     public var batteryLabel: String = ""
-    public var rawHidden: Bool
     public var rawLabel: String
+    public var rawHidden: Bool {
+        return (rawLabel == "")
+    }
     public var nameLabel: String
+
     public var urlLabel: String = ""
     public var sgvLabel: String
     public var deltaLabel: String
     public var lookStale: Bool = false
     public var rawNoise: Noise
-
+    
+    public var deltaShort: String {
+       return deltaLabel.stringByReplacingOccurrencesOfString(units.description, withString: PlaceHolderStrings.deltaAltJ)
+    }
+ 
     public var lastReadingColor: Color = Color.clearColor()
     public var batteryColor: Color =  Color.clearColor()
-    public var rawColor: Color
+
     public var sgvColor: Color
     public var deltaColor: Color
     
     public var units: Units
     public var direction: Direction
     
-    public init(lastReadingDate: NSDate, rawHidden: Bool, rawLabel: String, nameLabel: String, sgvLabel: String, deltaLabel: String, rawColor: Color, sgvColor: Color, units: Units, direction: Direction, noise: Noise) {
-        self.lastReadingDate = lastReadingDate
+    public var stale: Bool {
+        return date.timeIntervalSinceNow < 60.0 * 15.0
+    }
+    
+    public init(date: NSDate, rawLabel: String?, nameLabel: String, sgvLabel: String, deltaLabel: String = "", tintColor: Color, units: Units = .Mgdl, direction: Direction = .None, noise: Noise = .None) {
+        self.lastReadingDate = date
 
-        self.rawHidden = rawHidden
-        self.rawLabel = rawLabel
+        self.rawLabel = rawLabel ?? ""
         self.nameLabel = nameLabel
         self.urlLabel = ""
         self.sgvLabel = sgvLabel
         self.deltaLabel = deltaLabel
         self.lookStale = false
-        self.rawColor = rawColor
-        self.deltaColor = sgvColor
-        self.sgvColor = sgvColor
+        self.deltaColor = tintColor
+        self.sgvColor = tintColor
         
-        self.milliseconds = lastReadingDate.timeIntervalSince1970.millisecond
+        self.milliseconds = date.timeIntervalSince1970.millisecond
         self.units = units
         self.direction = direction
         self.rawNoise = noise
@@ -64,7 +73,7 @@ public struct ComplicationModel: SiteCommonInfoDataSource, SiteCommonInfoDelegat
 }
 
 
-extension ComplicationModel: Encodable {
+extension ComplicationTimelineEntry: Encodable {
     struct JSONKey {
         static let lastReadingDate = "lastReadingDate"
         static let rawHidden = "rawHidden"
@@ -83,12 +92,10 @@ extension ComplicationModel: Encodable {
     func encode() -> [String : AnyObject] {
         return [
             JSONKey.lastReadingDate: lastReadingDate,
-            JSONKey.rawHidden: rawHidden,
             JSONKey.rawLabel: rawLabel,
             JSONKey.nameLabel: nameLabel,
             JSONKey.sgvLabel: sgvLabel,
             JSONKey.deltaLabel: deltaLabel,
-            JSONKey.rawColor: rawColor.toHexString(),
             JSONKey.sgvColor: sgvColor.toHexString(),
             JSONKey.units: units.rawValue,
             JSONKey.direction: direction.rawValue,
@@ -98,21 +105,17 @@ extension ComplicationModel: Encodable {
     }
 }
 
-extension ComplicationModel: Decodable {
-    static func decode(dict: [String : AnyObject]) -> ComplicationModel? {
+extension ComplicationTimelineEntry: Decodable {
+    static func decode(dict: [String : AnyObject]) -> ComplicationTimelineEntry? {
         
         let json = JSON(dict)
-
-        return ComplicationModel(
-            lastReadingDate: dict[JSONKey.lastReadingDate] as! NSDate,
-          
-            rawHidden: json[JSONKey.rawHidden].boolValue,
+        return ComplicationTimelineEntry(
+            date: dict[JSONKey.lastReadingDate] as! NSDate,          
             rawLabel: json[JSONKey.rawLabel].stringValue,
             nameLabel: json[JSONKey.nameLabel].stringValue,
             sgvLabel: json[JSONKey.sgvLabel].stringValue,
             deltaLabel: json[JSONKey.deltaLabel].stringValue,
-            rawColor: Color(hexString: json[JSONKey.rawColor].stringValue),
-            sgvColor: Color(hexString: json[JSONKey.sgvColor].stringValue),
+            tintColor: Color(hexString: json[JSONKey.sgvColor].stringValue),
                 units: Units(rawValue: json[JSONKey.units].stringValue) ?? .Mgdl,
             direction:  Direction(rawValue: json[JSONKey.direction].stringValue) ?? .None,
             noise:  Noise(rawValue: json[JSONKey.noise].intValue) ?? .Unknown

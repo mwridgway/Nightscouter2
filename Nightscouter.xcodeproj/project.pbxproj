@@ -102,10 +102,10 @@
 		177054921C4963A200302D83 /* SitesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177054901C4963A200302D83 /* SitesDataSource.swift */; };
 		1771F4471C61AA2A004E0437 /* NSDate-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1771F4461C61AA2A004E0437 /* NSDate-Extensions.swift */; };
 		1771F4481C61AA2A004E0437 /* NSDate-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1771F4461C61AA2A004E0437 /* NSDate-Extensions.swift */; };
-		17A3F6651C60E8D400A702F2 /* iCloudStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F6641C60E8D400A702F2 /* iCloudStore.swift */; };
-		17A3F6661C60E8D400A702F2 /* iCloudStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F6641C60E8D400A702F2 /* iCloudStore.swift */; };
-		17A3F6681C60EC4900A702F2 /* Complication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F6671C60EC4900A702F2 /* Complication.swift */; };
-		17A3F6691C60EC4900A702F2 /* Complication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F6671C60EC4900A702F2 /* Complication.swift */; };
+		17A3F6651C60E8D400A702F2 /* iCloudKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F6641C60E8D400A702F2 /* iCloudKeyValueStore.swift */; };
+		17A3F6661C60E8D400A702F2 /* iCloudKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F6641C60E8D400A702F2 /* iCloudKeyValueStore.swift */; };
+		17A3F6681C60EC4900A702F2 /* ComplicationTimelineEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F6671C60EC4900A702F2 /* ComplicationTimelineEntry.swift */; };
+		17A3F6691C60EC4900A702F2 /* ComplicationTimelineEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F6671C60EC4900A702F2 /* ComplicationTimelineEntry.swift */; };
 		17A3F66B1C6130D900A702F2 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F66A1C6130D900A702F2 /* WatchSessionManager.swift */; };
 		17A3F66D1C61328000A702F2 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A3F66C1C61328000A702F2 /* WatchSessionManager.swift */; };
 		17CC72C01C4D3B8C00BA5E5B /* SiteNSNowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CC72BF1C4D3B8C00BA5E5B /* SiteNSNowTableViewCell.swift */; };
@@ -298,8 +298,8 @@
 		1770548D1C49608400302D83 /* LocalizedStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedStrings.swift; sourceTree = "<group>"; };
 		177054901C4963A200302D83 /* SitesDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SitesDataSource.swift; sourceTree = "<group>"; };
 		1771F4461C61AA2A004E0437 /* NSDate-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate-Extensions.swift"; sourceTree = "<group>"; };
-		17A3F6641C60E8D400A702F2 /* iCloudStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iCloudStore.swift; sourceTree = "<group>"; };
-		17A3F6671C60EC4900A702F2 /* Complication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Complication.swift; sourceTree = "<group>"; };
+		17A3F6641C60E8D400A702F2 /* iCloudKeyValueStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iCloudKeyValueStore.swift; sourceTree = "<group>"; };
+		17A3F6671C60EC4900A702F2 /* ComplicationTimelineEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplicationTimelineEntry.swift; sourceTree = "<group>"; };
 		17A3F66A1C6130D900A702F2 /* WatchSessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
 		17A3F66C1C61328000A702F2 /* WatchSessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
 		17CC72BF1C4D3B8C00BA5E5B /* SiteNSNowTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteNSNowTableViewCell.swift; sourceTree = "<group>"; };
@@ -383,6 +383,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1703D0461C80AA300005C6E9 /* Stores */ = {
+			isa = PBXGroup;
+			children = (
+				17A3F6641C60E8D400A702F2 /* iCloudKeyValueStore.swift */,
+			);
+			name = Stores;
+			sourceTree = "<group>";
+		};
 		173580441C44354200E893DB = {
 			isa = PBXGroup;
 			children = (
@@ -485,7 +493,7 @@
 				17292ECA1C4FD9B800538D01 /* JSONParser.swift */,
 				173581231C44496700E893DB /* AppConfiguration.swift */,
 				177054901C4963A200302D83 /* SitesDataSource.swift */,
-				17A3F6641C60E8D400A702F2 /* iCloudStore.swift */,
+				1703D0461C80AA300005C6E9 /* Stores */,
 				1742F02C1C449871008DED3F /* Extensions */,
 				177054951C4963D800302D83 /* Models */,
 				1742F02D1C4498B7008DED3F /* Protocols */,
@@ -720,7 +728,7 @@
 				173581201C44459E00E893DB /* MeteredGlucoseValue.swift */,
 				173581171C443C3500E893DB /* SensorGlucoseValue.swift */,
 				1742F0321C44A27D008DED3F /* ServerConfiguration.swift */,
-				17A3F6671C60EC4900A702F2 /* Complication.swift */,
+				17A3F6671C60EC4900A702F2 /* ComplicationTimelineEntry.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1324,7 +1332,7 @@
 				1735812A1C444ED400E893DB /* DeviceStatus.swift in Sources */,
 				1771F4471C61AA2A004E0437 /* NSDate-Extensions.swift in Sources */,
 				1742F0351C44A282008DED3F /* ServerConfiguration.swift in Sources */,
-				17A3F6681C60EC4900A702F2 /* Complication.swift in Sources */,
+				17A3F6681C60EC4900A702F2 /* ComplicationTimelineEntry.swift in Sources */,
 				177054791C49304B00302D83 /* BackgroundView.swift in Sources */,
 				177054771C492FDC00302D83 /* CompassControl.swift in Sources */,
 				173581241C44496700E893DB /* AppConfiguration.swift in Sources */,
@@ -1335,7 +1343,7 @@
 				1735811E1C443E8900E893DB /* Calibration.swift in Sources */,
 				177054911C4963A200302D83 /* SitesDataSource.swift in Sources */,
 				176BE2801C4979950040F1B7 /* Chartable.swift in Sources */,
-				17A3F6651C60E8D400A702F2 /* iCloudStore.swift in Sources */,
+				17A3F6651C60E8D400A702F2 /* iCloudKeyValueStore.swift in Sources */,
 				177054631C489BBF00302D83 /* NSCalendar+Extension.swift in Sources */,
 				1735811B1C443C6400E893DB /* Protocols.swift in Sources */,
 				17292EC81C4FD6D400538D01 /* DictionaryRepresentable.swift in Sources */,
@@ -1375,7 +1383,7 @@
 				175DE00C1C5BEB050031613E /* Array-Extensions.swift in Sources */,
 				17D0EB621C52D5D4007F21FC /* Encodable.swift in Sources */,
 				173F84F81C4D4E5800DCB47D /* NSAssetKitWatchOS+Helpers.swift in Sources */,
-				17A3F6691C60EC4900A702F2 /* Complication.swift in Sources */,
+				17A3F6691C60EC4900A702F2 /* ComplicationTimelineEntry.swift in Sources */,
 				177054661C489BC000302D83 /* Array+Extensions.swift in Sources */,
 				1742F0341C44A281008DED3F /* ServerConfiguration.swift in Sources */,
 				1771F4481C61AA2A004E0437 /* NSDate-Extensions.swift in Sources */,
@@ -1388,7 +1396,7 @@
 				176BE2811C4979950040F1B7 /* Chartable.swift in Sources */,
 				173581221C44459E00E893DB /* MeteredGlucoseValue.swift in Sources */,
 				17D0EB651C52D7FC007F21FC /* Extensions.swift in Sources */,
-				17A3F6661C60E8D400A702F2 /* iCloudStore.swift in Sources */,
+				17A3F6661C60E8D400A702F2 /* iCloudKeyValueStore.swift in Sources */,
 				177054671C489BC000302D83 /* Double+Extension.swift in Sources */,
 				1735811F1C443E8900E893DB /* Calibration.swift in Sources */,
 				1735811C1C443C6400E893DB /* Protocols.swift in Sources */,

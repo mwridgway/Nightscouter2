@@ -30,6 +30,9 @@ public extension RawDataSource {
     var rawFormatedLabel: String {
         return "\(rawLabel) : \(rawNoise.description)"
     }
+    var rawFormatedLabelShort: String {
+        return "\(rawLabel) : \(rawNoise.description[rawNoise.description.startIndex])"
+    }
 }
 
 public protocol RawDelegate {
@@ -169,7 +172,7 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, RawDataSource
                 delta = delta.toMmol
             }
             
-            deltaString = "\(delta.formattedForBGDelta) \(units.description)"
+            deltaString = delta.formattedBGDelta(forUnits: units)
             
             if let latestCalibration = site.cals.first {
                 let raw = calculateRawBG(fromSensorGlucoseValue: latestSgv, calibration: latestCalibration)

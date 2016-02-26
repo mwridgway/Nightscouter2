@@ -49,7 +49,7 @@ public struct ServerConfiguration: CustomStringConvertible {
 
         
         let alrm = Alarm(urgentHigh: true, urgentHighMins: placeholderAlarm2, high: true, highMins: placeholderAlarm2, low: true, lowMins: placeholderAlarm1, urgentLow: true, urgentLowMins: placeholderAlarm1, warnMins: placeholderAlarm2)
-        let timeAgo = TimeAgoAlert(warn: true, warnMins: 10, urgent: true, urgentMins: 15)
+        let timeAgo = TimeAgoAlert(warn: true, warnMins: 60.0 * 10, urgent: true, urgentMins: 60.0 * 15)
         let plugins: [Plugin] = [Plugin.delta, Plugin.rawbg]
         let thre = Thresholds(bgHigh: 300, bgLow: 70, bgTargetBottom: 60, bgTargetTop: 250)
         let atype = AlarmType.predict

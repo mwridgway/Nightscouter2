@@ -1,6 +1,6 @@
 PODS:
-  - Alamofire (3.1.5)
-  - CryptoSwift (0.2.2)
+  - Alamofire (3.2.0)
+  - CryptoSwift (0.2.3)
   - DateTools (1.7.0)
   - KeychainAccess (2.3.3)
   - ReactiveCocoa (4.0.0-RC.2):
@@ -14,8 +14,8 @@ PODS:
   - ReactiveCocoa/UI (4.0.0-RC.2):
     - ReactiveCocoa/Core
     - Result (~> 1.0)
-  - Result (1.0.1)
-  - Socket.IO-Client-Swift (5.3.1)
+  - Result (1.0.2)
+  - Socket.IO-Client-Swift (5.5.0)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
@@ -37,15 +37,13 @@ CHECKOUT OPTIONS:
     :git: https://github.com/SwiftyJSON/SwiftyJSON.git
 
 SPEC CHECKSUMS:
-  Alamofire: 5f730ba29fd113b7ddd71c1e65d0c630acf5d7b0
-  CryptoSwift: d382228d6301c09474132417878a741c2a2e68cd
+  Alamofire: 4da478599fccddff361205c8929333d7fe18dceb
+  CryptoSwift: b2bf37b8e7cc6d682ef3365cb966bc5ae5174aa5
   DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60
   KeychainAccess: 9b7e49e48277e329b1b3195e54697ed313d30acf
   ReactiveCocoa: 0d875167414bfe743bc5bf544ae5b05fddaf757d
-  Result: caef80340451e1f07492fa1e89117f83613bce24
-  Socket.IO-Client-Swift: abfed28a1e4ce09fb12d75cfaecc5b719bc584ea
+  Result: dd3dd71af3fa2e262f1a999e14fba2c25ec14f16
+  Socket.IO-Client-Swift: f39dbd4e9b295907bb7fd4b9588b89c00426783d
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
-PODFILE CHECKSUM: 8e351bc23c45349e6366ae2132696bdf7399de02
-
-COCOAPODS: 1.0.0.beta.2
+COCOAPODS: 0.39.0

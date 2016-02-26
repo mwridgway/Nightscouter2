@@ -19,6 +19,7 @@ public struct Site: Dateable, CustomStringConvertible {
     public var cals: [Calibration] = []
     public var mbgs: [MeteredGlucoseValue] = []
     public var deviceStatus: [DeviceStatus] = []
+    public var complicationTimeline: [ComplicationTimelineEntry] = []
     
     // public var allowNotifications: Bool // Will be used when we support push notifications. Future addition.
     // public var treatments: [Treatment] = [] // Will be used when we support display of treatments. Future addition.
@@ -26,7 +27,7 @@ public struct Site: Dateable, CustomStringConvertible {
     public var uuid: NSUUID
     
     public var description: String {
-        return "{ Site: { url: \(url), configuration: \(configuration), lastConnectedDate: \(date), disabled: \(disabled), numberOfSgvs: \(sgvs.count), numberOfCals: \(cals.count), , numberOfMbgs: \(mbgs.count) } }"
+        return "{ Site: { url: \(url), configuration: \(configuration), lastConnectedDate: \(date), disabled: \(disabled), numberOfSgvs: \(sgvs.count), numberOfCals: \(cals.count), , numberOfMbgs: \(mbgs.count), numberOfTimeLineEntries: \(complicationTimeline.count) } }"
     }
     
     public init(){

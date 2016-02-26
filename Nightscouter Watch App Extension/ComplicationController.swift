@@ -14,21 +14,36 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     // MARK: - Timeline Configuration
     
     func getSupportedTimeTravelDirectionsForComplication(complication: CLKComplication, withHandler handler: (CLKComplicationTimeTravelDirections) -> Void) {
-        handler(.Backward)
+        handler([.Backward, .Forward])
     }
     
     func getTimelineStartDateForComplication(complication: CLKComplication, withHandler handler: (NSDate?) -> Void) {
-        var date: NSDate? = nil
+        #if DEBUG
+            // print(">>> Entering \(__FUNCTION__) <<<")
+        #endif
+        var date: NSDate?
         let model = SitesDataSource.sharedInstance.oldestComplicationModel
-        date = model?.lastReadingDate
+        date = model?.date
+        
+        #if DEBUG
+            // print("getTimelineStartDateForComplication:\(date)")
+        #endif
         
         handler(date)
     }
     
     func getTimelineEndDateForComplication(complication: CLKComplication, withHandler handler: (NSDate?) -> Void) {
+        #if DEBUG
+            // print(">>> Entering \(__FUNCTION__) <<<")
+        #endif
         var date: NSDate? = nil
         let model = SitesDataSource.sharedInstance.latestComplicationModel
-        date = model?.lastReadingDate.dateByAddingTimeInterval(60.0 * 4.0)
+        date = model?.date
+        
+        
+        #if DEBUG
+            // print("getTimelineStartDateForComplication:\(date)")
+        #endif
         
         handler(date)
     }
@@ -41,12 +56,21 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getCurrentTimelineEntryForComplication(complication: CLKComplication, withHandler handler: ((CLKComplicationTimelineEntry?) -> Void)) {
         // Call the handler with the current timeline entry
+        #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
+        #endif
+        
         getTimelineEntriesForComplication(complication, beforeDate: NSDate(), limit: 1) { (timelineEntries) -> Void in
             handler(timelineEntries?.first)
         }
     }
     
     func getTimelineEntriesForComplication(complication: CLKComplication, beforeDate date: NSDate, limit: Int, withHandler handler: (([CLKComplicationTimelineEntry]?) -> Void)) {
+        
+        #if DEBUG
+            // print(">>> Entering \(__FUNCTION__) <<<")
+            // print("complication: \(complication.family)")
+        #endif
         
         var timelineEntries = [CLKComplicationTimelineEntry]()
         
@@ -69,6 +93,11 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getTimelineEntriesForComplication(complication: CLKComplication, afterDate date: NSDate, limit: Int, withHandler handler: (([CLKComplicationTimelineEntry]?) -> Void)) {
         // Call the handler with the timeline entries after to the given date
+        #if DEBUG
+            // print(">>> Entering \(__FUNCTION__) <<<")
+            // print("complication: \(complication.family)")
+        #endif
+
         var timelineEntries = [CLKComplicationTimelineEntry]()
         
         let entries = SitesDataSource.sharedInstance.complicationDataFromDefaults
@@ -94,11 +123,11 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     func getNextRequestedUpdateDateWithHandler(handler: (NSDate?) -> Void) {
         // Call the handler with the date when you would next like to be given the opportunity to update your complication content
         let today: NSDate = NSDate()
-        let fiveMins = NSTimeInterval(5)
+        let thirtyMins = 30
         
         // Set up date components
         let dateComponents: NSDateComponents = NSDateComponents()
-        dateComponents.minute = Int(fiveMins)
+        dateComponents.minute = thirtyMins
         
         // Create a calendar
         let gregorianCalendar: NSCalendar = NSCalendar.autoupdatingCurrentCalendar()
@@ -128,9 +157,9 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             
             modularLarge.headerTextProvider = CLKSimpleTextProvider(text: "Nightscouter")
             modularLarge.row1Column1TextProvider = CLKSimpleTextProvider(text: PlaceHolderStrings.delta)
-            modularLarge.row1Column2TextProvider = CLKRelativeDateTextProvider(date: NSDate(), style: .Offset, units: [.Minute, .Hour, .Day])
+            modularLarge.row1Column2TextProvider = CLKSimpleTextProvider(text: PlaceHolderStrings.date)//CLKRelativeDateTextProvider(date: NSDate(), style: .Offset, units: [.Minute, .Hour, .Day])
             modularLarge.row2Column1TextProvider = CLKSimpleTextProvider(text: PlaceHolderStrings.raw)
-            modularLarge.row2Column2TextProvider = CLKSimpleTextProvider(text: " ")
+            modularLarge.row2Column2TextProvider = CLKSimpleTextProvider(text: "")
             
             template = modularLarge
         case .UtilitarianSmall:
@@ -156,7 +185,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
 }
 
 extension ComplicationController {
-    private func templateForComplication(complication: CLKComplication, model: ComplicationModel) -> CLKComplicationTemplate? {
+    private func templateForComplication(complication: CLKComplication, model: ComplicationTimelineEntry) -> CLKComplicationTemplate? {
         #if DEBUG
             print(">>> Entering \(__FUNCTION__) <<<")
         #endif
@@ -167,9 +196,12 @@ extension ComplicationController {
         let sgv = model.sgvLabel + " " + model.direction.emojiForDirection
         let tintColor = model.sgvColor
         let delta = model.deltaLabel
-        let deltaShort = model.deltaLabel.stringByReplacingOccurrencesOfString(model.units.description, withString: PlaceHolderStrings.deltaAltJ)
-        let utilLargeSting = sgv + " (" + delta + ") " + model.rawFormatedLabel
-        let utilLargeStingShort = sgv + " (" + deltaShort + ") " + model.rawFormatedLabel
+        let deltaShort = model.deltaShort
+        let raw = !model.rawHidden ? model.rawFormatedLabel : ""
+        let rawShort = !model.rawHidden ? model.rawFormatedLabelShort : ""
+        
+        let utilLargeSting = sgv + " " + delta + " " + raw
+        let utilLargeStingShort = sgv + " " + deltaShort + " " + raw
         
         switch complication.family {
         case .ModularSmall:
@@ -182,10 +214,10 @@ extension ComplicationController {
             template = modularSmall
         case .ModularLarge:
             let modularLarge = CLKComplicationTemplateModularLargeTable()
-            modularLarge.headerTextProvider = CLKSimpleTextProvider(text: sgv + " (" + delta + ")", shortText: sgv + " (" + deltaShort + ")")
+            modularLarge.headerTextProvider = CLKSimpleTextProvider(text: sgv + " " + delta , shortText: sgv + " " + deltaShort)
             modularLarge.row1Column1TextProvider = CLKSimpleTextProvider(text: displayName)
             modularLarge.row1Column2TextProvider = CLKRelativeDateTextProvider(date: model.date, style: .Natural, units: [.Minute, .Hour, .Day])
-            modularLarge.row2Column1TextProvider = CLKSimpleTextProvider(text: model.rawFormatedLabel)
+            modularLarge.row2Column1TextProvider = CLKSimpleTextProvider(text: raw, shortText: rawShort)
             modularLarge.row2Column2TextProvider = CLKSimpleTextProvider(text: "")
             modularLarge.tintColor = tintColor
             
@@ -216,6 +248,21 @@ extension ComplicationController {
 }
 
 extension ComplicationController {
+    func requestedUpdateDidBegin() {
+        #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
+        #endif
+
+     // Ask data store for new data..
+    }
+    func requestedUpdateBudgetExhausted() {
+        #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
+        #endif
+        
+        // Ask data store for new data.. log when this happened.
+    }
+
     static func reloadComplications() {
         #if DEBUG
             print(">>> Entering \(__FUNCTION__) <<<")

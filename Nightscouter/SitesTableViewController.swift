@@ -37,6 +37,10 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
      Used for triggering a transition into edit mode.
      */
     var accessoryIndexPath: NSIndexPath?
+    
+    /**
+     Array of HTTP Clients
+    */
     var sockets = [NightscoutSocketIOClient]()
     
     override func viewDidLoad() {
@@ -354,7 +358,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         
         alertController.view.tintColor = NightscouterAssetKit.darkNavColor
         
-        self.view.window?.tintColor = nil
+        // self.view.window?.tintColor = nil
         
         self.navigationController?.popToRootViewControllerAnimated(true)
         

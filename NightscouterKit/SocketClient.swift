@@ -96,7 +96,8 @@ extension NightscoutSocketIOClient {
             let json = JSON(data[0])
             
             self.site.parseJSONforSocketData(json)
-            
+            self.site.generateTimeline()
+
             return self.site
         }
     }

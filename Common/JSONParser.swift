@@ -35,6 +35,7 @@ extension Site: Encodable, Decodable {
         static let mbgs = "mbgs"
         static let cals = "cals"
         static let deviceStatus = "deviceStatus"
+        static let complicationTimeline = "complicationTimeline"
     }
     
     func encode() -> [String: AnyObject] {
@@ -42,8 +43,9 @@ extension Site: Encodable, Decodable {
          let encodedCals: [[String : AnyObject]] = cals.flatMap{ $0.encode() }
          let encodedMgbs: [[String : AnyObject]] = mbgs.flatMap{ $0.encode() }
         let encodedDeviceStatus: [[String : AnyObject]] = deviceStatus.flatMap{ $0.encode() }
+        let encodedComplicationTimeline: [[String : AnyObject]] = complicationTimeline.flatMap { $0.encode() }
         
-        return [JSONKey.url : url.absoluteString, JSONKey.overrideScreenLock : overrideScreenLock, JSONKey.disabled: disabled, JSONKey.uuid: uuid.UUIDString, JSONKey.configuration: configuration?.encode() ?? "", JSONKey.sgvs: encodedSgvs, JSONKey.cals: encodedCals, JSONKey.mbgs: encodedMgbs, JSONKey.deviceStatus: encodedDeviceStatus]
+        return [JSONKey.url : url.absoluteString, JSONKey.overrideScreenLock : overrideScreenLock, JSONKey.disabled: disabled, JSONKey.uuid: uuid.UUIDString, JSONKey.configuration: configuration?.encode() ?? "", JSONKey.sgvs: encodedSgvs, JSONKey.cals: encodedCals, JSONKey.mbgs: encodedMgbs, JSONKey.deviceStatus: encodedDeviceStatus, JSONKey.complicationTimeline: encodedComplicationTimeline]
     }
     
     static func decode(dict: [String: AnyObject]) -> Site? {
@@ -74,6 +76,10 @@ extension Site: Encodable, Decodable {
         
         if let config = dict[JSONKey.configuration] as? [String: AnyObject] {
             site.configuration = ServerConfiguration.decode(config)
+        }
+        
+        if let  complicationTimeline = dict[JSONKey.complicationTimeline] as? [[String: AnyObject]] {
+            site.complicationTimeline = complicationTimeline.flatMap{ ComplicationTimelineEntry.decode($0) }
         }
         
         return site
@@ -431,6 +437,7 @@ extension Site {
                 self.cals.insertOrUpdate(calibration)
             }
         }
+        
         // makes sure things are sorted correctly by date. When delta's come in they might screw up the order.
         self.sgvs.sortByDate()
         self.cals.sortByDate()
