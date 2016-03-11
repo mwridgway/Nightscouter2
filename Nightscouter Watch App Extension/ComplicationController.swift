@@ -22,7 +22,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             // print(">>> Entering \(__FUNCTION__) <<<")
         #endif
         var date: NSDate?
-        let model = SitesDataSource.sharedInstance.oldestComplicationDataForPrimarySite
+        let model = SitesDataSource.sharedInstance.primarySite?.oldestComplicationData
         date = model?.date
         
         #if DEBUG
@@ -37,7 +37,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             // print(">>> Entering \(__FUNCTION__) <<<")
         #endif
         var date: NSDate? = nil
-        let model = SitesDataSource.sharedInstance.latestComplicationDataForPrimarySite
+        let model = SitesDataSource.sharedInstance.primarySite?.latestComplicationData
         date = model?.date
         
         
@@ -122,7 +122,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getNextRequestedUpdateDateWithHandler(handler: (NSDate?) -> Void) {
         // Call the handler with the date when you would next like to be given the opportunity to update your complication content
-        let nextUpdate = SitesDataSource.sharedInstance.nextRequestedComplicationUpdateDate
+        let nextUpdate = SitesDataSource.sharedInstance.primarySite?.nextRequestedComplicationUpdateDate
         
         #if DEBUG
             print("Next Requested Update Date is:\(nextUpdate)")

@@ -63,14 +63,14 @@ extension Array where Element: Equatable {
 
 extension Array where Element: Dateable {
     public mutating func sortByDate(orderDescending descending: Bool = true) {
-        let compare: NSComparisonResult = descending ? .OrderedDescending :.OrderedAscending
+        let compare: NSComparisonResult = descending ? .OrderedDescending : .OrderedAscending
         self = self.sort({ (d1, d2) -> Bool in
             d1.date.compare(d2.date) == compare
         })
     }
 }
 public func sortByDate<T: Dateable>(a: [T], orderDescending descending: Bool = true) -> [T] {
-    let compare: NSComparisonResult = descending ? .OrderedDescending :.OrderedAscending
+    let compare: NSComparisonResult = descending ? .OrderedDescending : .OrderedAscending
     return a.sort({ (d1, d2) -> Bool in
         d1.date.compare(d2.date) == compare
     })
