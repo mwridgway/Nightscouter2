@@ -13,10 +13,7 @@ public extension NSCalendar {
     public func stringRepresentationOfElapsedTimeFromDate(startDate: NSDate, endDate: NSDate) -> String {
         
         if (!startDate.timeIntervalSince1970.isSignMinus && !endDate.timeIntervalSince1970.isSignMinus){
-
-//            let hourMinuteComponents: NSCalendarUnit = [.Month, .Weekday, .Hour, .Minute, .Day]
-//            let componentsVar: NSDateComponents = self.components(hourMinuteComponents, fromDate: startDate, toDate: endDate, options: [])
-            
+      
             let hourMinuteComponents: NSCalendarUnit = [.Month, .Weekday, .Hour, .Minute, .Day]
             let componentsVar: NSDateComponents = self.components(hourMinuteComponents, fromDate: startDate, toDate: endDate, options: [])
 

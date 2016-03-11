@@ -19,8 +19,7 @@ public struct PlaceHolderStrings {
     public static let deltaAltJ: String = "∆"
     public static let raw: String = "---"
     public static let battery: String = "--%"
-
-    
+    public static let appName: String = "Nightscouter"
     public static let defaultColor: DesiredColorState = .Default
 }
 
@@ -33,7 +32,7 @@ public class AppConfiguration {
     // MARK: Types
 
     public static var keychain: Keychain {
-        return Keychain(service: "com.nothingonline.nightscouter")
+        return Keychain(service: "com.nothingonline.nightscouter").synchronizable(true)
     }
     
     private struct Defaults {

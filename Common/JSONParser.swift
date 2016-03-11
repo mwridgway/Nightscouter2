@@ -40,8 +40,8 @@ extension Site: Encodable, Decodable {
     
     func encode() -> [String: AnyObject] {
         let encodedSgvs: [[String : AnyObject]] = sgvs.flatMap{ $0.encode() }
-         let encodedCals: [[String : AnyObject]] = cals.flatMap{ $0.encode() }
-         let encodedMgbs: [[String : AnyObject]] = mbgs.flatMap{ $0.encode() }
+        let encodedCals: [[String : AnyObject]] = cals.flatMap{ $0.encode() }
+        let encodedMgbs: [[String : AnyObject]] = mbgs.flatMap{ $0.encode() }
         let encodedDeviceStatus: [[String : AnyObject]] = deviceStatus.flatMap{ $0.encode() }
         let encodedComplicationTimeline: [[String : AnyObject]] = complicationTimeline.flatMap { $0.encode() }
         
@@ -281,7 +281,7 @@ extension Calibration: Encodable, Decodable {
             intercept = json[JSONKey.intercept].double,
             scale = json[JSONKey.scale].double,
             mill = json[JSONKey.mills].double else {
-            return nil
+                return nil
         }
         
         return Calibration(slope: slope, intercept: intercept, scale: scale, milliseconds: mill)
@@ -310,7 +310,7 @@ extension MeteredGlucoseValue: Encodable {
         
         return MeteredGlucoseValue(milliseconds: mill, device: device, mgdl: mgdl)
     }
-
+    
 }
 
 extension SensorGlucoseValue: Encodable, Decodable {
@@ -368,6 +368,56 @@ extension DeviceStatus: Encodable, Decodable {
         return DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: mills)
     }
 }
+
+
+
+extension ComplicationTimelineEntry: Encodable, Decodable {
+    struct JSONKey {
+        static let lastReadingDate = "lastReadingDate"
+        static let rawHidden = "rawHidden"
+        static let rawLabel = "rawLabel"
+        static let nameLabel = "nameLabel"
+        static let sgvLabel = "sgvLabel"
+        static let deltaLabel = "deltaLabel"
+        static let rawColor = "rawColor"
+        static let sgvColor = "sgvColor"
+        static let units = "units"
+        static let noise = "noise"
+        static let direction = "direction"
+        
+    }
+    
+    func encode() -> [String : AnyObject] {
+        return [
+            JSONKey.lastReadingDate: lastReadingDate,
+            JSONKey.rawLabel: rawLabel,
+            JSONKey.nameLabel: nameLabel,
+            JSONKey.sgvLabel: sgvLabel,
+            JSONKey.deltaLabel: deltaLabel,
+            JSONKey.sgvColor: sgvColor.toHexString(),
+            JSONKey.units: units.rawValue,
+            JSONKey.direction: direction.rawValue,
+            JSONKey.noise: rawNoise.rawValue
+        ]
+        
+    }
+    static func decode(dict: [String : AnyObject]) -> ComplicationTimelineEntry? {
+        
+        let json = JSON(dict)
+        return ComplicationTimelineEntry(
+            date: dict[JSONKey.lastReadingDate] as! NSDate,
+            rawLabel: json[JSONKey.rawLabel].stringValue,
+            nameLabel: json[JSONKey.nameLabel].stringValue,
+            sgvLabel: json[JSONKey.sgvLabel].stringValue,
+            deltaLabel: json[JSONKey.deltaLabel].stringValue,
+            tintColor: Color(hexString: json[JSONKey.sgvColor].stringValue),
+            units: Units(rawValue: json[JSONKey.units].stringValue) ?? .Mgdl,
+            direction:  Direction(rawValue: json[JSONKey.direction].stringValue) ?? .None,
+            noise:  Noise(rawValue: json[JSONKey.noise].intValue) ?? .Unknown
+        )
+    }
+}
+
 
 // MARK: Append incoming data from a socket.io connection.
 extension Site {
@@ -446,6 +496,7 @@ extension Site {
         
     }
 }
+
 
 
 

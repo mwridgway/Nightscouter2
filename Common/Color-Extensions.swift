@@ -17,7 +17,7 @@ import Foundation
 #endif
 
 public extension Color {
-    public class func  randomColor() -> UIColor {
+    public class func  randomColor() -> Color {
         let randomRed:CGFloat = CGFloat(drand48())
         
         let randomGreen:CGFloat = CGFloat(drand48())

@@ -5,7 +5,7 @@
 //  Created by Peter Ina on 1/11/16.
 //  Copyright © 2016 Nothingonline. All rights reserved.
 //
-
+import Foundation
 #if os(iOS) || os(watchOS)
     import UIKit
 #elseif os(OSX)
@@ -36,9 +36,11 @@ extension SensorGlucoseValue: Equatable { }
 
 // Common fields for holding a glucose value.
 public typealias MgdlValue = Double
+
 public protocol GlucoseValueHolder {
     var mgdl: MgdlValue { get }
     var isSGVOk: Bool { get }
+    var reservedValueUpperEnd: MgdlValue { get }
 }
 
 public extension GlucoseValueHolder {
@@ -85,6 +87,10 @@ public enum DesiredColorState: String, CustomStringConvertible {
     public var description: String {
         return self.rawValue
     }
+    
+    public init() {
+        self = .Neutral
+    }
 }
 
 // Records tagged with a device share this field.
@@ -112,7 +118,7 @@ public protocol DeltaDisplayable {
 }
 
 extension DeltaDisplayable {
-    public var deltaNumberFormatter: NSNumberFormatter {
+    public static var deltaNumberFormatter: NSNumberFormatter {
         
         let formatter = NSNumberFormatter()
         formatter.numberStyle = .DecimalStyle
@@ -163,20 +169,15 @@ public func calculateRawBG(fromSensorGlucoseValue sgv: SensorGlucoseValue, calib
     return round(raw)
 }
 
-// Provide a private typealias for a platform specific color.
-#if os(iOS) || os(watchOS)
-    private typealias AppColor = UIColor
-#elseif os(OSX)
-    private typealias AppColor = NSColor
-#endif
+
 public extension DesiredColorState {
     
     private static let colorMapping = [
-        DesiredColorState.Neutral: AppColor(red: 0.851, green: 0.851, blue: 0.851, alpha: 1.000),
-        DesiredColorState.Alert: AppColor(red: 1.000, green: 0.067, blue: 0.310, alpha: 1.000),
-        DesiredColorState.Positive: AppColor(red: 0.016, green: 0.871, blue: 0.443, alpha: 1.000),
-        DesiredColorState.Warning: AppColor(red: 1.000, green: 0.902, blue: 0.125, alpha: 1.000),
-        DesiredColorState.Default: AppColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        DesiredColorState.Neutral: Color(red: 0.851, green: 0.851, blue: 0.851, alpha: 1.000),
+        DesiredColorState.Alert: Color(red: 1.000, green: 0.067, blue: 0.310, alpha: 1.000),
+        DesiredColorState.Positive: Color(red: 0.016, green: 0.871, blue: 0.443, alpha: 1.000),
+        DesiredColorState.Warning: Color(red: 1.000, green: 0.902, blue: 0.125, alpha: 1.000),
+        DesiredColorState.Default: Color(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     ]
     
     #if os(iOS) || os(watchOS)
@@ -185,7 +186,7 @@ public extension DesiredColorState {
     }
     #elseif os(OSX)
     public var colorValue: NSColor {
-    return DesiredColorState.colorMapping[self]!
+        return DesiredColorState.colorMapping[self]!
     }
     #endif
 }

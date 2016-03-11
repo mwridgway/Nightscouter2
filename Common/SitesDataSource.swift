@@ -8,42 +8,35 @@
 
 import Foundation
 
-
 public protocol SitesDataSourceProvider: Dateable {
     var sites: [Site] { get }
 }
-extension SitesDataSourceProvider {
-    public var milliseconds: Double {
-        return -1168583640000
+public extension SitesDataSourceProvider {
+    var milliseconds: Double {
+        return AppConfiguration.Constant.knownMilliseconds.inThePast
     }
 }
 
+public enum StorageLocation: String {
+    case LocalKeyValue, iCLoudKeyValue
+}
 
 // move to a protocol for storage conformance
 public protocol StorageType {
+    var storageLocation: StorageLocation { get }
     func getSites() -> [Site]
     func createSite(site: Site) -> Bool
     func updateSite(site: Site)  ->  Bool
     func deleteSite(atIndex: Int) -> Bool
     
+    var lastViewedSite: Site { get }
+    
     func saveData() -> Bool
     func loadData() -> Bool
 }
 
-public protocol ComplicationCreator {
-    var primarySite: Site? { get }
-    var oldestComplicationModel: ComplicationTimelineEntry? { set get }
-    var latestComplicationModel: ComplicationTimelineEntry? { set get }
-    
-    func generateComplicationModelsForPrimarySite() -> [ComplicationTimelineEntry]
-    func generateComplicationModels(forSite site: Site, calibrations: [Calibration]) -> [ComplicationTimelineEntry]
-    func generateComplicationModels(forConfiguration configuration: ServerConfiguration, sgvs:[SensorGlucoseValue], calibrations:[Calibration]) -> [ComplicationTimelineEntry]
-    
-    func nearest(calibration cals: [Calibration], forDate date: NSDate) -> Calibration?
-}
 
-
-public class SitesDataSource: SitesDataSourceProvider{
+public class SitesDataSource: SitesDataSourceProvider {
     private static let sharedAppGrouSuiteName: String = "group.com.nothingonline.nightscouter"
     
     public var sites = [Site]() {
@@ -51,7 +44,7 @@ public class SitesDataSource: SitesDataSourceProvider{
             let siteDict = sites.map { $0.encode() }
             defaults.setObject(siteDict, forKey: DefaultKey.sites.rawValue)
             
-            generateComplicationModelsForPrimarySite()
+            generateComplicationDataForPrimarySite()
         }
     }
     
@@ -201,46 +194,25 @@ public class SitesDataSource: SitesDataSourceProvider{
 }
 
 // MARK: Complication Data Source
-extension SitesDataSource {
-    
-    public var complicationDataFromDefaults: [ComplicationTimelineEntry] {
-        var complicationModels: [ComplicationTimelineEntry] = primarySite?.complicationTimeline ?? []
-        complicationModels.sortByDate()
-        
-        return complicationModels
-    }
-    
-    public var complicationDataDictoinary: [[String: AnyObject]] {
-        set{
-            defaults.setObject(newValue, forKey: DefaultKey.complicationData.rawValue)
-        }
-        get {
-            guard let complicationDictArray =  defaults.objectForKey(DefaultKey.complicationData.rawValue) as? [[String: AnyObject]] else {
-                return []
-            }
-            return complicationDictArray
-        }
-    }
+extension SitesDataSource: ComplicationDataSourceGenerator {
+//    
+//     public var complicationDataDictoinary: [[String: AnyObject]] {
+//        set{
+//            defaults.setObject(newValue, forKey: DefaultKey.complicationData.rawValue)
+//        }
+//        get {
+//            guard let complicationDictArray =  defaults.objectForKey(DefaultKey.complicationData.rawValue) as? [[String: AnyObject]] else {
+//                return []
+//            }
+//            return complicationDictArray
+//        }
+//    }
     
     public var primarySite: Site? {
         return sites.filter{ $0.uuid == primarySiteUUID }.first
     }
     
-    
-    // MARK: Convenience methods for generating complication data.
-    
-    private func generateComplicationModelsForPrimarySite() -> [ComplicationTimelineEntry] {
-        guard let site = primarySite, configuration = site.configuration else {
-            return []
-        }
-        return generateComplicationModels(forConfiguration: configuration, sgvs: site.sgvs, calibrations: site.cals)
-    }
-    
-    private func generateComplicationModels(forSite site: Site, calibrations: [Calibration]) -> [ComplicationTimelineEntry] {
-        return generateComplicationModels(forConfiguration: site.configuration ?? ServerConfiguration(), sgvs: site.sgvs, calibrations: site.cals)
-    }
-    
-    public func generateComplicationModels(forConfiguration configuration: ServerConfiguration, sgvs:[SensorGlucoseValue], calibrations:[Calibration]) -> [ComplicationTimelineEntry] {
+    public func generateComplicationData(forConfiguration configuration: ServerConfiguration, sgvs:[SensorGlucoseValue], calibrations:[Calibration]) -> [ComplicationTimelineEntry] {
         
         // Init Complication Model Array for return as Timeline.
         var compModels: [ComplicationTimelineEntry] = []
@@ -345,31 +317,19 @@ extension SitesDataSource {
         return compModels
     }
     
-    public var latestComplicationModel: ComplicationTimelineEntry? {
-        return sortByDate(complicationDataFromDefaults).first
+    public var latestComplicationDataForPrimarySite: ComplicationTimelineEntry? {
+        
+        let complicationModels: [ComplicationTimelineEntry] = primarySite?.complicationTimeline ?? []
+
+        return sortByDate(complicationModels).first
     }
     
-    public var oldestComplicationModel: ComplicationTimelineEntry? {
-        return sortByDate(complicationDataFromDefaults).last
+    public var oldestComplicationDataForPrimarySite: ComplicationTimelineEntry? {
+        let complicationModels: [ComplicationTimelineEntry] = primarySite?.complicationTimeline ?? []
+
+        return sortByDate(complicationModels).last
     }
     
-    public func nearest(calibration cals: [Calibration], forDate date: NSDate) -> Calibration? {
-        var desiredIndex: Int?
-        var minDate: NSTimeInterval = fabs(NSDate().timeIntervalSinceNow)
-        for (index, cal) in cals.enumerate() {
-            let dateInterval = fabs(cal.date.timeIntervalSinceDate(date))
-            let compared = minDate < dateInterval
-            if compared {
-                minDate = dateInterval
-                desiredIndex = index
-            }
-        }
-        guard let index = desiredIndex else {
-            print("NON-FATAL ERROR: No valid index was found... return first calibration if its there.")
-            return cals.first
-        }
-        return cals[safe: index]
-    }
 }
 
 extension Site {
@@ -378,6 +338,6 @@ extension Site {
             return
         }
         
-        self.complicationTimeline = SitesDataSource.sharedInstance.generateComplicationModels(forConfiguration:configuration, sgvs: self.sgvs, calibrations: self.cals)
+        self.complicationTimeline = SitesDataSource.sharedInstance.generateComplicationData(forConfiguration:configuration, sgvs: self.sgvs, calibrations: self.cals)
     }
 }

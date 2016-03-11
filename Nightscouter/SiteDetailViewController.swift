@@ -125,7 +125,7 @@ extension SiteDetailViewController {
         siteRawHeader?.hidden = dataSource.rawHidden
         
         siteRawLabel?.text = dataSource.rawFormatedLabel
-        siteRawLabel?.textColor = dataSource.sgvColor
+        siteRawLabel?.textColor = dataSource.rawColor
         
         siteNameLabel?.text = dataSource.nameLabel
         siteCompassControl?.configure(withDataSource: dataSource, delegate: dataSource)

@@ -4,15 +4,15 @@
 <dict>
 	<key>com.apple.developer.icloud-container-identifiers</key>
 	<array/>
-	<key>com.apple.developer.ubiquity-kvstore-identifier</key>
-	<string>$(TeamIdentifierPrefix)$(CFBundleIdentifier)</string>
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>group.com.nothingonline.nightscouter</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)com.nothingonline.Nightscouter</string>
+		<string>$(TeamIdentifierPrefix).com.nothingonline.nightscouter</string>
 	</array>
+	<key>com.apple.developer.ubiquity-kvstore-identifier</key>
+	<string>$(TeamIdentifierPrefix).com.nothingonline.nightscouter</string>
 </dict>
 </plist>

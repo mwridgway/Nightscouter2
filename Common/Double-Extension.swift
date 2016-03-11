@@ -77,7 +77,7 @@ public extension MgdlValue {
     }
 }
 
-public extension Double {
+public extension MgdlValue {
     internal var bgDeltaFormatter: NSNumberFormatter {
         let numberFormat =  NSNumberFormatter()
         numberFormat.numberStyle = .DecimalStyle

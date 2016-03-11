@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 public protocol DictionaryConvertible {
     var dictionary: [String: AnyObject] { get }
 }

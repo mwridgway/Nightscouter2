@@ -14,7 +14,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     // MARK: - Timeline Configuration
     
     func getSupportedTimeTravelDirectionsForComplication(complication: CLKComplication, withHandler handler: (CLKComplicationTimeTravelDirections) -> Void) {
-        handler([.Backward, .Forward])
+        handler([.Backward])
     }
     
     func getTimelineStartDateForComplication(complication: CLKComplication, withHandler handler: (NSDate?) -> Void) {
@@ -22,7 +22,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             // print(">>> Entering \(__FUNCTION__) <<<")
         #endif
         var date: NSDate?
-        let model = SitesDataSource.sharedInstance.oldestComplicationModel
+        let model = SitesDataSource.sharedInstance.oldestComplicationDataForPrimarySite
         date = model?.date
         
         #if DEBUG
@@ -37,7 +37,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             // print(">>> Entering \(__FUNCTION__) <<<")
         #endif
         var date: NSDate? = nil
-        let model = SitesDataSource.sharedInstance.latestComplicationModel
+        let model = SitesDataSource.sharedInstance.latestComplicationDataForPrimarySite
         date = model?.date
         
         
@@ -74,7 +74,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         var timelineEntries = [CLKComplicationTimelineEntry]()
         
-        let entries = SitesDataSource.sharedInstance.complicationDataFromDefaults
+        let entries = SitesDataSource.sharedInstance.primarySite?.complicationTimeline ?? []
         
         for entry in entries {
             let entryDate = entry.date
@@ -97,10 +97,10 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             // print(">>> Entering \(__FUNCTION__) <<<")
             // print("complication: \(complication.family)")
         #endif
-
+        
         var timelineEntries = [CLKComplicationTimelineEntry]()
         
-        let entries = SitesDataSource.sharedInstance.complicationDataFromDefaults
+        let entries = SitesDataSource.sharedInstance.primarySite?.complicationTimeline ?? []
         
         for entry in entries {
             let entryDate = entry.date
@@ -122,18 +122,13 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getNextRequestedUpdateDateWithHandler(handler: (NSDate?) -> Void) {
         // Call the handler with the date when you would next like to be given the opportunity to update your complication content
-        let today: NSDate = NSDate()
-        let thirtyMins = 30
+        let nextUpdate = SitesDataSource.sharedInstance.nextRequestedComplicationUpdateDate
         
-        // Set up date components
-        let dateComponents: NSDateComponents = NSDateComponents()
-        dateComponents.minute = thirtyMins
+        #if DEBUG
+            print("Next Requested Update Date is:\(nextUpdate)")
+        #endif
         
-        // Create a calendar
-        let gregorianCalendar: NSCalendar = NSCalendar.autoupdatingCurrentCalendar()
-        let fiveMinsFromNow: NSDate = gregorianCalendar.dateByAddingComponents(dateComponents, toDate: today, options:NSCalendarOptions(rawValue: 0))!
-        
-        handler(fiveMinsFromNow)
+        handler(nextUpdate)
     }
     
     // MARK: - Placeholder Templates
@@ -155,7 +150,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         case .ModularLarge:
             let modularLarge = CLKComplicationTemplateModularLargeTable()
             
-            modularLarge.headerTextProvider = CLKSimpleTextProvider(text: "Nightscouter")
+            modularLarge.headerTextProvider = CLKSimpleTextProvider(text: PlaceHolderStrings.appName)
             modularLarge.row1Column1TextProvider = CLKSimpleTextProvider(text: PlaceHolderStrings.delta)
             modularLarge.row1Column2TextProvider = CLKSimpleTextProvider(text: PlaceHolderStrings.date)//CLKRelativeDateTextProvider(date: NSDate(), style: .Offset, units: [.Minute, .Hour, .Day])
             modularLarge.row2Column1TextProvider = CLKSimpleTextProvider(text: PlaceHolderStrings.raw)
@@ -252,17 +247,20 @@ extension ComplicationController {
         #if DEBUG
             print(">>> Entering \(__FUNCTION__) <<<")
         #endif
-
-     // Ask data store for new data..
+        
+        // TODO: Start up connecitivty session ask for data from data source. and update.
+        
+        // Ask data store for new data..
     }
+    
     func requestedUpdateBudgetExhausted() {
         #if DEBUG
             print(">>> Entering \(__FUNCTION__) <<<")
         #endif
-        
+        // TODO: Start up connecitivty session ask for data from data source. and update. Also bookmark when this happened. Maybe add a new timeline entry informing the user.
         // Ask data store for new data.. log when this happened.
     }
-
+    
     static func reloadComplications() {
         #if DEBUG
             print(">>> Entering \(__FUNCTION__) <<<")

@@ -6,65 +6,8 @@
 //  Copyright © 2016 Nothingonline. All rights reserved.
 //
 import Foundation
-import UIKit
 
-public protocol SiteCommonInfoDataSource {
-    var lastReadingDate: NSDate { get }
-    var batteryLabel: String { get }
-    var nameLabel: String { get }
-    var urlLabel: String { get }
-    var sgvLabel: String { get }
-    var deltaLabel: String { get }
-    var lookStale: Bool { get }
-}
-
-public protocol RawDataSource {
-    var rawHidden: Bool { get }
-    var rawLabel: String { get }
-    var rawNoise: Noise { get }
-    
-    var rawFormatedLabel: String { get }
-}
-
-public extension RawDataSource {
-    var rawFormatedLabel: String {
-        return "\(rawLabel) : \(rawNoise.description)"
-    }
-    var rawFormatedLabelShort: String {
-        return "\(rawLabel) : \(rawNoise.description[rawNoise.description.startIndex])"
-    }
-}
-
-public protocol RawDelegate {
-    var rawColor: UIColor { get }
-}
-
-public protocol SiteCommonInfoDelegate {
-    var lastReadingColor: UIColor { get }
-    var batteryColor: UIColor { get }
-    var sgvColor: UIColor { get }
-    var deltaColor: UIColor { get }
-}
-
-public protocol DirectionDisplayable {
-    var direction: Direction { get }
-}
-
-public protocol CompassViewDataSource: SiteCommonInfoDataSource, DirectionDisplayable, RawDataSource {
-    var text: String { get }
-    var detailText: String { get }
-}
-
-public protocol CompassViewDelegate: SiteCommonInfoDelegate, RawDelegate {
-    var desiredColor: DesiredColorState { get }
-}
-
-public typealias TableViewRowWithCompassDataSource = protocol<SiteCommonInfoDataSource, CompassViewDataSource>
-public typealias TableViewRowWithCompassDelegate = protocol<SiteCommonInfoDelegate, CompassViewDelegate>
-public typealias TableViewRowWithOutCompassDataSource = protocol<SiteCommonInfoDataSource, RawDataSource, DirectionDisplayable>
-public typealias TableViewRowWithOutCompassDelegate = protocol<SiteCommonInfoDelegate, RawDelegate>
-
-public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, RawDataSource, RawDelegate, DirectionDisplayable, SiteCommonInfoDelegate, CompassViewDataSource, CompassViewDelegate {
+public struct SiteSummaryModelViewModel: SiteSummaryModelViewModelDataSource, SiteSummaryModelViewModelDelegate {
     
     public var lastReadingDate: NSDate
     public var batteryLabel: String
@@ -77,13 +20,13 @@ public struct SiteSummaryModelViewModel: SiteCommonInfoDataSource, RawDataSource
     public var rawLabel: String
     public var rawNoise: Noise
     
-    public var lastReadingColor: UIColor
-    public var batteryColor: UIColor
+    public var lastReadingColor: Color
+    public var batteryColor: Color
     
-    public var sgvColor: UIColor
-    public var deltaColor: UIColor
+    public var sgvColor: Color
+    public var deltaColor: Color
     
-    public var rawColor: UIColor
+    public var rawColor: Color
     
     public var direction: Direction
     public var text: String

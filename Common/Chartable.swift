@@ -21,11 +21,9 @@ extension Chartable {
     }
     public var chartDateFormatter: NSDateFormatter {
         let nsDateFormatter = NSDateFormatter()
-        // nsDateFormatter.dateFormat = "EEE MMM d yyy HH:mm:ss OOOO (zzz)"
         nsDateFormatter.dateFormat = "EEE MMM d HH:mm:ss zzz yyy"
-        
         nsDateFormatter.timeZone = NSTimeZone.localTimeZone()
-        
+
         return nsDateFormatter
     }
     
@@ -70,5 +68,5 @@ extension MeteredGlucoseValue: Chartable {
             return dict
         }
     }
-
+    
 }
