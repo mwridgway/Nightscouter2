@@ -80,7 +80,7 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if sites.isEmpty {
             let cell = tableView.dequeueReusableCellWithIdentifier(TableViewConstants.CellIdentifiers.message, forIndexPath: indexPath)
-            cell.textLabel!.text = NSLocalizedString("No Nightscout sites were found.", comment: "")
+            cell.textLabel!.text = LocalizedString.emptyTableViewCellTitle.localized
             
             return cell
         } else {
@@ -133,11 +133,14 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
             
             let site = sites[indexPath.row], uuidString = site.uuid.UUIDString
             
+            // TODO: Add UUID to URK processing get ride of setting datasource everywhere.
+            
             SitesDataSource.sharedInstance.lastViewedSiteIndex = indexPath.row
             SitesDataSource.sharedInstance.lastViewedSiteUUID = site.uuid
             
-            let url = NSURL(string: "nightscouter://link/\(StoryboardIdentifier.SiteListPageViewController.rawValue)/\(uuidString)")
-            context.openURL(url!, completionHandler: nil)
+            let url = LinkBuilder.buildLink(withViewController: .SiteListPageViewController).URLByAppendingPathComponent(uuidString)
+        
+            context.openURL(url, completionHandler: nil)
         }
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NightscouterKit
 
 struct SettingsModelViewModel {
     var title: String
@@ -45,9 +46,9 @@ class SiteSettingsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         tableView.estimatedRowHeight = 88.0
-        tableView.rowHeight = 88.0//UITableViewAutomaticDimension
+        tableView.rowHeight = 88.0 // UITableViewAutomaticDimension
         self.tableView.reloadData()
-        self.title = "Settings"
+        self.title = LocalizedString.viewTitleSettings.localized
         
         if let delegate =  delegate{
             settings = delegate.settings

@@ -77,12 +77,7 @@ extension WatchSessionManager {
             
             self.processApplicationContext(userInfo)
 
-            let complicationServer = CLKComplicationServer.sharedInstance()
-            if let activeComplications = complicationServer.activeComplications {
-                for complication in activeComplications {
-                    complicationServer.reloadTimelineForComplication(complication)
-                }
-            }
+            
         }
     }
     

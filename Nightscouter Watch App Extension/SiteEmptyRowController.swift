@@ -9,6 +9,5 @@
 import WatchKit
 
 class SiteEmptyRowController: NSObject {
-
     @IBOutlet var messageLabel: WKInterfaceLabel!
 }

@@ -12,8 +12,8 @@ public struct ComplicationTimelineEntry: SiteCommonInfoDataSource, SiteCommonInf
     
     public var milliseconds: Mills
     public var lastReadingDate: NSDate
-    public var batteryLabel: String = ""
     public var rawLabel: String
+    
     public var rawHidden: Bool {
         return (rawLabel == "")
     }

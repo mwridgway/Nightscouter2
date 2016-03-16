@@ -15,17 +15,40 @@ class SitesTableInterfaceController: WKInterfaceController {
         static let SiteDetail: String = "SiteDetail"
     }
     
+    struct RowIdentifier {
+        static let rowSiteTypeIdentifier = "SiteRowController"
+        static let rowEmptyTypeIdentifier = "SiteEmptyRowController"
+        static let rowUpdateTypeIdentifier = "SiteUpdateRowController"
+    }
+    
+    
     @IBOutlet var sitesTable: WKInterfaceTable!
-
-//    var sites: [Site] {
-//        return SitesDataSource.sharedInstance.sites
-//    }
-
+    @IBOutlet var sitesLoading: WKInterfaceLabel!
+    
+    //    var sites: [Site] {
+    //        return SitesDataSource.sharedInstance.sites
+    //    }
+    
     var sites = [Site]()  {
         didSet {
             updateTableData()
         }
     }
+    
+    var lastUpdatedTime: NSDate? {
+        didSet{
+            
+            if let date = lastUpdatedTime {
+                timeStamp = AppConfiguration.lastUpdatedFromPhoneDateFormatter.stringFromDate(date)
+            }
+            
+            // sitesLoading.setHidden(!self.sites.isEmpty)
+            
+            // updateTableData()
+        }
+    }
+    
+    var timeStamp: String = ""
     
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
@@ -38,6 +61,10 @@ class SitesTableInterfaceController: WKInterfaceController {
         if sites.isEmpty { updateTableData() }
         
         // TODO: If there is only one site in the array, push to the detail controller right away. If a new or second one is added dismiss and return to table view.
+        
+        
+        // TODO: Faking a data transfter date.
+        lastUpdatedTime = NSDate()
     }
     
     override func table(table: WKInterfaceTable, didSelectRowAtIndex rowIndex: Int) {
@@ -59,23 +86,35 @@ class SitesTableInterfaceController: WKInterfaceController {
             
             print(">>> Entering \(__FUNCTION__) <<<")
             
-            let rowTypeIdentifier: String = "SiteRowController"
-            
             if self.sites.isEmpty {
-                self.sitesTable.setNumberOfRows(1, withRowType: "SiteEmptyRowController")
+                
+                // self.sitesLoading.setHidden(true)
+                
+                self.sitesTable.setNumberOfRows(1, withRowType: RowIdentifier.rowEmptyTypeIdentifier)
                 let row = self.sitesTable.rowControllerAtIndex(0) as? SiteEmptyRowController
                 if let row = row {
-                    row.messageLabel.setText("No sites availble.")
+                    row.messageLabel.setText(LocalizedString.emptyTableViewCellTitle.localized)
                 }
                 
             } else {
-                self.sitesTable.setNumberOfRows(self.sites.count, withRowType: rowTypeIdentifier)
+                
+                var rowSiteType = self.sites.map{ _ in RowIdentifier.rowSiteTypeIdentifier }
+                rowSiteType.append(RowIdentifier.rowUpdateTypeIdentifier)
+                
+                self.sitesTable.setRowTypes(rowSiteType)
+                
                 for (index, site) in self.sites.enumerate() {
                     if let row = self.sitesTable.rowControllerAtIndex(index) as? SiteRowController {
                         let mvm = site.generateSummaryModelViewModel()
                         row.configure(withDataSource: mvm, delegate: mvm)
-                        
                     }
+                }
+                
+                let updateRow = self.sitesTable.rowControllerAtIndex(self.sites.count) as? SiteUpdateRowController
+                
+                if let updateRow = updateRow {
+                    updateRow.siteLastReadingLabel.setText(self.timeStamp)
+                    updateRow.siteLastReadingLabelHeader.setText("LAST UPDATE FROM PHONE")
                 }
                 
             }

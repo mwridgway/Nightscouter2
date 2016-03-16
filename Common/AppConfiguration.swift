@@ -19,20 +19,72 @@ public struct PlaceHolderStrings {
     public static let deltaAltJ: String = "∆"
     public static let raw: String = "---"
     public static let battery: String = "--%"
-    public static let appName: String = "Nightscouter"
+    public static let appName: String = LocalizedString.nightscoutTitleString.localized
     public static let defaultColor: DesiredColorState = .Default
 }
 
+
+public struct LinkBuilder {
+    public enum LinkType: String {
+        case Link = "link"
+    }
+    
+    public static var supportedSchemes: [String]? {
+        if let info = NSBundle.mainBundle().infoDictionary {
+            var schemes = [String]() // Create an empty array we can later set append available schemes.
+            if let bundleURLTypes = info["CFBundleURLTypes"] as? [AnyObject] {
+                for (index, _) in bundleURLTypes.enumerate() {
+                    if let urlTypeDictionary = bundleURLTypes[index] as? [String : AnyObject] {
+                        if let urlScheme = urlTypeDictionary["CFBundleURLSchemes"] as? [String] {
+                            schemes += urlScheme // We've found the supported schemes appending to the array.
+                            return schemes
+                        }
+                    }
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    public static func buildLink(forType type: LinkType = .Link, withViewController viewController: StoryboardIdentifier) -> NSURL {
+        
+        // should probably do somethning with the supportedSchemes here...
+        return NSURL(string: "nightscouter://\(type.rawValue)/\(viewController.rawValue)")!
+    }
+}
+
+
+public enum CommonUseCasesForShortcuts: String {
+    case ShowDetail, AddNew, AddNewWhenEmpty, ShowList
+    
+    public func linkForUseCase() -> NSURL {
+        switch self {
+        case .ShowDetail: return LinkBuilder.buildLink(forType: .Link, withViewController: .SiteListPageViewController)
+        case .ShowList: return LinkBuilder.buildLink(forType: .Link, withViewController: .SitesTableViewController)
+        case .AddNewWhenEmpty: return LinkBuilder.buildLink(forType: .Link, withViewController: .FormViewController)
+        case .AddNew: return LinkBuilder.buildLink(forType: .Link, withViewController: .FormViewNavigationController)
+        }
+    }
+
+    public var applicationShortcutItemType: String {
+        return AppConfiguration.applicationGroupName + "." + self.rawValue
+    }
+}
+
 public enum StoryboardIdentifier: String, RawRepresentable {
-    case FormViewController, SitesTableViewController, SiteListPageViewController, SiteDetailViewController
-    public static let allValues = [FormViewController, SitesTableViewController, SiteListPageViewController, SiteDetailViewController]
+    case FormViewController, FormViewNavigationController, SitesTableViewController, SiteListPageViewController, SiteDetailViewController, SiteSettingsNavigationViewController
+    public static let allValues = [FormViewController, FormViewNavigationController, SitesTableViewController, SiteListPageViewController, SiteDetailViewController, SiteSettingsNavigationViewController]
+    public static let deepLinkable = [FormViewNavigationController, FormViewController, SiteListPageViewController, SitesTableViewController]
 }
 
 public class AppConfiguration {
     // MARK: Types
-
+    
+    public static var applicationGroupName = "com.nothingonline.nightscouter"
+    
     public static var keychain: Keychain {
-        return Keychain(service: "com.nothingonline.nightscouter").synchronizable(true)
+        return Keychain(service: applicationGroupName).synchronizable(true)
     }
     
     private struct Defaults {
@@ -42,7 +94,7 @@ public class AppConfiguration {
     }
     
     public struct Constant {
-        public static let knownMilliseconds: Mills = 1168583640000
+        public static let knownMilliseconds: Mills = 1268197200000
         public static let knownMgdl: MgdlValue = 100
     }
     
@@ -58,6 +110,16 @@ public class AppConfiguration {
         dateFormatter.timeStyle = NSDateFormatterStyle.MediumStyle
         dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
         dateFormatter.timeZone = NSTimeZone.localTimeZone()
+        return dateFormatter
+    }()
+    
+    public static let lastUpdatedFromPhoneDateFormatter: NSDateFormatter = {
+        // Create and use a formatter.
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
+        dateFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
+        dateFormatter.timeZone = NSTimeZone.localTimeZone()
+        
         return dateFormatter
     }()
     

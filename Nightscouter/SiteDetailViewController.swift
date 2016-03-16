@@ -174,52 +174,8 @@ extension SiteDetailViewController {
     }
     
     func presentSettings(sender: UIBarButtonItem) {
-        
-        //        let alertController = UIAlertController(title: LocalizedString.uiAlertScreenOverrideTitle.localized, message: LocalizedString.uiAlertScreenOverrideMessage.localized, preferredStyle: .ActionSheet)
-        //
-        //        let cancelAction = UIAlertAction(title: LocalizedString.generalCancelLabel.localized, style: .Cancel) { (action) in
-        //            #if DEBUG
-        //                print("Canceled action: \(action)")
-        //            #endif
-        //        }
-        //        alertController.addAction(cancelAction)
-        //
-        //        let checkEmoji = "✓ "
-        //        var yesString = "   "
-        //        if site?.overrideScreenLock == true {
-        //            yesString = checkEmoji
-        //        }
-        //
-        //        let yesAction = UIAlertAction(title: "\(yesString)\(LocalizedString.generalYesLabel.localized)", style: .Default) { (action) -> Void in
-        //            self.updateScreenOverride(true)
-        //            #if DEBUG
-        //                print("Yes action: \(action)")
-        //            #endif
-        //        }
-        //
-        //        alertController.addAction(yesAction)
-        //
-        //        alertController.preferredAction = yesAction
-        //
-        //        var noString = "   "
-        //        if (site!.overrideScreenLock == false) {
-        //            noString = checkEmoji
-        //        }
-        //
-        //        let noAction = UIAlertAction(title: "\(noString)\(LocalizedString.generalNoLabel.localized)", style: .Destructive) { (action) -> Void in
-        //            self.updateScreenOverride(false)
-        //            #if DEBUG
-        //                print("No action: \(action)")
-        //            #endif
-        //        }
-        //        alertController.addAction(noAction)
-        //
-        //        alertController.view.tintColor = NightscouterAssetKit.darkNavColor
-        //
-        //        self.view.window?.tintColor = nil
-        
-        
-        guard let alertController = self.storyboard?.instantiateViewControllerWithIdentifier("SiteSettingsNavigationViewController") as? UINavigationController else {
+
+        guard let alertController = self.storyboard?.instantiateViewControllerWithIdentifier(StoryboardIdentifier.SiteSettingsNavigationViewController.rawValue) as? UINavigationController else {
             return
         }
         
@@ -249,10 +205,10 @@ extension SiteDetailViewController: SiteSettingsDelegate {
             
             let defaultSite = (site.uuid == SitesDataSource.sharedInstance.primarySiteUUID)
             
-            tempSettings.append(SettingsModelViewModel(title: "Prevent Screen from Locking?", intent: SettingIntent.PreventLocking , subTitle: nil, switchOn: site.overrideScreenLock))
-            tempSettings.append(SettingsModelViewModel(title: "Use as Default Site", intent: SettingIntent.SetDefault , subTitle: "\nWhen enabled, this site's information will be proiritized for the watch.\n", switchOn: defaultSite , cellIdentifier: .cellSubtitle))
-            tempSettings.append(SettingsModelViewModel(title: "Edit", intent: SettingIntent.Edit, subTitle: "Change any available settings for connecting to the site.", cellIdentifier: .cellBasicDisclosure))
-            tempSettings.append(SettingsModelViewModel(title: "Goto Website", intent: SettingIntent.GoToSafari, cellIdentifier: .cellBasic))
+            tempSettings.append(SettingsModelViewModel(title: LocalizedString.settingsPreventLocking.localized, intent: SettingIntent.PreventLocking , subTitle: nil, switchOn: site.overrideScreenLock))
+            tempSettings.append(SettingsModelViewModel(title: LocalizedString.settingsDefaultSite.localized, intent: SettingIntent.SetDefault , subTitle: LocalizedString.settingsDefaultSiteSubTitle.localized, switchOn: defaultSite , cellIdentifier: .cellSubtitle))
+            tempSettings.append(SettingsModelViewModel(title: LocalizedString.settingsEditSite.localized, intent: SettingIntent.Edit, subTitle: LocalizedString.settingsEditSiteSubTitle.localized, cellIdentifier: .cellBasicDisclosure))
+            tempSettings.append(SettingsModelViewModel(title: LocalizedString.settingsGoToWeb.localized, intent: SettingIntent.GoToSafari, cellIdentifier: .cellBasic))
         }
         return tempSettings
     }

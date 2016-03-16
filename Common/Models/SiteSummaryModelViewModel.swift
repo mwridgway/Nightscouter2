@@ -149,11 +149,13 @@ public struct SiteSummaryModelViewModel: SiteSummaryModelViewModelDataSource, Si
                 
                 deltaString = PlaceHolderStrings.delta
                 
+                direction = .None
                 sgvString = PlaceHolderStrings.sgv
                 sgvColorVar = DesiredColorState.Neutral
                 lastReadingColorVar = DesiredColorState.Warning
             }
             
+            // Piles on to whatever warn did.
             if isStaleData.urgent{
                 lastReadingColorVar = DesiredColorState.Alert
             }

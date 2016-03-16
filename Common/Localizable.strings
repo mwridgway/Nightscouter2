@@ -6,6 +6,8 @@
   Copyright (c) 2015 Peter Ina. All rights reserved.
 */
 
+"viewTitleSettings" = "Settings";
+
 "tableViewCellRemove" = "Remove";
 
 "batteryLabel" = "BATTERY"; // not implemented.
@@ -47,3 +49,13 @@
 "directionFortyFiveDown" = "Forty Five Down";
 "directionSingleDown" = "Single Down";
 "directionDoubleDown" = "Doublue Down";
+
+"settingsPreventLocking" = "Prevent Screen from Locking?";
+"settingsDefaultSite" = "Use as Default Site";
+"settingsDefaultSiteSubTitle" = "\nWhen enabled, this site's information will be proiritized for the watch.\n";
+"settingsEditSite" = "Edit";
+"settingsEditSiteSubTitle" = "Change any available settings for connecting to the site.";
+"settingsGoToWeb" = "Goto Website";
+
+"emptyTableViewCellTitle" = "No Nightscout sites were found.";
+

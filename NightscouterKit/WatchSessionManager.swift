@@ -15,7 +15,6 @@ public class WatchSessionManager: NSObject, WCSessionDelegate {
     
     private override init() {
         super.init()
-        // startSession()
     }
     
     private let session: WCSession? = WCSession.isSupported() ? WCSession.defaultSession() : nil
@@ -40,6 +39,16 @@ public class WatchSessionManager: NSObject, WCSessionDelegate {
         print("WCSession.isSupported: \(WCSession.isSupported()), Paired Watch: \(session?.paired), Watch App Installed: \(session?.watchAppInstalled)")
     }
     
+}
+
+public extension WatchSessionManager {
+    public func sessionReachabilityDidChange(session: WCSession) {
+        print("sessionReachabilityDidChange")
+    }
+    
+    public func sessionWatchStateDidChange(session: WCSession) {
+        print("sessionWatchStateDidChange")
+    }
 }
 
 // MARK: Application Context
@@ -78,7 +87,6 @@ extension WatchSessionManager {
     public func transferCurrentComplicationUserInfo(userInfo: [String : AnyObject]) -> WCSessionUserInfoTransfer? {
         return validSession?.transferCurrentComplicationUserInfo(userInfo)
     }
-    
 
     // Sender
     public func transferUserInfo(userInfo: [String : AnyObject]) -> WCSessionUserInfoTransfer? {
@@ -173,25 +181,9 @@ extension WatchSessionManager {
             print("session: \(session), didReceiveMessage: \(message)")
         #endif
         
-//        guard let action = WatchAction(rawValue: (message[WatchModel.PropertyKey.actionKey] as? String)!) else {
-//            print("No action was found, didReceiveMessage: \(message)")
-//            return
-//        }
-//       
-//            // make sure to put on the main queue to update UI!
-//            switch action {
-//            case .AppContext:
-//                print("appContext")
-//                dispatch_async(dispatch_get_main_queue()) {
-//                AppDataManageriOS.sharedInstance.updateWatch(withAction: .AppContext, withSites: AppDataManageriOS.sharedInstance.sites)
-//
-//                }
-//
-//            default:
-//                print("default")
-//                break
-//        }
-        
+        dispatch_async(dispatch_get_main_queue()) {
+          // Process context in the datasource.
+        }
     }
     
     public func session(session: WCSession, didReceiveMessageData messageData: NSData, replyHandler: (NSData) -> Void) {

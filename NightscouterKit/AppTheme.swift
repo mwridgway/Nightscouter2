@@ -8,6 +8,8 @@
 
 import UIKit
 
+import DateTools
+
 public struct Theme {
     public struct Color {
         public static let windowTintColor =  NightscouterAssetKit.predefinedNeutralColor
@@ -19,5 +21,25 @@ public struct Theme {
     
     public struct Font {
         public static let navBarTitleFont = UIFont(name: "HelveticaNeue-Thin", size: 20.0)
+    }
+    
+    public static func customizeAppAppearance(sharedApplication application:UIApplication, forWindow window: UIWindow?) {
+        application.statusBarStyle = .LightContent
+        // Change the font and size of nav bar text.
+        window?.tintColor = Theme.Color.windowTintColor
+        
+        if let navBarFont = Theme.Font.navBarTitleFont {
+            
+            let navBarColor: UIColor = Theme.Color.navBarColor
+            UINavigationBar.appearance().barTintColor = navBarColor
+            UINavigationBar.appearance().tintColor = Theme.Color.windowTintColor
+            
+            let navBarAttributesDictionary: [String: AnyObject]? = [
+                NSForegroundColorAttributeName: Theme.Color.navBarTextColor,
+                NSFontAttributeName: navBarFont
+            ]
+            
+            UINavigationBar.appearance().titleTextAttributes = navBarAttributesDictionary
+        }
     }
 }

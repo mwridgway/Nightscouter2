@@ -14,7 +14,7 @@ def global_pods
     pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
     pod 'CryptoSwift'
     pod 'KeychainAccess'
-    pod 'ReactiveCocoa', '4.0.0-RC.2'
+    pod 'ReactiveCocoa', '4.0.4-alpha-4'
 end
 
 

@@ -14,10 +14,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
+    /// Saved shortcut item used as a result of an app launch, used later when app is activated.
+    var launchedShortcutItem: String?
+    
+    override init() {
+        super.init()
+        WatchSessionManager.sharedManager.startSession()
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
-        customizeAppAppearance()
+        Theme.customizeAppAppearance(sharedApplication: UIApplication.sharedApplication(), forWindow: window)
         
         // Register for intial settings.
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -28,15 +40,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             selector: Selector("userDefaultsDidChange:"),
             name: NSUserDefaultsDidChangeNotification,
             object: nil)
-     
-        WatchSessionManager.sharedManager.startSession()
-
+        
+        // If a shortcut was launched, display its information and take the appropriate action
+        if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
+            launchedShortcutItem = shortcutItem.type
+        }
+        
         return true
     }
     
     func applicationDidBecomeActive(application: UIApplication) {
-        print("applicationDidBecomeActive")
-
+        #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
+        #endif
     }
     
     func applicationWillResignActive(application: UIApplication) {
@@ -56,10 +72,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print(">>> Entering \(__FUNCTION__) <<<")
             print("Recieved URL: \(url) with options: \(options)")
         #endif
-        let schemes = supportedSchemes!
-        if (!schemes.contains((url.scheme))) { // If the incoming scheme is not contained within the array of supported schemes return false.
-            return false
-        }
+        
+        // If the incoming scheme is not contained within the array of supported schemes return false.
+        guard let schemes = LinkBuilder.supportedSchemes where schemes.contains(url.scheme) else { return false }
         
         // We now have an acceptable scheme. Pass the URL to the deep linking handler.
         deepLinkToURL(url)
@@ -67,6 +82,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    func application(application: UIApplication, performActionForShortcutItem shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
+        print(shortcutItem)
+        
+        guard let type = CommonUseCasesForShortcuts(rawValue: shortcutItem.type) else {
+            completionHandler(false)
+            return
+        }
+        
+        switch type {
+        case .AddNew:
+            let url = type.linkForUseCase()
+            deepLinkToURL(url)
+        case .ShowDetail:
+            let siteIndex = shortcutItem.userInfo!["siteIndex"] as! Int
+            SitesDataSource.sharedInstance.lastViewedSiteIndex = siteIndex
+            
+            #if DEDBUG
+                println("User tapped on notification for site: \(site) at index \(siteIndex) with UUID: \(uuid)")
+            #endif
+            
+            let url = type.linkForUseCase()
+            
+            deepLinkToURL(url)
+        default:
+            completionHandler(false)
+        }
+        
+        completionHandler(true)
+    }
+    
+    
+    func application(application: UIApplication, performFetchWithCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        // TODO: Background fetch new data and update watch.
+        
+        completionHandler(.NewData)
+    }
 }
 
 extension AppDelegate {
@@ -104,7 +155,7 @@ extension AppDelegate {
                     continue
                 }
                 
-                let linkIsAllowed = StoryboardIdentifier.allValues.contains(storyboardIdentifier) // Check to see if this is an allowed viewcontroller.
+                let linkIsAllowed = StoryboardIdentifier.deepLinkable.contains(storyboardIdentifier) // Check to see if this is an allowed viewcontroller.
                 
                 if linkIsAllowed {
                     let newViewController = storyboard!.instantiateViewControllerWithIdentifier(storyboardIdentifier.rawValue)
@@ -112,7 +163,7 @@ extension AppDelegate {
                     switch (storyboardIdentifier) {
                     case .SiteListPageViewController:
                         viewControllers.append(newViewController) // Create the view controller and append it to the navigation view controller stack
-                    case .FormViewController:
+                    case .FormViewNavigationController, .FormViewController:
                         navController.presentViewController(newViewController, animated: false, completion: { () -> Void in
                             // ...
                         })
@@ -126,42 +177,7 @@ extension AppDelegate {
         
     }
     
-    var supportedSchemes: [String]? {
-        if let info = NSBundle.mainBundle().infoDictionary as [String : AnyObject]? {
-            var schemes = [String]() // Create an empty array we can later set append available schemes.
-            if let bundleURLTypes = info["CFBundleURLTypes"] as? [AnyObject] {
-                for (index, _) in bundleURLTypes.enumerate() {
-                    if let urlTypeDictionary = bundleURLTypes[index] as? [String : AnyObject] {
-                        if let urlScheme = urlTypeDictionary["CFBundleURLSchemes"] as? [String] {
-                            schemes += urlScheme // We've found the supported schemes appending to the array.
-                            return schemes
-                        }
-                    }
-                }
-            }
-        }
-        return nil
-    }
     
-    private func customizeAppAppearance() {
-        UIApplication.sharedApplication().statusBarStyle = .LightContent
-        // Change the font and size of nav bar text.
-        window?.tintColor = Theme.Color.windowTintColor
-        
-        if let navBarFont = Theme.Font.navBarTitleFont {
-            
-            let navBarColor: UIColor = Theme.Color.navBarColor
-            UINavigationBar.appearance().barTintColor = navBarColor
-            UINavigationBar.appearance().tintColor = Theme.Color.windowTintColor
-            
-            let navBarAttributesDictionary: [String: AnyObject]? = [
-                NSForegroundColorAttributeName: Theme.Color.navBarTextColor,
-                NSFontAttributeName: navBarFont
-            ]
-            
-            UINavigationBar.appearance().titleTextAttributes = navBarAttributesDictionary
-        }
-    }
     
     
     // MARK: Notifications
@@ -173,8 +189,8 @@ extension AppDelegate {
             // tabBarController.viewControllers = tabViewControllersForStore(store)
             
             print("Defaults Changed")
-//            let userInfo = WatchSessionManager.sharedManager.transferUserInfo(userDefaults.dictionaryRepresentation())
-//            print(userInfo)
+            //            let userInfo = WatchSessionManager.sharedManager.transferUserInfo(userDefaults.dictionaryRepresentation())
+            //            print(userInfo)
             let compInfo = WatchSessionManager.sharedManager.transferCurrentComplicationUserInfo(userDefaults.dictionaryRepresentation())
             print(compInfo)
         }
@@ -183,5 +199,47 @@ extension AppDelegate {
     private func registerInitialSettings(userDefaults: NSUserDefaults) {
         
     }
- }
+    
+    func setupNotificationSettings() {
+        print(">>> Entering \(__FUNCTION__) <<<")
+        // Specify the notification types.
+        let notificationTypes: UIUserNotificationType = [.Alert, .Sound, .Badge]
+        
+        // Register the notification settings.
+        let newNotificationSettings = UIUserNotificationSettings(forTypes: notificationTypes, categories: nil)
+        UIApplication.sharedApplication().registerUserNotificationSettings(newNotificationSettings)
+        
+        // TODO: Enabled remote notifications... need to get a server running.
+        // UIApplication.sharedApplication().registerForRemoteNotifications()
+        
+        UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(UIApplicationBackgroundFetchIntervalMinimum)
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+        UIApplication.sharedApplication().cancelAllLocalNotifications()
+    }
+    
+    
+    // TODO: Datasource needs to produce a signal, notification or callback so that the delegate can request premissions.
+    
+    // AppDataManagerNotificationDidChange Handler
+    func dataManagerDidChange(notification: NSNotification) {
+        
+        let sites = SitesDataSource.sharedInstance.sites
+        
+        if UIApplication.sharedApplication().currentUserNotificationSettings()?.types == .None || !sites.isEmpty {
+            setupNotificationSettings()
+        }
+        
+        UIApplication.sharedApplication().shortcutItems = nil
+        
+        let useCase = CommonUseCasesForShortcuts.ShowDetail.applicationShortcutItemType
+        
+        for (index, site) in sites.enumerate() {
+            
+            let mvm = site.generateSummaryModelViewModel()
+            
+            UIApplication.sharedApplication().shortcutItems?.append(UIApplicationShortcutItem(type: useCase, localizedTitle: mvm.nameLabel, localizedSubtitle: mvm.urlLabel, icon: nil, userInfo: ["uuid": site.uuid.UUIDString, "siteIndex": index]))
+        }
+    }
+    
+}
 

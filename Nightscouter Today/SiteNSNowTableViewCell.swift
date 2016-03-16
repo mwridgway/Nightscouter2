@@ -26,7 +26,6 @@ class SiteNSNowTableViewCell: UITableViewCell {
     @IBOutlet weak private var siteSgvLabel: UILabel!
     @IBOutlet weak private var siteDirectionLabel: UILabel!
     
-    
     private var dataSource: TableViewRowWithOutCompassDataSource?
     private var delegate: TableViewRowWithOutCompassDelegate?
     
@@ -40,12 +39,15 @@ class SiteNSNowTableViewCell: UITableViewCell {
         self.dataSource = dataSource
         self.delegate = delegate
         
+        siteLastReadingHeader.text = LocalizedString.lastReadingLabel.localized
         siteLastReadingLabel.text = dataSource.lastReadingDate.timeAgoSinceNow()
         siteLastReadingLabel.textColor = delegate?.lastReadingColor
         
+        siteBatteryHeader.text = LocalizedString.batteryLabel.localized
         siteBatteryLabel.text = dataSource.batteryLabel
         siteBatteryLabel.textColor = delegate?.batteryColor
         
+        siteRawHeader.text = LocalizedString.rawLabel.localized
         siteRawLabel?.hidden = dataSource.rawHidden
         siteRawHeader?.hidden = dataSource.rawHidden
         

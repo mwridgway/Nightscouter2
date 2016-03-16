@@ -30,45 +30,21 @@ class SiteTableViewCell: UITableViewCell {
         // Initialization code
         self.backgroundColor = UIColor.clearColor()
     }
-//    var site: Site? {
-//        didSet{
-//            self.client?.fetchConfigurationData().startWithNext { site in
-//                if let site = site {
-//                    SitesDataSource.sharedInstance.updateSite(site)
-//                }
-//            }
-//            
-//            self.client?.fetchSocketData().observeNext { site in
-//                SitesDataSource.sharedInstance.updateSite(site)
-//                
-//                let model = site.generateSummaryModelViewModel()
-//                self.configure(withDataSource: model, delegate: model)
-//            }
-//            
-//
-//        }
-//    }
-//    lazy var client: NightscoutSocketIOClient? = self.initalizeClient()
-//    
-//    func initalizeClient() -> NightscoutSocketIOClient? {
-//        
-//        if let site = site {
-//            return NightscoutSocketIOClient(site: site)
-//        }
-//        return nil
-//    }
-//    
     
     func configure(withDataSource dataSource: TableViewRowWithCompassDataSource, delegate: TableViewRowWithCompassDelegate?) {
         self.dataSource = dataSource
         self.delegate = delegate
         
+        
+        siteLastReadingHeader.text = LocalizedString.lastReadingLabel.localized
         siteLastReadingLabel.text = dataSource.lastReadingDate.timeAgoSinceNow()
         siteLastReadingLabel.textColor = delegate?.lastReadingColor
         
+        siteBatteryHeader.text = LocalizedString.batteryLabel.localized
         siteBatteryLabel.text = dataSource.batteryLabel
         siteBatteryLabel.textColor = delegate?.batteryColor
         
+        siteRawHeader.text = LocalizedString.rawLabel.localized
         siteRawLabel?.hidden = dataSource.rawHidden
         siteRawHeader?.hidden = dataSource.rawHidden
         

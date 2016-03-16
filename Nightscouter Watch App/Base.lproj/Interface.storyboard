@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="gRC-1z-59n">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Izo-4h-cj6">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="9515"/>
     </dependencies>
     <scenes>
@@ -51,127 +51,6 @@
                 </glanceController>
             </objects>
             <point key="canvasLocation" x="220" y="435"/>
-        </scene>
-        <!--Nightscouter-->
-        <scene sceneID="o9p-CN-OBn">
-            <objects>
-                <controller identifier="SitesTableInterfaceController" title="Nightscouter" hidesWhenLoading="NO" alwaysBounce="YES" id="gRC-1z-59n" customClass="SitesTableInterfaceController" customModule="Nightscouter_Watch_App_Extension">
-                    <items>
-                        <table alignment="center" id="OvQ-Ra-LcR" userLabel="Sites List">
-                            <items>
-                                <tableRow identifier="SiteRowController" id="rZQ-1X-hDf" customClass="SiteRowController" customModule="Nightscouter_Watch_App_Extension">
-                                    <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" id="x9O-eq-G91">
-                                        <items>
-                                            <group width="1" alignment="center" id="KAe-ZJ-BpV">
-                                                <items>
-                                                    <label alignment="left" verticalAlignment="center" text="----" id="TSZ-6R-VzL">
-                                                        <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
-                                                    </label>
-                                                    <label alignment="right" verticalAlignment="center" text="----" id="7EN-VK-OY1">
-                                                        <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
-                                                    </label>
-                                                </items>
-                                            </group>
-                                            <group width="1" alignment="center" verticalAlignment="center" id="Z8z-2n-dsn">
-                                                <items>
-                                                    <group alignment="left" verticalAlignment="center" id="rvI-LK-woY">
-                                                        <items>
-                                                            <label alignment="left" text="LR" id="pnE-3E-iS0">
-                                                                <color key="textColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
-                                                                <fontDescription key="font" type="boldSystem" pointSize="8"/>
-                                                            </label>
-                                                            <timer width="35.5" alignment="left" verticalAlignment="center" hidden="YES" enabled="YES" format="short" previewedSeconds="0" id="q4X-Bc-8u9">
-                                                                <fontDescription key="font" type="system" pointSize="11"/>
-                                                                <calendarUnit key="units" year="YES" month="YES" day="YES" hour="YES" minute="YES" weekOfMonth="YES"/>
-                                                            </timer>
-                                                            <label alignment="left" verticalAlignment="center" text="---" id="tdp-9Y-6Cz">
-                                                                <fontDescription key="font" type="system" pointSize="11"/>
-                                                            </label>
-                                                        </items>
-                                                    </group>
-                                                    <group alignment="right" verticalAlignment="center" id="uXb-BD-dFy">
-                                                        <items>
-                                                            <label alignment="right" verticalAlignment="center" text="---" id="ZP9-NC-q0l">
-                                                                <fontDescription key="font" type="system" pointSize="11"/>
-                                                            </label>
-                                                        </items>
-                                                    </group>
-                                                </items>
-                                            </group>
-                                            <group width="1" alignment="center" verticalAlignment="bottom" id="yv9-05-EWN">
-                                                <items>
-                                                    <group alignment="left" verticalAlignment="center" id="N5E-W6-5od">
-                                                        <items>
-                                                            <label alignment="left" text="B" id="x09-on-pAm">
-                                                                <color key="textColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
-                                                                <fontDescription key="font" type="boldSystem" pointSize="8"/>
-                                                            </label>
-                                                            <label alignment="left" verticalAlignment="center" text="--%" id="o07-Ek-pBQ">
-                                                                <fontDescription key="font" style="UICTFontTextStyleCaption2"/>
-                                                            </label>
-                                                        </items>
-                                                    </group>
-                                                    <group alignment="right" verticalAlignment="center" id="aXJ-Kj-7YH">
-                                                        <items>
-                                                            <label alignment="left" text="R" id="1H6-fa-zoe">
-                                                                <color key="textColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
-                                                                <fontDescription key="font" type="boldSystem" pointSize="8"/>
-                                                            </label>
-                                                            <label alignment="left" verticalAlignment="center" text="--- : ---" id="X2r-er-hEe">
-                                                                <fontDescription key="font" style="UICTFontTextStyleCaption2"/>
-                                                            </label>
-                                                        </items>
-                                                    </group>
-                                                </items>
-                                            </group>
-                                        </items>
-                                        <edgeInsets key="margins" left="5" right="5" top="8" bottom="8"/>
-                                    </group>
-                                    <connections>
-                                        <outlet property="backgroundGroup" destination="x9O-eq-G91" id="L21-YT-pBC"/>
-                                        <outlet property="siteBatteryHeader" destination="x09-on-pAm" id="EMn-lS-1Gn"/>
-                                        <outlet property="siteBatteryLabel" destination="o07-Ek-pBQ" id="No7-td-Wz7"/>
-                                        <outlet property="siteDeltaLabel" destination="ZP9-NC-q0l" id="VIv-6H-Fs5"/>
-                                        <outlet property="siteLastReadingHeader" destination="pnE-3E-iS0" id="YST-WI-gaz"/>
-                                        <outlet property="siteLastReadingLabel" destination="tdp-9Y-6Cz" id="SkP-ZJ-eyb"/>
-                                        <outlet property="siteNameLabel" destination="TSZ-6R-VzL" id="U2L-bn-TeU"/>
-                                        <outlet property="siteRawGroup" destination="aXJ-Kj-7YH" id="ptj-5u-cRy"/>
-                                        <outlet property="siteRawHeader" destination="1H6-fa-zoe" id="LeV-jB-Jgl"/>
-                                        <outlet property="siteRawLabel" destination="X2r-er-hEe" id="bX4-28-VIh"/>
-                                        <outlet property="siteSgvLabel" destination="7EN-VK-OY1" id="Qij-NE-YHk"/>
-                                        <outlet property="siteUpdateTimer" destination="q4X-Bc-8u9" id="cxJ-sq-aMd"/>
-                                    </connections>
-                                </tableRow>
-                                <tableRow identifier="SiteEmptyRowController" selectable="NO" id="V9F-Yh-VmV" customClass="SiteEmptyRowController" customModule="Nightscouter_Watch_App_Extension">
-                                    <group key="rootItem" width="1" alignment="left" id="fVP-T8-xCS">
-                                        <items>
-                                            <label alignment="center" verticalAlignment="center" text="No Sites Available" id="iaN-Cg-8M8">
-                                                <fontDescription key="font" style="UICTFontTextStyleCaption2"/>
-                                            </label>
-                                        </items>
-                                    </group>
-                                    <connections>
-                                        <outlet property="messageLabel" destination="iaN-Cg-8M8" id="tii-Ek-ClN"/>
-                                    </connections>
-                                </tableRow>
-                            </items>
-                        </table>
-                    </items>
-                    <menu key="menu" id="L1x-5b-oqA">
-                        <items>
-                            <menuItem title="Update" image="RefreshIcon" id="DN1-yO-ebD">
-                                <connections>
-                                    <action selector="updateButton" destination="gRC-1z-59n" id="f5O-TP-kmD"/>
-                                </connections>
-                            </menuItem>
-                        </items>
-                    </menu>
-                    <connections>
-                        <outlet property="sitesTable" destination="OvQ-Ra-LcR" id="ifn-7F-vf3"/>
-                    </connections>
-                </controller>
-            </objects>
-            <point key="canvasLocation" x="220" y="175"/>
         </scene>
         <!--SiteDetail-->
         <scene sceneID="BvE-GE-ZIc">
@@ -242,6 +121,143 @@
                 </controller>
             </objects>
             <point key="canvasLocation" x="468" y="182.5"/>
+        </scene>
+        <!--Nightscouter-->
+        <scene sceneID="IbD-0l-hEC">
+            <objects>
+                <controller identifier="SitesTableInterfaceController" title="Nightscouter" hidesWhenLoading="NO" alwaysBounce="YES" id="Izo-4h-cj6" customClass="SitesTableInterfaceController" customModule="Nightscouter_Watch_App_Extension">
+                    <items>
+                        <label height="19.5" alignment="center" text="Loading..." id="vVa-bL-hHp"/>
+                        <table alignment="center" id="Zyq-5X-Xxy" userLabel="Sites List">
+                            <items>
+                                <tableRow identifier="SiteRowController" id="RUO-UK-K1x" customClass="SiteRowController" customModule="Nightscouter_Watch_App_Extension">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" id="H1Z-d1-V2f">
+                                        <items>
+                                            <group width="1" alignment="center" id="lfd-yZ-NqH">
+                                                <items>
+                                                    <label width="0.59999999999999998" alignment="left" verticalAlignment="center" text="----" numberOfLines="0" id="NZZ-LB-F0r">
+                                                        <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                                    </label>
+                                                    <label alignment="right" verticalAlignment="center" text="----" id="xPa-fP-oBo">
+                                                        <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                                    </label>
+                                                </items>
+                                            </group>
+                                            <group width="1" alignment="center" verticalAlignment="center" id="Eac-D5-kvS">
+                                                <items>
+                                                    <group alignment="left" verticalAlignment="center" id="XJT-Ii-8dX">
+                                                        <items>
+                                                            <label alignment="left" text="LR" id="tyV-Ng-4fc">
+                                                                <color key="textColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
+                                                                <fontDescription key="font" type="boldSystem" pointSize="8"/>
+                                                            </label>
+                                                            <timer width="35.5" alignment="left" verticalAlignment="center" enabled="YES" format="short" id="oN5-go-AdO">
+                                                                <fontDescription key="font" type="system" pointSize="11"/>
+                                                                <calendarUnit key="units" day="YES" hour="YES" minute="YES"/>
+                                                            </timer>
+                                                            <label alignment="left" verticalAlignment="center" hidden="YES" text="-- --- --" id="E01-9J-Dai">
+                                                                <fontDescription key="font" type="system" pointSize="11"/>
+                                                            </label>
+                                                        </items>
+                                                    </group>
+                                                    <label alignment="right" verticalAlignment="center" text="---" id="554-3p-U1F">
+                                                        <fontDescription key="font" type="system" pointSize="11"/>
+                                                    </label>
+                                                </items>
+                                            </group>
+                                            <group width="1" alignment="center" verticalAlignment="bottom" id="ucQ-5U-fGy">
+                                                <items>
+                                                    <group alignment="left" verticalAlignment="center" id="KCI-t5-oIc">
+                                                        <items>
+                                                            <label alignment="left" text="B" id="EJ0-OT-8dz">
+                                                                <color key="textColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
+                                                                <fontDescription key="font" type="boldSystem" pointSize="8"/>
+                                                            </label>
+                                                            <label alignment="left" verticalAlignment="center" text="--%" id="XRi-6d-9HC">
+                                                                <fontDescription key="font" style="UICTFontTextStyleCaption2"/>
+                                                            </label>
+                                                        </items>
+                                                    </group>
+                                                    <group alignment="right" verticalAlignment="center" id="xMM-iJ-B3b">
+                                                        <items>
+                                                            <label alignment="left" text="R" id="nnS-xd-X1d">
+                                                                <color key="textColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
+                                                                <fontDescription key="font" type="boldSystem" pointSize="8"/>
+                                                            </label>
+                                                            <label alignment="left" verticalAlignment="center" text="--- : ---" id="fcg-gM-fbM">
+                                                                <fontDescription key="font" style="UICTFontTextStyleCaption2"/>
+                                                            </label>
+                                                        </items>
+                                                    </group>
+                                                </items>
+                                            </group>
+                                        </items>
+                                        <edgeInsets key="margins" left="5" right="5" top="8" bottom="8"/>
+                                    </group>
+                                    <connections>
+                                        <outlet property="backgroundGroup" destination="H1Z-d1-V2f" id="Sbt-IW-f3L"/>
+                                        <outlet property="siteBatteryHeader" destination="EJ0-OT-8dz" id="2A8-wS-4sg"/>
+                                        <outlet property="siteBatteryLabel" destination="XRi-6d-9HC" id="htq-nW-H8r"/>
+                                        <outlet property="siteDeltaLabel" destination="554-3p-U1F" id="y27-7K-UBh"/>
+                                        <outlet property="siteLastReadingHeader" destination="tyV-Ng-4fc" id="Kz9-xv-prd"/>
+                                        <outlet property="siteLastReadingLabel" destination="E01-9J-Dai" id="qk0-b9-qgg"/>
+                                        <outlet property="siteNameLabel" destination="NZZ-LB-F0r" id="nVy-GN-vdS"/>
+                                        <outlet property="siteRawGroup" destination="xMM-iJ-B3b" id="Jps-KI-Tnj"/>
+                                        <outlet property="siteRawHeader" destination="nnS-xd-X1d" id="EPn-Z5-J4s"/>
+                                        <outlet property="siteRawLabel" destination="fcg-gM-fbM" id="XBQ-lQ-XgM"/>
+                                        <outlet property="siteSgvLabel" destination="xPa-fP-oBo" id="Xfq-Er-qvu"/>
+                                        <outlet property="siteUpdateTimer" destination="oN5-go-AdO" id="ijF-xx-RVc"/>
+                                    </connections>
+                                </tableRow>
+                                <tableRow identifier="SiteEmptyRowController" selectable="NO" id="V54-qa-xQ2" customClass="SiteEmptyRowController" customModule="Nightscouter_Watch_App_Extension">
+                                    <group key="rootItem" width="1" alignment="left" id="JgC-Ce-uHd">
+                                        <items>
+                                            <label alignment="center" verticalAlignment="center" text="No Sites Available" id="Tn2-pc-Lno">
+                                                <fontDescription key="font" style="UICTFontTextStyleCaption2"/>
+                                            </label>
+                                        </items>
+                                    </group>
+                                    <connections>
+                                        <outlet property="messageLabel" destination="Tn2-pc-Lno" id="gDN-sX-sKU"/>
+                                    </connections>
+                                </tableRow>
+                                <tableRow identifier="SiteUpdateRowController" selectable="NO" id="P8S-bM-df1" customClass="SiteUpdateRowController" customModule="Nightscouter_Watch_App_Extension">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" id="dSd-U5-F8c">
+                                        <items>
+                                            <label alignment="center" text="LAST ATTEMPTED UPDATE" id="1pr-f8-HfS">
+                                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="font" type="system" pointSize="8"/>
+                                            </label>
+                                            <label alignment="center" text="---" id="sf5-PT-eyd">
+                                                <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                            </label>
+                                        </items>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </group>
+                                    <connections>
+                                        <outlet property="siteLastReadingLabel" destination="sf5-PT-eyd" id="b57-i4-L0j"/>
+                                        <outlet property="siteLastReadingLabelHeader" destination="1pr-f8-HfS" id="HiM-Un-m61"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <menu key="menu" id="gqx-zc-qoU">
+                        <items>
+                            <menuItem title="Update" image="RefreshIcon" id="t8k-jo-33I">
+                                <connections>
+                                    <action selector="updateButton" destination="Izo-4h-cj6" id="Rlc-Mn-0JM"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                    <connections>
+                        <outlet property="sitesLoading" destination="vVa-bL-hHp" id="tL7-wi-yUw"/>
+                        <outlet property="sitesTable" destination="Zyq-5X-Xxy" id="Qc6-0A-4We"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="220" y="-1"/>
         </scene>
     </scenes>
 </document>

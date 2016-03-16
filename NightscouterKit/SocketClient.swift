@@ -89,8 +89,7 @@ extension NightscoutSocketIOClient {
                 return self.site
         }
     }
-    
-    
+        
     public func fetchSocketData() -> Signal<Site, NSError> {
         return self.signal.map { data in
             let json = JSON(data[0])
@@ -101,22 +100,10 @@ extension NightscoutSocketIOClient {
             return self.site
         }
     }
-    
-    //    public func mapToSite() -> Signal<Site, NSError> {
-    //        return self.signal.map { data in
-    //            self.addConfigurationDataToSite(self.site)
-    //            self.addValuesFromJson(self.site, data: data)
-    //
-    //            SitesDataSource.sharedInstance.updateSite(self.site)
-    //
-    //            return self.site
-    //        }
-    //    }
-    
 }
 
 public enum ClientNotifications: String {
-    case comNightscouterDataUpdate
+    case NightscouterDataUpdate
 }
 
 // Data events that I'm aware of.

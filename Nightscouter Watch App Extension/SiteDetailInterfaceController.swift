@@ -53,7 +53,6 @@ class SiteDetailInterfaceController: WKInterfaceController {
         
         guard let site = self.site else {
             
-
             let image = NSAssetKitWatchOS.imageOfWatchFace()
             compassImage.setImage(image)
             compassImage.setAlpha(0.5)

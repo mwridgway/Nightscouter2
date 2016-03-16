@@ -40,6 +40,7 @@ class SiteRowController: NSObject {
         siteNameLabel.setText(dataSource.nameLabel)
         
         // Last reading label
+        siteLastReadingHeader.setText(LocalizedString.lastReadingLabelShort.localized)
         siteLastReadingLabel.setText(PlaceHolderStrings.date)
         siteLastReadingLabel.setTextColor(PlaceHolderStrings.defaultColor.colorValue)
         siteLastReadingLabel.setHidden(true)
@@ -49,11 +50,13 @@ class SiteRowController: NSObject {
         siteUpdateTimer.setHidden(false)
 
         // Battery label
+        siteBatteryHeader.setText(LocalizedString.batteryLabelShort.localized)
         siteBatteryLabel.setText(dataSource.batteryLabel)
         siteBatteryLabel.setTextColor(delegate?.batteryColor)
         
         // Raw data
         siteRawGroup.setHidden(dataSource.rawHidden)
+        siteRawHeader.setText(LocalizedString.rawLabelShort.localized)
         siteRawLabel.setText(dataSource.rawFormatedLabel)
         siteRawLabel.setTextColor(delegate?.rawColor)
         

@@ -35,7 +35,23 @@ public enum LocalizedString: String {
     directionFlat,
     directionFortyFiveDown,
     directionSingleDown,
-    directionDoubleDown
+    directionDoubleDown,
+    viewTitleSettings,
+    
+    settingsPreventLocking,
+    settingsDefaultSite,
+    settingsDefaultSiteSubTitle,
+    settingsEditSite,
+    settingsEditSiteSubTitle,
+    settingsGoToWeb,
+    
+    emptyTableViewCellTitle,
+    
+    nightscoutTitleString,
+    
+    lastReadingLabel,
+    batteryLabel,
+    rawLabel
 }
 
 extension LocalizedString {
