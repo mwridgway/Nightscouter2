@@ -8,185 +8,200 @@
 
 import Foundation
 
-public protocol SitesDataSourceProvider: Dateable {
-    var sites: [Site] { get }
+public enum DefaultKey: String, RawRepresentable {
+    case sites, lastViewedSiteIndex, primarySiteUUID
 }
-public extension SitesDataSourceProvider {
-    var milliseconds: Double {
-        return AppConfiguration.Constant.knownMilliseconds.inThePast
+
+public class SitesDataSource: SiteStoreType {
+    // MARK: Persistence
+    
+    public static let sharedInstance = SitesDataSource()
+    
+    private init() {
+        self.defaults = NSUserDefaults(suiteName: AppConfiguration.sharedApplicationGroupSuiteName ) ?? NSUserDefaults.standardUserDefaults()
+        
+        let sessionManager = WatchSessionManager.sharedManager
+        self.sessionManager = sessionManager
+        self.sessionManager.store = self
+        self.sessionManager.startSession()
+        
+        #if os(watchOS)
+            self.sessionManager.requestCompanionAppUpdate()
+        #endif
     }
-}
-
-public enum StorageLocation: String {
-    case LocalKeyValue, iCLoudKeyValue
-}
-
-// move to a protocol for storage conformance
-public protocol StorageType {
-    var storageLocation: StorageLocation { get }
-    func getSites() -> [Site]
-    func createSite(site: Site) -> Bool
-    func updateSite(site: Site)  ->  Bool
-    func deleteSite(atIndex: Int) -> Bool
     
-    var lastViewedSite: Site { get }
+    private let defaults: NSUserDefaults
     
-    func saveData() -> Bool
-    func loadData() -> Bool
-}
-
-
-public class SitesDataSource: SitesDataSourceProvider {
-    private static let sharedAppGrouSuiteName: String = "group.com.nothingonline.nightscouter"
+    private let sessionManager: SessionManagerType
     
-    public var sites = [Site]() {
-        didSet {
-            let siteDict = sites.map { $0.encode() }
-            defaults.setObject(siteDict, forKey: DefaultKey.sites.rawValue)
+    public var storageLocation: StorageLocation { return .LocalKeyValueStore }
+    
+    public var sites: [Site] {
+        if let loaded = loadData() {
+            return loaded
         }
+        return []
     }
-    
-    public var milliseconds: Mills = AppConfiguration.Constant.knownMilliseconds.inThePast
     
     public var lastViewedSiteIndex: Int {
-        set {
-            defaults.setInteger(newValue, forKey: DefaultKey.lastViewedSiteIndex.rawValue)
-        }
         get {
             return defaults.integerForKey(DefaultKey.lastViewedSiteIndex.rawValue)
         }
-    }
-    
-    public var lastViewedSiteUUID: NSUUID? {
         set {
-            defaults.setObject(newValue?.UUIDString, forKey: DefaultKey.lastViewedSiteUUID.rawValue)
-        }
-        get {
-            guard let uuidString = defaults.objectForKey(DefaultKey.lastViewedSiteUUID.rawValue) as? String else {
-                return nil
+            if lastViewedSiteIndex != newValue {
+                // defaults.setInteger(newValue, forKey: DefaultKey.lastViewedSiteIndex.rawValue)
+                saveData([DefaultKey.lastViewedSiteIndex.rawValue: newValue])
             }
-            
-            return NSUUID(UUIDString: uuidString)
-        }
-    }
-    
-    public var primarySiteUUID: NSUUID? {
-        set {
-            defaults.setObject(newValue?.UUIDString, forKey: DefaultKey.primarySiteUUID.rawValue)
-        }
-        get {
-            guard let uuidString = defaults.objectForKey(DefaultKey.primarySiteUUID.rawValue) as? String else {
-                return nil
-            }
-            
-            return NSUUID(UUIDString: uuidString)
         }
     }
     
     public var primarySite: Site? {
-        return sites.filter{ $0.uuid == primarySiteUUID }.first
-    }
-    
-    private let defaults =  NSUserDefaults(suiteName: sharedAppGrouSuiteName) ?? NSUserDefaults.standardUserDefaults()
-    
-    private enum DefaultKey: String, RawRepresentable {
-        case sites, lastViewedSiteIndex, lastViewedSiteUUID, primarySiteUUID, complicationData
-    }
-    
-    public static let sharedInstance = SitesDataSource()
-    
-    private init(){
-        loadSitesFromDefaults()
-    }
-    
-    public func loadDefaults(fromDictionary dict: [String: AnyObject]) {
-        
-        if let sites = dict[DefaultKey.sites.rawValue] as? [[String: AnyObject]] {
-            self.sites = sites.flatMap { Site.decode($0) }
-            defaults.setObject(sites, forKey: DefaultKey.sites.rawValue)
-        }
-        
-        self.lastViewedSiteIndex = dict[DefaultKey.lastViewedSiteIndex.rawValue] as? Int ?? 0
-        if let uuidString = dict[DefaultKey.lastViewedSiteUUID.rawValue] as? String, uuid = NSUUID(UUIDString: uuidString) {
-            lastViewedSiteUUID = uuid
-        }
-        
-        if let uuidString = dict[DefaultKey.primarySiteUUID.rawValue] as? String, uuid = NSUUID(UUIDString: uuidString) {
-            primarySiteUUID = uuid
-        } else {
-            if !sites.isEmpty {
-                primarySiteUUID = sites[0].uuid
+        set{
+            if let site = newValue {
+                // defaults.setObject(site.uuid.UUIDString, forKey: DefaultKey.primarySiteUUID.rawValue)
+                saveData([DefaultKey.primarySiteUUID.rawValue: site.uuid.UUIDString])
             }
         }
-        
-    }
-    
-    // MARK: Persistence
-    
-    public func saveSitesToDefaults() {
-        let siteDict = sites.map { $0.encode() }
-        
-        defaults.setObject(siteDict, forKey: DefaultKey.sites.rawValue)
-        defaults.setInteger(lastViewedSiteIndex, forKey: DefaultKey.lastViewedSiteIndex.rawValue)
-        defaults.setObject(lastViewedSiteUUID?.UUIDString, forKey: DefaultKey.lastViewedSiteUUID.rawValue)
-        defaults.setObject(primarySiteUUID?.UUIDString, forKey: DefaultKey.primarySiteUUID.rawValue)
-    }
-    
-    public func loadSitesFromDefaults() {
-        if let sites = defaults.valueForKey(DefaultKey.sites.rawValue) as? [[String: AnyObject]] {
-            self.sites = sites.flatMap { Site.decode($0) }
-        }
-        
-        lastViewedSiteIndex = defaults.integerForKey(DefaultKey.lastViewedSiteIndex.rawValue)
-        
-        if let uuidString = defaults.stringForKey(DefaultKey.lastViewedSiteUUID.rawValue), uuid = NSUUID(UUIDString: uuidString) {
-            lastViewedSiteUUID = uuid
-        }
-        
-        if let uuidString = defaults.stringForKey(DefaultKey.primarySiteUUID.rawValue), uuid = NSUUID(UUIDString: uuidString) {
-            primarySiteUUID = uuid
-        } else {
-            if !sites.isEmpty {
-                primarySiteUUID = sites[0].uuid
+        get {
+            if let uuidString = defaults.objectForKey(DefaultKey.primarySiteUUID.rawValue) as? String {
+                return sites.filter { $0.uuid.UUIDString == uuidString }.first
+            } else if let firstSite = sites.first {
+                return firstSite
             }
+            return nil
         }
     }
     
     // MARK: Array modification methods
-    
-    public func addSite(site: Site, atIndex: Int?) {
-        // FIXME: The site isn't be matched correctly.
-        if sites.isEmpty {
-            primarySiteUUID = site.uuid
+    public func createSite(site: Site, atIndex index: Int?) -> Bool {
+        var initial: [Site] = self.sites
+        
+        if initial.isEmpty {
+            primarySite = site
         }
-        if let indexOptional = atIndex where !sites.contains(site){
-            if (sites.count >= indexOptional) {
-                sites.insert(site, atIndex: indexOptional )
-            }
+        
+        if let index = index {
+            initial.insert(site, atIndex: index)
         } else {
-            sites.append(site)
+            initial.append(site)
         }
+        
+        let siteDict = initial.map { $0.encode() }
+        
+        saveData([DefaultKey.sites.rawValue: siteDict])
+        
+        return initial.contains(site)
     }
     
-    public func updateSite(site: Site)  ->  Void {
-        sites.insertOrUpdate(site)
+    public func updateSite(site: Site)  ->  Bool {
+        
+        var initial = sites
+        
+        let success = initial.insertOrUpdate(site)
+        
+        let siteDict = initial.map { $0.encode() }
+        
+        saveData([DefaultKey.sites.rawValue: siteDict])
+        
+        return success
     }
     
-    public func removeSite(atIndex: Int) {
-        if atIndex <= sites.count - 1 {
-            let site = sites[atIndex]
-            sites.removeAtIndex(atIndex)
-            AppConfiguration.keychain[site.uuid.UUIDString] = nil
-            
-            if primarySiteUUID == site.uuid {
-                primarySiteUUID = nil
-            }
-        }
+    public func deleteSite(site: Site) -> Bool {
+        
+        var initial = sites
+        let success = initial.remove(site)
+        AppConfiguration.keychain[site.uuid.UUIDString] = nil
+        
         if sites.isEmpty {
             lastViewedSiteIndex = 0
-            lastViewedSiteUUID = nil
-            primarySiteUUID = nil
+            primarySite = nil
         }
+        
+        let siteDict = initial.map { $0.encode() }
+        saveData([DefaultKey.sites.rawValue: siteDict])
+        
+        return success
     }
     
+    public func clearAllSites() -> Bool {
+        var initial = sites
+        initial.removeAll()
+        
+        saveData([DefaultKey.sites.rawValue: []])
+        
+        return initial.isEmpty
+    }
+    
+    public func handleApplicationContextPayload(payload: [String : AnyObject]) {
+        
+        if let sites = payload[DefaultKey.sites.rawValue] as? ArrayOfDictionaries {
+            defaults.setObject(sites, forKey: DefaultKey.sites.rawValue)
+        } else {
+            print("No sites were found.")
+        }
+        
+        if let lastViewedSiteIndex = payload[DefaultKey.lastViewedSiteIndex.rawValue] as? Int {
+            self.lastViewedSiteIndex = lastViewedSiteIndex
+        } else {
+            print("No lastViewedIndex was found.")
+        }
+        
+        if let uuidString = payload[DefaultKey.primarySiteUUID.rawValue] as? String {
+            self.primarySite = sites.filter{ $0.uuid.UUIDString == uuidString }.first
+        } else {
+            print("No primarySiteUUID was found.")
+        }
+        
+        if let action = payload["action"] as? String {
+            print(action)
+            for site in sites {
+                #if os(iOS)
+                    dispatch_async(dispatch_get_main_queue()) {
+                        let socket = NightscoutSocketIOClient(site: site)
+                        socket.fetchConfigurationData().startWithNext { racSite in
+                            // if let racSite = racSite {
+                            // self.updateSite(racSite)
+                            // }
+                        }
+                        socket.fetchSocketData().observeNext { racSite in
+                            self.updateSite(racSite)
+                        }
+                    }
+                #endif
+            }
+        }
+        
+        defaults.synchronize()
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(DataUpdatedNotification, object: nil)
+    }
+    
+    public func loadData() -> [Site]? {
+        if let sites = defaults.arrayForKey(DefaultKey.sites.rawValue) as? ArrayOfDictionaries {
+            return sites.flatMap { Site.decode($0) }
+        }
+        
+        return []
+    }
+    
+    public func saveData(dictionary: [String: AnyObject]) -> (savedLocally: Bool, updatedApplicationContext: Bool) {
+        
+        var successfullSave: Bool = false
+        
+        for (key, object) in dictionary {
+            defaults.setObject(object, forKey: key)
+        }
+        
+        successfullSave = defaults.synchronize()
+        
+        var successfullAppContextUpdate = true
+        do {
+            try sessionManager.updateApplicationContext(dictionary)
+        } catch {
+            successfullAppContextUpdate = false
+            print("error")
+        }
+        
+        return (successfullSave, successfullAppContextUpdate)
+    }
 }

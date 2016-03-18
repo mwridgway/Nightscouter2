@@ -38,7 +38,7 @@ extension Site: Encodable, Decodable {
         static let complicationTimeline = "complicationTimeline"
     }
     
-    func encode() -> [String: AnyObject] {
+    public func encode() -> [String: AnyObject] {
         let encodedSgvs: [[String : AnyObject]] = sgvs.flatMap{ $0.encode() }
         let encodedCals: [[String : AnyObject]] = cals.flatMap{ $0.encode() }
         let encodedMgbs: [[String : AnyObject]] = mbgs.flatMap{ $0.encode() }
@@ -48,7 +48,7 @@ extension Site: Encodable, Decodable {
         return [JSONKey.url : url.absoluteString, JSONKey.overrideScreenLock : overrideScreenLock, JSONKey.disabled: disabled, JSONKey.uuid: uuid.UUIDString, JSONKey.configuration: configuration?.encode() ?? "", JSONKey.sgvs: encodedSgvs, JSONKey.cals: encodedCals, JSONKey.mbgs: encodedMgbs, JSONKey.deviceStatus: encodedDeviceStatus, JSONKey.complicationTimeline: encodedComplicationTimeline]
     }
     
-    static func decode(dict: [String: AnyObject]) -> Site? {
+    public static func decode(dict: [String: AnyObject]) -> Site? {
         
         guard let urlString = dict[JSONKey.url] as? String, url = NSURL(string: urlString), uuidString = dict[JSONKey.uuid] as? String, uuid = NSUUID(UUIDString: uuidString) else {
             return nil
@@ -99,7 +99,7 @@ extension ServerConfiguration: Encodable, Decodable {
         static let settings = "settings"
     }
     
-    func encode() -> [String: AnyObject] {
+    public func encode() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
         dict[JSONKey.status] = status
         dict[JSONKey.apiEnabled] = apiEnabled
@@ -113,8 +113,7 @@ extension ServerConfiguration: Encodable, Decodable {
         
         return dict
     }
-    
-    static func decode(dict: [String: AnyObject]) -> ServerConfiguration? {
+    public static func decode(dict: [String: AnyObject]) -> ServerConfiguration? {
         
         guard let status = dict[JSONKey.status] as? String,
             apiEnabled = dict[JSONKey.apiEnabled] as? Bool,
@@ -170,7 +169,7 @@ extension Settings: Encodable, Decodable {
         static let thresholds = "thresholds"
     }
     
-    func encode() -> [String : AnyObject] {
+    public func encode() -> [String : AnyObject] {
         return [
             JSONKey.units: units.description,
             JSONKey.timeFormat: timeFormat,
@@ -197,7 +196,7 @@ extension Settings: Encodable, Decodable {
         ]
     }
     
-    static func decode(dict: [String: AnyObject]) -> Settings? {
+    public static func decode(dict: [String: AnyObject]) -> Settings? {
         let json = JSON(dict)
         let units = Units(rawValue: json[Settings.JSONKey.units].stringValue) ?? .Mmol
         let timeFormat = json[Settings.JSONKey.timeFormat].int ?? 12
@@ -245,7 +244,7 @@ extension Thresholds: Encodable, Decodable {
         static let bgTargetTop = "bgTargetTop"
     }
     
-    func encode() -> [String : AnyObject] {
+    public func encode() -> [String : AnyObject] {
         return [
             JSONKey.bgHigh: bgHigh,
             JSONKey.bgLow: bgLow,
@@ -254,7 +253,7 @@ extension Thresholds: Encodable, Decodable {
         ]
     }
     
-    static func decode(dict: [String: AnyObject]) -> Thresholds? {
+    public static func decode(dict: [String: AnyObject]) -> Thresholds? {
         guard let bgHigh = dict[JSONKey.bgHigh] as? Double, bgLow =  dict[JSONKey.bgLow] as? Double, bgTargetBottom =  dict[JSONKey.bgTargetBottom] as? Double, bgTargetTop =  dict[JSONKey.bgTargetTop] as? Double else {
             return nil
         }
@@ -271,10 +270,11 @@ extension Calibration: Encodable, Decodable {
         static let mills = "mills"
     }
     
-    func encode() -> [String : AnyObject] {
+    public func encode() -> [String : AnyObject] {
         return [JSONKey.slope : slope, JSONKey.intercept: intercept, JSONKey.mills: milliseconds, JSONKey.scale: scale]
     }
-    static func decode(dict: [String : AnyObject]) -> Calibration? {
+    
+    public static func decode(dict: [String : AnyObject]) -> Calibration? {
         let json = JSON(dict)
         
         guard let slope = json[JSONKey.slope].double,
@@ -295,7 +295,7 @@ extension MeteredGlucoseValue: Encodable {
         static let mgdl = "mgdl"
     }
     
-    func encode() -> [String : AnyObject] {
+    public func encode() -> [String : AnyObject] {
         return [JSONKey.mills: milliseconds, JSONKey.mgdl: mgdl, JSONKey.device: device.description]
     }
     
@@ -325,11 +325,11 @@ extension SensorGlucoseValue: Encodable, Decodable {
         static let mgdl = "mgdl"
     }
     
-    func encode() -> [String : AnyObject] {
+    public func encode() -> [String : AnyObject] {
         return [JSONKey.device: device.description, JSONKey.direction: direction.rawValue, JSONKey.filtered: filtered, JSONKey.mills: milliseconds, JSONKey.noise: noise.rawValue, JSONKey.rssi: rssi, JSONKey.unfiltered: unfiltered, JSONKey.mgdl: mgdl]
     }
     
-    static func decode(dict: [String : AnyObject]) -> SensorGlucoseValue? {
+    public static func decode(dict: [String : AnyObject]) -> SensorGlucoseValue? {
         
         let json = JSON(dict)
         guard let deviceString = json[JSONKey.device].string, mgdl = json[JSONKey.mgdl].double, mill = json[JSONKey.mills].double, directionString = json[JSONKey.direction].string, rssi = json[JSONKey.rssi].int, unfiltered = json[JSONKey.unfiltered].double, filtered = json[JSONKey.filtered].double, noiseInt = json[JSONKey.noise].int else {
@@ -354,11 +354,11 @@ extension DeviceStatus: Encodable, Decodable {
         static let battery = "battery"
     }
     
-    func encode() -> [String : AnyObject] {
+    public func encode() -> [String : AnyObject] {
         return [JSONKey.mills: milliseconds, JSONKey.uploaderBattery: uploaderBattery]
     }
     
-    static func decode(dict: [String : AnyObject]) -> DeviceStatus? {
+    public static func decode(dict: [String : AnyObject]) -> DeviceStatus? {
         let json = JSON(dict)
         
         guard let mills = json[JSONKey.mills].double, uploaderBattery = json[JSONKey.uploaderBattery].int else {
@@ -387,7 +387,7 @@ extension ComplicationTimelineEntry: Encodable, Decodable {
         
     }
     
-    func encode() -> [String : AnyObject] {
+    public func encode() -> [String : AnyObject] {
         return [
             JSONKey.lastReadingDate: lastReadingDate,
             JSONKey.rawLabel: rawLabel,
@@ -399,9 +399,9 @@ extension ComplicationTimelineEntry: Encodable, Decodable {
             JSONKey.direction: direction.rawValue,
             JSONKey.noise: rawNoise.rawValue
         ]
-        
     }
-    static func decode(dict: [String : AnyObject]) -> ComplicationTimelineEntry? {
+    
+    public static func decode(dict: [String : AnyObject]) -> ComplicationTimelineEntry? {
         
         let json = JSON(dict)
         return ComplicationTimelineEntry(

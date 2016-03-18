@@ -80,3 +80,9 @@ extension DeviceStatus: ColorBoundable {
         return self.desiredColorState(forValue: Double(self.uploaderBattery))
     }
 }
+
+extension DeviceStatus: Hashable {
+    public var hashValue: Int {
+        return uploaderBattery.hashValue + date.hashValue
+    }
+}

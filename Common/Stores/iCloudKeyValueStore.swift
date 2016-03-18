@@ -12,7 +12,7 @@ class iCloudKeyValueStore {
     // MARK: iCloud Key Store Changed
     private let iCloudKeyValueStore: NSUbiquitousKeyValueStore
     
-    init () {
+    init() {
         iCloudKeyValueStore = NSUbiquitousKeyValueStore.defaultStore()
         
         NSNotificationCenter.defaultCenter().addObserver(self,

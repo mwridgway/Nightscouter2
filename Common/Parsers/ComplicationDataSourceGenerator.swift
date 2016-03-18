@@ -8,17 +8,11 @@
 
 import Foundation
 
-
-public protocol D {
-    var primarySite: Site? { get }
-    func generateComplicationDataForPrimarySite() -> [ComplicationTimelineEntry]
-}
-
 public protocol ComplicationDataSourceGenerator {
     var oldestComplicationData: ComplicationTimelineEntry? { get }
     var latestComplicationData: ComplicationTimelineEntry? { get }
     var complicationUpdateInterval: NSTimeInterval { get }
-
+    
     func generateComplicationData(forSite site: Site) -> [ComplicationTimelineEntry]
     func generateComplicationData(forConfiguration configuration: ServerConfiguration, sgvs:[SensorGlucoseValue], calibrations:[Calibration]) -> [ComplicationTimelineEntry]
     
@@ -27,7 +21,7 @@ public protocol ComplicationDataSourceGenerator {
 
 public extension ComplicationDataSourceGenerator {
     var complicationUpdateInterval: NSTimeInterval { return 60.0 * 30.0 }
-
+    
     var nextRequestedComplicationUpdateDate: NSDate {
         guard let latestComplicationData = latestComplicationData else {
             return NSDate(timeIntervalSinceNow: complicationUpdateInterval)
@@ -188,4 +182,3 @@ extension Site {
         self.complicationTimeline = generateComplicationData(forSite: self)
     }
 }
-

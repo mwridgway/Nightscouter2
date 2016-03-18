@@ -18,8 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var launchedShortcutItem: String?
     
     override init() {
+        SitesDataSource.sharedInstance.sites
         super.init()
-        WatchSessionManager.sharedManager.startSession()
     }
     
     deinit {
@@ -64,7 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         
         // Save data.
-        SitesDataSource.sharedInstance.saveSitesToDefaults()
+//        SitesDataSource.sharedInstance.saveSitesToDefaults()
     }
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
@@ -191,8 +191,8 @@ extension AppDelegate {
             print("Defaults Changed")
             //            let userInfo = WatchSessionManager.sharedManager.transferUserInfo(userDefaults.dictionaryRepresentation())
             //            print(userInfo)
-            let compInfo = WatchSessionManager.sharedManager.transferCurrentComplicationUserInfo(userDefaults.dictionaryRepresentation())
-            print(compInfo)
+//            let compInfo = WatchSessionManager.sharedManager.transferCurrentComplicationUserInfo(userDefaults.dictionaryRepresentation())
+//            print(compInfo)
         }
     }
     

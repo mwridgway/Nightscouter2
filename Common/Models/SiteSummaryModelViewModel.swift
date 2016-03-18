@@ -191,4 +191,3 @@ public struct SiteSummaryModelViewModel: SiteSummaryModelViewModelDataSource, Si
         
     }
 }
-

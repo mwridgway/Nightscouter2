@@ -23,7 +23,17 @@ public struct Site: Dateable, CustomStringConvertible {
     
     // public var allowNotifications: Bool // Will be used when we support push notifications. Future addition.
     // public var treatments: [Treatment] = [] // Will be used when we support display of treatments. Future addition.
-
+    /*
+    public var nextRefreshDate: NSDate {
+    let date = self.date.dateByAddingTimeInterval(60.0 * 4)
+    print("iOS nextRefreshDate: " + date.description)
+    return date
+    }
+    
+    public var updateNow: Bool {
+    return self.date.compare(self.nextRefreshDate) == .OrderedDescending
+    }
+    */
     public var uuid: NSUUID
     
     public var description: String {
@@ -48,7 +58,7 @@ public struct Site: Dateable, CustomStringConvertible {
         
         self.uuid = NSUUID()
     }
-
+    
     /**
      Resets the underlying identity of the `Site`. If a copy of this item is made, and a call
      to refreshIdentity() is made afterward, the items will no longer be equal.
@@ -56,7 +66,6 @@ public struct Site: Dateable, CustomStringConvertible {
     public mutating func refreshIdentity() {
         self.uuid = NSUUID()
     }
-
 }
 
 extension Site: Equatable { }
@@ -66,7 +75,7 @@ public func ==(lhs: Site, rhs: Site) -> Bool {
 
 extension Site: Hashable {
     public var hashValue: Int {
-        return uuid.hashValue
+        return uuid.hashValue + sgvs.count.hashValue + cals.count.hashValue + deviceStatus.count.hashValue
     }
 }
 
@@ -102,10 +111,8 @@ extension Site {
         self.uuid = uuid
         
         self.apiSecret = AppConfiguration.keychain[uuid.UUIDString]
-
     }
-
- }
+}
 
 extension Site {
     public func generateSummaryModelViewModel() -> SiteSummaryModelViewModel {

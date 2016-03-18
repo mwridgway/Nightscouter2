@@ -202,9 +202,12 @@ extension SiteDetailViewController: SiteSettingsDelegate {
         
         var tempSettings: [SettingsModelViewModel] = []
         if let site = site {
-            
-            let defaultSite = (site.uuid == SitesDataSource.sharedInstance.primarySiteUUID)
-            
+            // FIXME: Add primary site conformance
+
+//            let defaultSite = (site.uuid == SitesDataSource.sharedInstance.primarySiteUUID)
+
+            let defaultSite = site == SitesDataSource.sharedInstance.lastViewedSite// (site.uuid == SitesDataSource.sharedInstance.primarySiteUUID)
+
             tempSettings.append(SettingsModelViewModel(title: LocalizedString.settingsPreventLocking.localized, intent: SettingIntent.PreventLocking , subTitle: nil, switchOn: site.overrideScreenLock))
             tempSettings.append(SettingsModelViewModel(title: LocalizedString.settingsDefaultSite.localized, intent: SettingIntent.SetDefault , subTitle: LocalizedString.settingsDefaultSiteSubTitle.localized, switchOn: defaultSite , cellIdentifier: .cellSubtitle))
             tempSettings.append(SettingsModelViewModel(title: LocalizedString.settingsEditSite.localized, intent: SettingIntent.Edit, subTitle: LocalizedString.settingsEditSiteSubTitle.localized, cellIdentifier: .cellBasicDisclosure))
@@ -221,9 +224,13 @@ extension SiteDetailViewController: SiteSettingsDelegate {
             self.updateScreenOverride(setting.switchOn ?? false)
         case .SetDefault:
             if let boolSetting = setting.switchOn where boolSetting == true {
-                SitesDataSource.sharedInstance.primarySiteUUID = site?.uuid
+                
+                // FIXME: Add primary site conformance
+//                SitesDataSource.sharedInstance.primarySiteUUID = site?.uuid
+                SitesDataSource.sharedInstance.primarySite = site
             } else {
-                SitesDataSource.sharedInstance.primarySiteUUID = nil
+//                SitesDataSource.sharedInstance.primarySiteUUID = nil
+                SitesDataSource.sharedInstance.primarySite = nil
             }
         case .Edit:
             print("Edit")

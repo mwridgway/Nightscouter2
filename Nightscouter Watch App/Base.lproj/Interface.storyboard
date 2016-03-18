@@ -151,9 +151,9 @@
                                                                 <color key="textColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
                                                                 <fontDescription key="font" type="boldSystem" pointSize="8"/>
                                                             </label>
-                                                            <timer width="35.5" alignment="left" verticalAlignment="center" enabled="YES" format="short" id="oN5-go-AdO">
+                                                            <timer width="35.5" alignment="left" verticalAlignment="center" enabled="YES" format="short" previewedSeconds="189200000000" id="oN5-go-AdO">
                                                                 <fontDescription key="font" type="system" pointSize="11"/>
-                                                                <calendarUnit key="units" day="YES" hour="YES" minute="YES"/>
+                                                                <calendarUnit key="units" hour="YES" minute="YES"/>
                                                             </timer>
                                                             <label alignment="left" verticalAlignment="center" hidden="YES" text="-- --- --" id="E01-9J-Dai">
                                                                 <fontDescription key="font" type="system" pointSize="11"/>
@@ -212,7 +212,7 @@
                                 <tableRow identifier="SiteEmptyRowController" selectable="NO" id="V54-qa-xQ2" customClass="SiteEmptyRowController" customModule="Nightscouter_Watch_App_Extension">
                                     <group key="rootItem" width="1" alignment="left" id="JgC-Ce-uHd">
                                         <items>
-                                            <label alignment="center" verticalAlignment="center" text="No Sites Available" id="Tn2-pc-Lno">
+                                            <label alignment="center" verticalAlignment="center" text="No Sites Available" numberOfLines="0" id="Tn2-pc-Lno">
                                                 <fontDescription key="font" style="UICTFontTextStyleCaption2"/>
                                             </label>
                                         </items>

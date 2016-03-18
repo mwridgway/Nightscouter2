@@ -59,3 +59,5 @@
 
 "emptyTableViewCellTitle" = "No Nightscout sites were found.";
 
+"updateDateFromPhoneString" = "LAST UPDATE FROM PHONE";
+

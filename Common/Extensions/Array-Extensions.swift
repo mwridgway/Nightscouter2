@@ -45,19 +45,28 @@ public extension Array {
 }
 
 extension Array where Element: Equatable {
-    public mutating func insertOrUpdate(object: Generator.Element) {
+    public mutating func insertOrUpdate(object: Generator.Element) -> Bool {
         if let index = self.indexOf(object) {
             self[index] = object
         } else {
             self.append(object)
         }
         
+        return self.contains(object)
     }
     
     public mutating func appendUniqueObject(object: Generator.Element) {
         if contains(object) == false {
             append(object)
         }
+    }
+    
+    public mutating func remove(object: Generator.Element) -> Bool {
+        if let index = self.indexOf(object) {
+            self.removeAtIndex(index)
+        }
+        
+        return self.contains(object)
     }
 }
 

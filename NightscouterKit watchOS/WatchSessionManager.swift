@@ -9,27 +9,19 @@
 import WatchConnectivity
 import ClockKit
 
-@available(watchOS 2.0, *)
-public protocol DataSourceChangedDelegate {
-    //    func dataSourceDidUpdateAppContext(models: [WatchModel])
-    //    func dataSourceCouldNotConnectToPhone(error: NSError)
-    
-    //    func dataSourceDidUpdateAppContext(models: [WatchModel])
-    //    func dataSourceDidUpdateSiteModel(model: WatchModel, atIndex index: Int)
-    //    func dataSourceDidAddSiteModel(model: WatchModel, atIndex index: Int)
-    //    func dataSourceDidDeleteSiteModel(model: WatchModel, atIndex index: Int)
-}
-
-@available(watchOS 2.0, *)
-public class WatchSessionManager: NSObject, WCSessionDelegate {
+public class WatchSessionManager: NSObject, WCSessionDelegate, SessionManagerType {
     
     public static let sharedManager = WatchSessionManager()
+    
+    public var store: SiteStoreType?
     
     private override init() {
         super.init()
     }
     
-    private var dataSourceChangedDelegates = [DataSourceChangedDelegate]()
+    deinit {
+        stopSearching()
+    }
     
     private let session: WCSession = WCSession.defaultSession()
     
@@ -41,19 +33,34 @@ public class WatchSessionManager: NSObject, WCSessionDelegate {
             #if DEBUG
                 print("WCSession.isSupported: \(WCSession.isSupported()), Paired Phone Reachable: \(session.reachable)")
             #endif
+            
+            startSearching()
         }
     }
     
-    public func addDataSourceChangedDelegate<T where T: DataSourceChangedDelegate, T: Equatable>(delegate: T) {
-        dataSourceChangedDelegates.append(delegate)
+    private func startSearching() {
+        if !WCSession.defaultSession().receivedApplicationContext.isEmpty {
+            processApplicationContext(WCSession.defaultSession().receivedApplicationContext)
+        }
+        
+        requestCompanionAppUpdate()
     }
     
-    public func removeDataSourceChangedDelegate<T where T: DataSourceChangedDelegate, T: Equatable>(delegate: T) {
-        for (index, indexDelegate) in dataSourceChangedDelegates.enumerate() {
-            if let indexDelegate = indexDelegate as? T where indexDelegate == delegate {
-                dataSourceChangedDelegates.removeAtIndex(index)
-                break
-            }
+    public func stopSearching() {
+        session.delegate = nil
+    }
+}
+
+extension WatchSessionManager {
+    // Sender
+    public func updateApplicationContext(applicationContext: [String : AnyObject]) throws {
+        #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
+        #endif
+        do {
+            try session.updateApplicationContext(applicationContext)
+        } catch let error {
+            throw error
         }
     }
 }
@@ -74,10 +81,7 @@ extension WatchSessionManager {
         // print(": \(userInfo)")
         
         dispatch_async(dispatch_get_main_queue()) {
-            
             self.processApplicationContext(userInfo)
-
-            
         }
     }
     
@@ -100,9 +104,37 @@ extension WatchSessionManager {
     
     func processApplicationContext(context: [String : AnyObject]) -> Bool {
         print("processApplicationContext \(context)")
-        SitesDataSource.sharedInstance.loadDefaults(fromDictionary: context)
-
-        return false
+        
+        //print("Did receive payload: \(context)")
+        
+        guard let store = store else {
+            print("No Store")
+            return false
+        }
+        
+        store.handleApplicationContextPayload(context)
+        
+        return true
+    }
+    
+    public func requestCompanionAppUpdate() {
+        print(">>> Entering \(__FUNCTION__) <<<")
+        
+        let messageToSend = ["action": "updateData"]
+        
+        self.session.sendMessage(messageToSend, replyHandler: {(context:[String : AnyObject]) -> Void in
+            // handle reply from iPhone app here
+            print("recievedMessageReply from iPhone")
+            dispatch_async(dispatch_get_main_queue()) {
+                print("WatchSession success...")
+                self.processApplicationContext(context)
+            }
+            }, errorHandler: {(error: NSError ) -> Void in
+                print("WatchSession Transfer Error: \(error)")
+                // dispatch_async(dispatch_get_main_queue()) { [weak self] in
+                // self?.dataSourceChangedDelegates.forEach { $0.dataSourceCouldNotConnectToPhone(error) }
+                // }
+        })
     }
     
 }

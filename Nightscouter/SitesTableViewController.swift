@@ -110,7 +110,8 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         if editingStyle == .Delete {
             
             // Delete object form data source.
-            SitesDataSource.sharedInstance.removeSite(indexPath.row)
+//            SitesDataSource.sharedInstance.removeSite(indexPath.row)
+            SitesDataSource.sharedInstance.deleteSite(sites[indexPath.row])
             
             // Delete the row from the data source
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
@@ -130,9 +131,11 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         let site = sites[fromIndexPath.row]
         
         // Remove the site from the data source from its orginal (fromIndexPath) location.
-        SitesDataSource.sharedInstance.removeSite(fromIndexPath.row)
+        SitesDataSource.sharedInstance.deleteSite(sites[fromIndexPath.row])
+
+//        SitesDataSource.sharedInstance.removeSite(fromIndexPath.row)
         // Insert the site into the data source at its new (toIndexPath) location.
-        SitesDataSource.sharedInstance.addSite(site, atIndex: toIndexPath.row)
+        SitesDataSource.sharedInstance.createSite(site, atIndex: toIndexPath.row)
     }
     
     
@@ -174,7 +177,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
                 let selectedSite = sites[indexPath.row]
                 
                 SitesDataSource.sharedInstance.lastViewedSiteIndex = indexPath.row
-                SitesDataSource.sharedInstance.lastViewedSiteUUID = selectedSite.uuid
+//                SitesDataSource.sharedInstance.lastViewedSiteUUID = selectedSite.uuid
                 siteDetailViewController.site = selectedSite
             }
             
@@ -206,13 +209,13 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             if let selectedSiteCell = sender as? UITableViewCell {
                 let indexPath = tableView.indexPathForCell(selectedSiteCell)!
                 SitesDataSource.sharedInstance.lastViewedSiteIndex = indexPath.row
-                SitesDataSource.sharedInstance.lastViewedSiteUUID = sites[indexPath.row].uuid
+//                SitesDataSource.sharedInstance.lastViewedSiteUUID = sites[indexPath.row].uuid
             }
             
             if let incomingSite = sender as? Site{
                 if let indexOfSite = sites.indexOf(incomingSite) {
                     SitesDataSource.sharedInstance.lastViewedSiteIndex = indexOfSite
-                    SitesDataSource.sharedInstance.lastViewedSiteUUID = incomingSite.uuid
+//                    SitesDataSource.sharedInstance.lastViewedSiteUUID = incomingSite.uuid
                 }
             }
             
@@ -234,7 +237,12 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         if let sourceViewController = sender.sourceViewController as? FormViewController, site = sourceViewController.site {
             
             // This segue is triggered when we "save" or "next" out of the url form.
-            if let selectedIndexPath = accessoryIndexPath {
+            if sites.contains(site) {
+                guard let selectedIndex = sites.indexOf(site) else {
+                    return
+                }
+                
+                let selectedIndexPath = NSIndexPath(forRow: selectedIndex, inSection: 0)
                 // Update an existing site.
                 SitesDataSource.sharedInstance.updateSite(site)
                 tableView.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: .None)
@@ -243,7 +251,8 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
                 // Add a new site.
                 editing = false
                 let newIndexPath = NSIndexPath(forRow: 0, inSection: 0)
-                SitesDataSource.sharedInstance.addSite(site, atIndex: newIndexPath.row)
+//                SitesDataSource.sharedInstance.addSite(site, atIndex: newIndexPath.row)
+                SitesDataSource.sharedInstance.createSite(site, atIndex: newIndexPath.row)
                 tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Automatic)
                 accessoryIndexPath = nil
             }
@@ -294,7 +303,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
                 sockets.append(socket)
                 socket.fetchConfigurationData().startWithNext { site in
                     if let site = site {
-                        SitesDataSource.sharedInstance.updateSite(site)
+                        // SitesDataSource.sharedInstance.updateSite(site)
                     }
                 }
                 socket.fetchSocketData().observeNext { site in
@@ -350,7 +359,9 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         
         let removeAction = UIAlertAction(title: LocalizedString.tableViewCellRemove.localized, style: .Destructive) { (action) in
             self.tableView.beginUpdates()
-            SitesDataSource.sharedInstance.removeSite(index)
+//            SitesDataSource.sharedInstance.removeSite(index)
+            SitesDataSource.sharedInstance.deleteSite(self.sites[index])
+
             self.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
             self.tableView.endUpdates()
         }

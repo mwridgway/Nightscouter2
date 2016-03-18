@@ -251,6 +251,7 @@ extension ComplicationController {
         // TODO: Start up connecitivty session ask for data from data source. and update.
         
         // Ask data store for new data..
+        SitesDataSource.sharedInstance
     }
     
     func requestedUpdateBudgetExhausted() {

@@ -7,10 +7,10 @@
 //
 import Foundation
 
-protocol Encodable {
+public protocol Encodable {
     func encode() -> [String: AnyObject]
 }
 
-protocol Decodable {
+public protocol Decodable {
     static func decode(dict: [String: AnyObject]) -> Self?
 }

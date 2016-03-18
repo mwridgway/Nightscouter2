@@ -13,7 +13,9 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 
     override init() {
         super.init()
-        WatchSessionManager.sharedManager.startSession()
+
+         SitesDataSource.sharedInstance.sites
+//        WatchSessionManager.sharedManager.startSession()
     }
     
     func applicationDidFinishLaunching() {

@@ -8,12 +8,20 @@
 
 import WatchConnectivity
 
+protocol WatchSessionManagerDelegate {
+    func session(session: WCSession, didReceiveContext context: [String: AnyObject])
+}
+
 @available(iOSApplicationExtension 9.0, *)
-public class WatchSessionManager: NSObject, WCSessionDelegate {
+public class WatchSessionManager: NSObject, WCSessionDelegate, SessionManagerType {
     
     public static let sharedManager = WatchSessionManager()
     
+    /// The store that the session manager should interact with.
+    public var store: SiteStoreType?
+
     private override init() {
+        
         super.init()
     }
     
@@ -34,20 +42,31 @@ public class WatchSessionManager: NSObject, WCSessionDelegate {
     }
     
     public func startSession() {
+        #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
+        #endif
+        
         session?.delegate = self
         session?.activateSession()
-        print("WCSession.isSupported: \(WCSession.isSupported()), Paired Watch: \(session?.paired), Watch App Installed: \(session?.watchAppInstalled)")
+        
+        #if DEBUG
+            print("WCSession.isSupported: \(WCSession.isSupported()), Paired Watch: \(session?.paired), Watch App Installed: \(session?.watchAppInstalled)")
+        #endif
     }
     
 }
 
 public extension WatchSessionManager {
     public func sessionReachabilityDidChange(session: WCSession) {
-        print("sessionReachabilityDidChange")
+        #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
+        #endif
     }
     
     public func sessionWatchStateDidChange(session: WCSession) {
-        print("sessionWatchStateDidChange")
+        #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
+        #endif
     }
 }
 
@@ -59,6 +78,9 @@ public extension WatchSessionManager {
     
     // Sender
     public func updateApplicationContext(applicationContext: [String : AnyObject]) throws {
+        #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
+        #endif
         if let session = validSession {
             do {
                 try session.updateApplicationContext(applicationContext)
@@ -71,10 +93,9 @@ public extension WatchSessionManager {
     // Receiver
     public func session(session: WCSession, didReceiveApplicationContext applicationContext: [String : AnyObject]) {
         // handle receiving application context
-        
         dispatch_async(dispatch_get_main_queue()) {
-            // make sure to put on the main queue to update UI!
-        }
+            self.processApplicationContext(applicationContext)
+        }      
     }
 }
 
@@ -85,28 +106,46 @@ public extension WatchSessionManager {
 extension WatchSessionManager {
     
     public func transferCurrentComplicationUserInfo(userInfo: [String : AnyObject]) -> WCSessionUserInfoTransfer? {
-        return validSession?.transferCurrentComplicationUserInfo(userInfo)
+        
+        #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
+            // print("transferUserInfo: \(userInfo)")
+            print("validSession?.complicationEnabled == \(validReachableSession?.complicationEnabled)")
+        #endif
+        // return validSession?.transferCurrentComplicationUserInfo(userInfo)
+        cleanUpTransfers()
+        
+        return validSession?.complicationEnabled == true ? validSession?.transferCurrentComplicationUserInfo(userInfo) : transferUserInfo(userInfo)
     }
-
+    
     // Sender
     public func transferUserInfo(userInfo: [String : AnyObject]) -> WCSessionUserInfoTransfer? {
         #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
             print("transferUserInfo: \(userInfo)")
         #endif
-        return validSession?.transferUserInfo(userInfo)
+        
+        return validSession?.complicationEnabled == true ? validSession?.transferCurrentComplicationUserInfo(userInfo) : transferUserInfo(userInfo)
+    }
+    
+    func cleanUpTransfers(){
+        validReachableSession?.outstandingFileTransfers.forEach({ $0.cancel() })
     }
     
     public func session(session: WCSession, didFinishUserInfoTransfer userInfoTransfer: WCSessionUserInfoTransfer, error: NSError?) {
         #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
             print("session \(session), didFinishUserInfoTransfer: \(userInfoTransfer), error: \(error)")
         #endif
+        
         // implement this on the sender if you need to confirm that
-        // the user info did in fact transfer
+        // the user info did in fact transfer.
     }
     
     // Receiver
     public func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
         #if DEBUG
+            print(">>> Entering \(__FUNCTION__) <<<")
             print("session \(session), didReceiveUserInfo: \(userInfo)")
         #endif
         // handle receiving user info
@@ -182,12 +221,13 @@ extension WatchSessionManager {
         #endif
         
         dispatch_async(dispatch_get_main_queue()) {
-          // Process context in the datasource.
+            // Process context in the datasource.
+            self.processApplicationContext(message)
         }
     }
     
     public func session(session: WCSession, didReceiveMessageData messageData: NSData, replyHandler: (NSData) -> Void) {
-
+        
         #if DEBUG
             print(">>> Entering \(__FUNCTION__) <<<")
             print("session: \(session), messageData: \(messageData)")
@@ -198,4 +238,23 @@ extension WatchSessionManager {
             // make sure to put on the main queue to update UI!
         }
     }
+}
+
+extension WatchSessionManager {
+    
+    func processApplicationContext(context: [String : AnyObject]) -> Bool {
+        print("processApplicationContext \(context)")
+        
+        print("Did receive payload: \(context)")
+        
+        guard let store = store else {
+            print("No Store")
+            return false
+        }
+        
+        store.handleApplicationContextPayload(context)
+        
+        return true
+    }
+    
 }

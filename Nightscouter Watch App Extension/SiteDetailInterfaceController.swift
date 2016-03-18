@@ -37,6 +37,17 @@ class SiteDetailInterfaceController: WKInterfaceController {
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
         // TODO: Parse incoming context for data. Create and set site.
+        if let context = context, index = context[DefaultKey.lastViewedSiteIndex.rawValue] as? Int {
+            self.site = SitesDataSource.sharedInstance.sites[index]
+        }
+        
+        NSNotificationCenter.defaultCenter().addObserverForName(DataUpdatedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { (_) -> Void in
+            self.configureView()
+        }
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     // MARK: Interface Builder Actions
@@ -59,6 +70,7 @@ class SiteDetailInterfaceController: WKInterfaceController {
             
             return
         }
+        
         let dataSource = SiteSummaryModelViewModel(withSite: site)
         let compassAlpha: CGFloat = dataSource.lookStale ? 0.5 : 1.0
         //let timerHidden: Bool = dataSource.lookStale

@@ -180,7 +180,7 @@ public enum Noise : Int, CustomStringConvertible {
         case .Light: return NSLocalizedString("noiseLight", tableName: nil, bundle:  NSBundle.mainBundle(), value: "Light", comment: "Label used to indicate a direction.")
         case .Medium: return NSLocalizedString("noiseMedium", tableName: nil, bundle:  NSBundle.mainBundle(), value: "Medium", comment: "Label used to indicate a direction.")
         case .Heavy: return NSLocalizedString("noiseHeavy", tableName: nil, bundle:  NSBundle.mainBundle(), value: "Heavy", comment: "Label used to indicate a direction.")
-        case .Unknown: return NSLocalizedString("noiseUnkown", tableName: nil, bundle:  NSBundle.mainBundle(), value: "Unknown", comment: "Label used to indicate a direction.")
+        case .Unknown: return NSLocalizedString("noiseUnkown", tableName: nil, bundle:  NSBundle.mainBundle(), value: "~~~", comment: "Label used to indicate a direction.")
         }
     }
     

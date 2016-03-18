@@ -51,7 +51,8 @@ public enum LocalizedString: String {
     
     lastReadingLabel,
     batteryLabel,
-    rawLabel
+    rawLabel,
+    updateDateFromPhoneString
 }
 
 extension LocalizedString {

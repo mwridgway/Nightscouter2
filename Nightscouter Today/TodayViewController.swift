@@ -136,7 +136,7 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
             // TODO: Add UUID to URK processing get ride of setting datasource everywhere.
             
             SitesDataSource.sharedInstance.lastViewedSiteIndex = indexPath.row
-            SitesDataSource.sharedInstance.lastViewedSiteUUID = site.uuid
+//            SitesDataSource.sharedInstance.lastViewedSiteUUID = site.uuid
             
             let url = LinkBuilder.buildLink(withViewController: .SiteListPageViewController).URLByAppendingPathComponent(uuidString)
         

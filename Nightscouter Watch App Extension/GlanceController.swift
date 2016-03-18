@@ -29,8 +29,17 @@ class GlanceController: WKInterfaceController {
         super.awakeWithContext(context)
         // Configure interface objects here.
         self.configureView()
+      
+        NSNotificationCenter.defaultCenter().addObserverForName(DataUpdatedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { (_) -> Void in
+            self.site = SitesDataSource.sharedInstance.primarySite
+        }
+        
     }
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()

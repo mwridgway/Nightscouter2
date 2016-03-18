@@ -9,6 +9,12 @@
 import Foundation
 import KeychainAccess
 
+
+public let DataUpdatedNotification: String = "com.nothingonline.nightscouter.dataUpdated"
+
+public typealias ArrayOfDictionaries = [[String: AnyObject]]
+
+
 // TODO: Locallize these strings and move them to centeral location so all view can have consistent placeholder text.
 public struct PlaceHolderStrings {
     public static let displayName: String = "----"
@@ -68,7 +74,7 @@ public enum CommonUseCasesForShortcuts: String {
     }
 
     public var applicationShortcutItemType: String {
-        return AppConfiguration.applicationGroupName + "." + self.rawValue
+        return AppConfiguration.applicationName + "." + self.rawValue
     }
 }
 
@@ -81,10 +87,11 @@ public enum StoryboardIdentifier: String, RawRepresentable {
 public class AppConfiguration {
     // MARK: Types
     
-    public static var applicationGroupName = "com.nothingonline.nightscouter"
-    
+    public static let applicationName = "com.nothingonline.nightscouter"
+    public static let sharedApplicationGroupSuiteName: String = "group.com.nothingonline.nightscouter"
+
     public static var keychain: Keychain {
-        return Keychain(service: applicationGroupName).synchronizable(true)
+        return Keychain(service: applicationName).synchronizable(true)
     }
     
     private struct Defaults {
