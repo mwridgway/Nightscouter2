@@ -8,8 +8,8 @@
 
 import UIKit
 
-import DateTools
-
+//import DateTools
+//
 public struct Theme {
     public struct Color {
         public static let windowTintColor =  NightscouterAssetKit.predefinedNeutralColor

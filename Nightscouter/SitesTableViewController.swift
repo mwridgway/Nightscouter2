@@ -177,7 +177,6 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
                 let selectedSite = sites[indexPath.row]
                 
                 SitesDataSource.sharedInstance.lastViewedSiteIndex = indexPath.row
-//                SitesDataSource.sharedInstance.lastViewedSiteUUID = selectedSite.uuid
                 siteDetailViewController.site = selectedSite
             }
             
@@ -209,13 +208,11 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             if let selectedSiteCell = sender as? UITableViewCell {
                 let indexPath = tableView.indexPathForCell(selectedSiteCell)!
                 SitesDataSource.sharedInstance.lastViewedSiteIndex = indexPath.row
-//                SitesDataSource.sharedInstance.lastViewedSiteUUID = sites[indexPath.row].uuid
             }
             
             if let incomingSite = sender as? Site{
                 if let indexOfSite = sites.indexOf(incomingSite) {
                     SitesDataSource.sharedInstance.lastViewedSiteIndex = indexOfSite
-//                    SitesDataSource.sharedInstance.lastViewedSiteUUID = incomingSite.uuid
                 }
             }
             
@@ -251,7 +248,6 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
                 // Add a new site.
                 editing = false
                 let newIndexPath = NSIndexPath(forRow: 0, inSection: 0)
-//                SitesDataSource.sharedInstance.addSite(site, atIndex: newIndexPath.row)
                 SitesDataSource.sharedInstance.createSite(site, atIndex: newIndexPath.row)
                 tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Automatic)
                 accessoryIndexPath = nil
@@ -285,7 +281,6 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         refreshControl?.layer.zPosition = tableView.backgroundView!.layer.zPosition + 1
         
         // Make sure the idle screen timer is turned back to normal. Screen will time out.
-        //AppDataManageriOS.sharedInstance.shouldDisableIdleTimer = false
         UIApplication.sharedApplication().idleTimerDisabled = false
     }
     
@@ -296,6 +291,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
                 refreshControl?.beginRefreshing()
                 tableView.setContentOffset(CGPointMake(0, tableView.contentOffset.y-refreshControl!.frame.size.height), animated: true)
             }
+            
             
             for (index, oldSite) in sites.enumerate() {
                 let socket = NightscoutSocketIOClient(site: oldSite)

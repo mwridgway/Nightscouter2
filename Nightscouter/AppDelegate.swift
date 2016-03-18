@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var launchedShortcutItem: String?
     
     override init() {
-        SitesDataSource.sharedInstance.sites
+        //SitesDataSource.sharedInstance.sites
         super.init()
     }
     
@@ -40,6 +40,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             selector: Selector("userDefaultsDidChange:"),
             name: NSUserDefaultsDidChangeNotification,
             object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserverForName(DataUpdatedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { (_) -> Void in
+          self.dataManagerDidChange()
+        }
+        
         
         // If a shortcut was launched, display its information and take the appropriate action
         if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
@@ -184,15 +189,7 @@ extension AppDelegate {
     
     func userDefaultsDidChange(notification: NSNotification) {
         if let userDefaults = notification.object as? NSUserDefaults {
-            // archiveStoreIfLocal()
-            // store = storeForUserDefaults(userDefaults)
-            // tabBarController.viewControllers = tabViewControllersForStore(store)
-            
             print("Defaults Changed")
-            //            let userInfo = WatchSessionManager.sharedManager.transferUserInfo(userDefaults.dictionaryRepresentation())
-            //            print(userInfo)
-//            let compInfo = WatchSessionManager.sharedManager.transferCurrentComplicationUserInfo(userDefaults.dictionaryRepresentation())
-//            print(compInfo)
         }
     }
     
@@ -221,7 +218,7 @@ extension AppDelegate {
     // TODO: Datasource needs to produce a signal, notification or callback so that the delegate can request premissions.
     
     // AppDataManagerNotificationDidChange Handler
-    func dataManagerDidChange(notification: NSNotification) {
+    func dataManagerDidChange(notification: NSNotification? = nil) {
         
         let sites = SitesDataSource.sharedInstance.sites
         

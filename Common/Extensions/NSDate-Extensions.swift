@@ -7,6 +7,14 @@
 //
 
 import Foundation
+
+
+public extension NSDate {
+    func timeAgoSinceNow() -> String {
+        return NSCalendar.autoupdatingCurrentCalendar().stringRepresentationOfElapsedTimeSinceNow(self)
+    }
+}
+
 //MARK: OPERATIONS WITH DATES (==,!=,<,>,<=,>=)
 
 extension NSDate : Comparable {}

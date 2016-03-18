@@ -113,11 +113,13 @@ public protocol SessionManagerType {
     /// Call this method after initialization to send/receive payload between the counterparts.
     ///
     func startSession()
-    
-    #if os(watchOS)
-    ///
-    ///
-    ///
-    func requestCompanionAppUpdate()
-    #endif
 }
+//#if os(watchOS)
+//    public protocol CompanionAppRequestorType {
+//        ///
+//        ///
+//        ///
+//        func requestCompanionAppUpdate()
+//    
+//    public extension CompanionAppRequestorType where Self: SessionManagerType { }
+//#endif

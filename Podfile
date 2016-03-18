@@ -5,11 +5,13 @@ inhibit_all_warnings!
 
 
 def limited_pods
-    pod 'Socket.IO-Client-Swift' # Or latest version
-    pod 'DateTools'
+inhibit_all_warnings!
+    pod 'Socket.IO-Client-Swift'    
+    #pod 'DateTools'
 end
 
 def global_pods
+inhibit_all_warnings!
     pod 'Alamofire'
     pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
     pod 'CryptoSwift'

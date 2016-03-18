@@ -59,6 +59,8 @@ class FormViewController: UIViewController, UITextFieldDelegate, UINavigationCon
         let validationResults = urlStrings
             .flatMap(.Latest) { (query: String) -> SignalProducer<(NSData, NSURLResponse), NSError> in
                 let cleanString = query.stringByReplacingOccurrencesOfString(" ", withString: "", options: [], range: nil)
+                
+                if cleanString.isEmpty { return SignalProducer.empty }
                 // Test that URL actually exists by sending a URL request that returns only the header response
                 self.urlTextField.text = cleanString
                 

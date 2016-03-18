@@ -103,7 +103,8 @@ extension WatchSessionManager {
 extension WatchSessionManager {
     
     func processApplicationContext(context: [String : AnyObject]) -> Bool {
-        print("processApplicationContext \(context)")
+        print(">>> Entering \(__FUNCTION__) <<<")
+        //print("processApplicationContext \(context)")
         
         //print("Did receive payload: \(context)")
         
@@ -116,21 +117,26 @@ extension WatchSessionManager {
         
         return true
     }
-    
+}
+
+extension WatchSessionManager { 
     public func requestCompanionAppUpdate() {
         print(">>> Entering \(__FUNCTION__) <<<")
         
-        let messageToSend = ["action": "updateData"]
+        let messageToSend = DefaultKey.payloadPhoneUpdate
         
         self.session.sendMessage(messageToSend, replyHandler: {(context:[String : AnyObject]) -> Void in
             // handle reply from iPhone app here
             print("recievedMessageReply from iPhone")
             dispatch_async(dispatch_get_main_queue()) {
                 print("WatchSession success...")
-                self.processApplicationContext(context)
+                let success = self.processApplicationContext(context)
+                print(success)
             }
             }, errorHandler: {(error: NSError ) -> Void in
                 print("WatchSession Transfer Error: \(error)")
+                
+                self.processApplicationContext(DefaultKey.payloadPhoneUpdateError)
                 // dispatch_async(dispatch_get_main_queue()) { [weak self] in
                 // self?.dataSourceChangedDelegates.forEach { $0.dataSourceCouldNotConnectToPhone(error) }
                 // }

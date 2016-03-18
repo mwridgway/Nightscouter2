@@ -9,7 +9,15 @@
 import Foundation
 
 public enum DefaultKey: String, RawRepresentable {
-    case sites, lastViewedSiteIndex, primarySiteUUID
+    case sites, lastViewedSiteIndex, primarySiteUUID, lastDataUpdateDateFromPhone, updateData, action, error
+    
+    static var payloadPhoneUpdate: [String : String] {
+        return [DefaultKey.action.rawValue: DefaultKey.updateData.rawValue]
+    }
+    
+    static var payloadPhoneUpdateError: [String : String] {
+        return [DefaultKey.action.rawValue: DefaultKey.error.rawValue]
+    }
 }
 
 public class SitesDataSource: SiteStoreType {
@@ -20,21 +28,27 @@ public class SitesDataSource: SiteStoreType {
     private init() {
         self.defaults = NSUserDefaults(suiteName: AppConfiguration.sharedApplicationGroupSuiteName ) ?? NSUserDefaults.standardUserDefaults()
         
-        let sessionManager = WatchSessionManager.sharedManager
-        self.sessionManager = sessionManager
-        self.sessionManager.store = self
-        self.sessionManager.startSession()
+        let watchConnectivityManager = WatchSessionManager.sharedManager
+        watchConnectivityManager.store = self
+        watchConnectivityManager.startSession()
         
-        #if os(watchOS)
-            self.sessionManager.requestCompanionAppUpdate()
-        #endif
+        let iCloudManager = iCloudKeyValueStore()
+        iCloudManager.store = self
+        iCloudManager.startSession()
+        
+        self.sessionManagers = [watchConnectivityManager, iCloudManager]
     }
     
     private let defaults: NSUserDefaults
     
-    private let sessionManager: SessionManagerType
+    //    private let sessionManager: SessionManagerType
+    
+    private var sessionManagers: [SessionManagerType] = []
+    
     
     public var storageLocation: StorageLocation { return .LocalKeyValueStore }
+    
+    public var otherStorageLocations: SiteStoreType?
     
     public var sites: [Site] {
         if let loaded = loadData() {
@@ -45,7 +59,7 @@ public class SitesDataSource: SiteStoreType {
     
     public var lastViewedSiteIndex: Int {
         get {
-            return defaults.integerForKey(DefaultKey.lastViewedSiteIndex.rawValue)
+            return defaults.objectForKey(DefaultKey.lastViewedSiteIndex.rawValue) as? Int ?? 0
         }
         set {
             if lastViewedSiteIndex != newValue {
@@ -152,22 +166,35 @@ public class SitesDataSource: SiteStoreType {
             print("No primarySiteUUID was found.")
         }
         
-        if let action = payload["action"] as? String {
-            print(action)
-            for site in sites {
-                #if os(iOS)
-                    dispatch_async(dispatch_get_main_queue()) {
-                        let socket = NightscoutSocketIOClient(site: site)
-                        socket.fetchConfigurationData().startWithNext { racSite in
-                            // if let racSite = racSite {
-                            // self.updateSite(racSite)
-                            // }
+        #if os(watchOS)
+            if let lastDataUpdateDateFromPhone = payload[DefaultKey.lastDataUpdateDateFromPhone.rawValue] as? NSDate {
+                defaults.setObject(lastDataUpdateDateFromPhone,forKey: DefaultKey.lastDataUpdateDateFromPhone.rawValue)
+            }
+        #endif
+        
+        if let action = payload[DefaultKey.action.rawValue] as? String {
+            if action == DefaultKey.updateData.rawValue {
+                print("found an action: \(action)")
+                for site in sites {
+                    #if os(iOS)
+                        dispatch_async(dispatch_get_main_queue()) {
+                            let socket = NightscoutSocketIOClient(site: site)
+                            socket.fetchConfigurationData().startWithNext { racSite in
+                                // if let racSite = racSite {
+                                // self.updateSite(racSite)
+                                // }
+                            }
+                            socket.fetchSocketData().observeNext { racSite in
+                                self.updateSite(racSite)
+                            }
                         }
-                        socket.fetchSocketData().observeNext { racSite in
-                            self.updateSite(racSite)
-                        }
-                    }
-                #endif
+                    #endif
+                }
+            } else if action == DefaultKey.error.rawValue {
+                print("Received an error.")
+                
+            } else {
+                print("Did not find an action.")
             }
         }
         
@@ -177,6 +204,7 @@ public class SitesDataSource: SiteStoreType {
     }
     
     public func loadData() -> [Site]? {
+        
         if let sites = defaults.arrayForKey(DefaultKey.sites.rawValue) as? ArrayOfDictionaries {
             return sites.flatMap { Site.decode($0) }
         }
@@ -186,21 +214,28 @@ public class SitesDataSource: SiteStoreType {
     
     public func saveData(dictionary: [String: AnyObject]) -> (savedLocally: Bool, updatedApplicationContext: Bool) {
         
+        var dictionaryToSend = dictionary
+        
         var successfullSave: Bool = false
         
-        for (key, object) in dictionary {
+        for (key, object) in dictionaryToSend {
             defaults.setObject(object, forKey: key)
         }
+        
+        dictionaryToSend[DefaultKey.lastDataUpdateDateFromPhone.rawValue] = NSDate()
         
         successfullSave = defaults.synchronize()
         
         var successfullAppContextUpdate = true
-        do {
-            try sessionManager.updateApplicationContext(dictionary)
-        } catch {
-            successfullAppContextUpdate = false
-            print("error")
-        }
+        
+        sessionManagers.forEach({ (manager: SessionManagerType ) -> () in
+            do {
+                try manager.updateApplicationContext(dictionaryToSend)
+            } catch {
+                successfullAppContextUpdate = false
+                fatalError("Something didn't go right, create a fix.")
+            }
+        })
         
         return (successfullSave, successfullAppContextUpdate)
     }

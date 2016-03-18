@@ -796,6 +796,7 @@
 			buildConfigurationList = 1735805F1C44354200E893DB /* Build configuration list for PBXNativeTarget "Nightscouter" */;
 			buildPhases = (
 				721A5D6B5D1B47E3E9E23C9D /* 📦 Check Pods Manifest.lock */,
+				DCFEA462F7AF2F535B9CEC06 /* Check Pods Manifest.lock */,
 				173580491C44354200E893DB /* Sources */,
 				1735804A1C44354200E893DB /* Frameworks */,
 				1735804B1C44354200E893DB /* Resources */,
@@ -804,6 +805,8 @@
 				173580B51C44370300E893DB /* Embed Watch Content */,
 				D9CFD2C9B78B84B4D0B02890 /* 📦 Embed Pods Frameworks */,
 				97C87FDD1A52F3F4D167AFB3 /* 📦 Copy Pods Resources */,
+				D281E79036C7B2CEFDA70C2C /* Embed Pods Frameworks */,
+				C900AF46C5E61E5F09392B1D /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -822,11 +825,14 @@
 			buildConfigurationList = 173580741C44357D00E893DB /* Build configuration list for PBXNativeTarget "Nightscouter Today" */;
 			buildPhases = (
 				73F2A1E266C43E1B530B507E /* 📦 Check Pods Manifest.lock */,
+				B4B2768C1D12DF5960A0C846 /* Check Pods Manifest.lock */,
 				173580621C44357D00E893DB /* Sources */,
 				173580631C44357D00E893DB /* Frameworks */,
 				173580641C44357D00E893DB /* Resources */,
 				6BEFE5DA71F30EF7C9ECC62D /* 📦 Embed Pods Frameworks */,
 				7E733E974E7315F258D237D2 /* 📦 Copy Pods Resources */,
+				6AA1190B48F7D65B253F62AF /* Embed Pods Frameworks */,
+				68290C1126DB6A948513A9A5 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -842,11 +848,13 @@
 			buildConfigurationList = 173580871C4435BD00E893DB /* Build configuration list for PBXNativeTarget "NightscouterKit" */;
 			buildPhases = (
 				3B8E7DBE1F9B6C7F1D343CBA /* 📦 Check Pods Manifest.lock */,
+				5FC1F85ED740A1EE06B2B491 /* Check Pods Manifest.lock */,
 				173580791C4435BD00E893DB /* Sources */,
 				1735807A1C4435BD00E893DB /* Frameworks */,
 				1735807B1C4435BD00E893DB /* Headers */,
 				1735807C1C4435BD00E893DB /* Resources */,
 				C90134590CE4271E08381ADD /* 📦 Copy Pods Resources */,
+				528FE3DC7421EC5FC349369C /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -862,10 +870,12 @@
 			buildConfigurationList = 173580B21C44370300E893DB /* Build configuration list for PBXNativeTarget "Nightscouter Watch App" */;
 			buildPhases = (
 				2A39B856B932D42B8B388FD0 /* 📦 Check Pods Manifest.lock */,
+				A97B05C3E856E1B205A18553 /* Check Pods Manifest.lock */,
 				1735808D1C44370300E893DB /* Resources */,
 				173580B11C44370300E893DB /* Embed App Extensions */,
 				4D70BC723D189E2D344D4C47 /* Frameworks */,
 				5586A04EBA44C7221BF243AD /* 📦 Copy Pods Resources */,
+				89431F91EC014250C7BBC881 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -882,12 +892,15 @@
 			buildConfigurationList = 173580AE1C44370300E893DB /* Build configuration list for PBXNativeTarget "Nightscouter Watch App Extension" */;
 			buildPhases = (
 				9AC4C39F06E5BB88A172CC83 /* 📦 Check Pods Manifest.lock */,
+				03A1900ABAAC09C9C5D32DBC /* Check Pods Manifest.lock */,
 				173580971C44370300E893DB /* Sources */,
 				173580981C44370300E893DB /* Frameworks */,
 				173580991C44370300E893DB /* Resources */,
 				173580C71C44375200E893DB /* Embed Frameworks */,
 				6DD9FE6BD299A634EDC01E52 /* 📦 Embed Pods Frameworks */,
 				B440DD9991F7FA468D71F5F5 /* 📦 Copy Pods Resources */,
+				A2CC588FBF82AAF54FA09CE0 /* Embed Pods Frameworks */,
+				34D95E7563D8446E6208B675 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -904,11 +917,13 @@
 			buildConfigurationList = 173580C41C44375200E893DB /* Build configuration list for PBXNativeTarget "NightscouterWatchKit" */;
 			buildPhases = (
 				8DCAC2FBA7365646BDA858A2 /* 📦 Check Pods Manifest.lock */,
+				2A674A1597AE576D775F3309 /* Check Pods Manifest.lock */,
 				173580B61C44375200E893DB /* Sources */,
 				173580B71C44375200E893DB /* Frameworks */,
 				173580B81C44375200E893DB /* Headers */,
 				173580B91C44375200E893DB /* Resources */,
 				862AF2F47D54B7A949FFDC93 /* 📦 Copy Pods Resources */,
+				0D84F2779D39DDD069720825 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1079,6 +1094,36 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		03A1900ABAAC09C9C5D32DBC /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		0D84F2779D39DDD069720825 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NightscouterWatchKit/Pods-NightscouterWatchKit-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		2A39B856B932D42B8B388FD0 /* 📦 Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1092,6 +1137,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		2A674A1597AE576D775F3309 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		34D95E7563D8446E6208B675 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Watch App Extension/Pods-Nightscouter Watch App Extension-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		3B8E7DBE1F9B6C7F1D343CBA /* 📦 Check Pods Manifest.lock */ = {
@@ -1109,6 +1184,21 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		528FE3DC7421EC5FC349369C /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NightscouterKit/Pods-NightscouterKit-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		5586A04EBA44C7221BF243AD /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1122,6 +1212,51 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Watch App/Pods-Nightscouter Watch App-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5FC1F85ED740A1EE06B2B491 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		68290C1126DB6A948513A9A5 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Today/Pods-Nightscouter Today-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6AA1190B48F7D65B253F62AF /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Today/Pods-Nightscouter Today-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6BEFE5DA71F30EF7C9ECC62D /* 📦 Embed Pods Frameworks */ = {
@@ -1214,6 +1349,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NightscouterWatchKit/Pods-NightscouterWatchKit-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		89431F91EC014250C7BBC881 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Watch App/Pods-Nightscouter Watch App-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		8DCAC2FBA7365646BDA858A2 /* 📦 Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1259,6 +1409,36 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		A2CC588FBF82AAF54FA09CE0 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Watch App Extension/Pods-Nightscouter Watch App Extension-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A97B05C3E856E1B205A18553 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		B440DD9991F7FA468D71F5F5 /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1272,6 +1452,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter Watch App Extension/Pods-Nightscouter Watch App Extension-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B4B2768C1D12DF5960A0C846 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		C900AF46C5E61E5F09392B1D /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter/Pods-Nightscouter-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C90134590CE4271E08381ADD /* 📦 Copy Pods Resources */ = {
@@ -1289,6 +1499,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NightscouterKit/Pods-NightscouterKit-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		D281E79036C7B2CEFDA70C2C /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter/Pods-Nightscouter-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D9CFD2C9B78B84B4D0B02890 /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1302,6 +1527,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nightscouter/Pods-Nightscouter-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DCFEA462F7AF2F535B9CEC06 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
