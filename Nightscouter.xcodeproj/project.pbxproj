@@ -119,6 +119,7 @@
 		17CC72C01C4D3B8C00BA5E5B /* SiteNSNowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CC72BF1C4D3B8C00BA5E5B /* SiteNSNowTableViewCell.swift */; };
 		17D0EB671C53C82E007F21FC /* SocketIOClient+Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0EB661C53C82E007F21FC /* SocketIOClient+Signal.swift */; };
 		17EBFD9F1C9BA1F400B55C43 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 177054891C49601B00302D83 /* Localizable.strings */; };
+		17EBFDA01C9BAA3200B55C43 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 177054891C49601B00302D83 /* Localizable.strings */; };
 		17F5A42C1C98FAC000057A71 /* SiteStoreTypeProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F5A42B1C98FAC000057A71 /* SiteStoreTypeProtocols.swift */; };
 		17F5A42D1C98FAC000057A71 /* SiteStoreTypeProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F5A42B1C98FAC000057A71 /* SiteStoreTypeProtocols.swift */; };
 		3DFC12D518539DCBDE22AF93 /* Pods_NightscouterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3689830C529C3873F282C7D /* Pods_NightscouterKit.framework */; };
@@ -1034,6 +1035,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1735806F1C44357D00E893DB /* MainInterface.storyboard in Resources */,
+				17EBFDA01C9BAA3200B55C43 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
