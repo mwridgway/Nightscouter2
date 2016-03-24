@@ -135,11 +135,7 @@ extension WatchSessionManager {
             }
             }, errorHandler: {(error: NSError ) -> Void in
                 print("WatchSession Transfer Error: \(error)")
-                
                 self.processApplicationContext(DefaultKey.payloadPhoneUpdateError)
-                // dispatch_async(dispatch_get_main_queue()) { [weak self] in
-                // self?.dataSourceChangedDelegates.forEach { $0.dataSourceCouldNotConnectToPhone(error) }
-                // }
         })
     }
     

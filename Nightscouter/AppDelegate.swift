@@ -69,7 +69,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         
         // Save data.
-//        SitesDataSource.sharedInstance.saveSitesToDefaults()
     }
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
@@ -167,6 +166,12 @@ extension AppDelegate {
                     
                     switch (storyboardIdentifier) {
                     case .SiteListPageViewController:
+                        
+                        if let UUIDString = pathComponents[safe: 2], uuid = NSUUID(UUIDString: UUIDString), site = (SitesDataSource.sharedInstance.sites.filter { $0.uuid == uuid }.first), index = SitesDataSource.sharedInstance.sites.indexOf(site) {
+                            
+                           SitesDataSource.sharedInstance.lastViewedSiteIndex = index
+                        }
+                        
                         viewControllers.append(newViewController) // Create the view controller and append it to the navigation view controller stack
                     case .FormViewNavigationController, .FormViewController:
                         navController.presentViewController(newViewController, animated: false, completion: { () -> Void in
@@ -220,22 +225,22 @@ extension AppDelegate {
     // AppDataManagerNotificationDidChange Handler
     func dataManagerDidChange(notification: NSNotification? = nil) {
         
-        let sites = SitesDataSource.sharedInstance.sites
-        
-        if UIApplication.sharedApplication().currentUserNotificationSettings()?.types == .None || !sites.isEmpty {
-            setupNotificationSettings()
-        }
-        
-        UIApplication.sharedApplication().shortcutItems = nil
-        
-        let useCase = CommonUseCasesForShortcuts.ShowDetail.applicationShortcutItemType
-        
-        for (index, site) in sites.enumerate() {
-            
-            let mvm = site.generateSummaryModelViewModel()
-            
-            UIApplication.sharedApplication().shortcutItems?.append(UIApplicationShortcutItem(type: useCase, localizedTitle: mvm.nameLabel, localizedSubtitle: mvm.urlLabel, icon: nil, userInfo: ["uuid": site.uuid.UUIDString, "siteIndex": index]))
-        }
+//        let sites = SitesDataSource.sharedInstance.sites
+//        
+//        if UIApplication.sharedApplication().currentUserNotificationSettings()?.types == .None || !sites.isEmpty {
+//            setupNotificationSettings()
+//        }
+//        
+//        UIApplication.sharedApplication().shortcutItems = nil
+//        
+//        let useCase = CommonUseCasesForShortcuts.ShowDetail.applicationShortcutItemType
+//        
+//        for (index, site) in sites.enumerate() {
+//            
+//            let mvm = site.generateSummaryModelViewModel()
+//            
+//            UIApplication.sharedApplication().shortcutItems?.append(UIApplicationShortcutItem(type: useCase, localizedTitle: mvm.nameLabel, localizedSubtitle: mvm.urlLabel, icon: nil, userInfo: ["uuid": site.uuid.UUIDString, "siteIndex": index]))
+//        }
     }
     
 }

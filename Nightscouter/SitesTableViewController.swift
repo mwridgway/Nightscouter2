@@ -8,7 +8,7 @@
 
 import UIKit
 import NightscouterKit
-
+import ReactiveCocoa
 class SitesTableViewController: UITableViewController, SitesDataSourceProvider, SegueHandlerType {
     
     struct CellIdentifier {
@@ -40,14 +40,21 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
     
     /**
      Array of HTTP Clients
-    */
-    var sockets = [NightscoutSocketIOClient]()
+     */
+    //    var sockets = [NightscoutSocketIOClient]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Common setup.
         configureView()
+        
+        
+        NSNotificationCenter.defaultCenter().addObserverForName(DataUpdatedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { (_) -> Void in
+            
+            self.tableView.reloadData()
+        }
+        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -110,7 +117,6 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         if editingStyle == .Delete {
             
             // Delete object form data source.
-//            SitesDataSource.sharedInstance.removeSite(indexPath.row)
             SitesDataSource.sharedInstance.deleteSite(sites[indexPath.row])
             
             // Delete the row from the data source
@@ -132,8 +138,8 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         
         // Remove the site from the data source from its orginal (fromIndexPath) location.
         SitesDataSource.sharedInstance.deleteSite(sites[fromIndexPath.row])
-
-//        SitesDataSource.sharedInstance.removeSite(fromIndexPath.row)
+        
+        //        SitesDataSource.sharedInstance.removeSite(fromIndexPath.row)
         // Insert the site into the data source at its new (toIndexPath) location.
         SitesDataSource.sharedInstance.createSite(site, atIndex: toIndexPath.row)
     }
@@ -206,7 +212,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             // let siteListPageViewController = segue.destinationViewController as! SiteListPageViewController
             // Get the cell that generated this segue.
             if let selectedSiteCell = sender as? UITableViewCell {
-                let indexPath = tableView.indexPathForCell(selectedSiteCell)!
+                let indexPath = tableView.indexPathForCell(selectedSiteCell) ?? NSIndexPath(forItem: 0, inSection: 0)
                 SitesDataSource.sharedInstance.lastViewedSiteIndex = indexPath.row
             }
             
@@ -225,7 +231,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
     
     // MARK: Interface Builder Actions
     
-    @IBAction func refreshTable(sender: UIRefreshControl) {
+    @IBAction func refreshTable( sender: UIRefreshControl) {
         updateData()
     }
     
@@ -282,6 +288,14 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         
         // Make sure the idle screen timer is turned back to normal. Screen will time out.
         UIApplication.sharedApplication().idleTimerDisabled = false
+        
+        // TODO: If there is only one site in the array, push to the detail controller right away. If a new or second one is added dismiss and return to table view.
+        // TODO: Faking a data transfter date.
+        // TODO: Need to update the table when data changes... also need to call updateTable if empty to show an empty row.
+        //        NSNotificationCenter.defaultCenter().addObserverForName(DataUpdatedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { (_) -> Void in
+        //            self.tableView.reloadData()
+        //        }
+        
     }
     
     func updateData(){
@@ -293,19 +307,29 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             }
             
             
-            for (index, oldSite) in sites.enumerate() {
-                let socket = NightscoutSocketIOClient(site: oldSite)
+            for site in sites {
+                rac_nightscouterFetchSiteConfigurationData(withSite: site)
+                    .observeOn(UIScheduler())
+                    .startWithNext { configuration in
+                        var newSite = site
+                        newSite.configuration = configuration
+                        SitesDataSource.sharedInstance.updateSite(newSite)
+                }
                 
-                sockets.append(socket)
-                socket.fetchConfigurationData().startWithNext { site in
-                    if let site = site {
-                        // SitesDataSource.sharedInstance.updateSite(site)
-                    }
+                rac_nightscouterConnectToSocketSignal(withSite: site)
+                    .observeOn(UIScheduler())
+                    .map({ (items, event) -> Site in
+                        var newSite = site
+                        
+                        newSite.parseJSONforSocketData(items)
+                        SitesDataSource.sharedInstance.updateSite(newSite)
+                        return newSite
+                        
+                    })
+                    .startWithNext { (site) in
+                        NSNotificationCenter.defaultCenter().postNotificationName(DataUpdatedNotification, object: nil)
                 }
-                socket.fetchSocketData().observeNext { site in
-                    SitesDataSource.sharedInstance.updateSite(site)
-                    self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
-                }
+                
             }
         }
         
@@ -355,9 +379,9 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         
         let removeAction = UIAlertAction(title: LocalizedString.tableViewCellRemove.localized, style: .Destructive) { (action) in
             self.tableView.beginUpdates()
-//            SitesDataSource.sharedInstance.removeSite(index)
+            //            SitesDataSource.sharedInstance.removeSite(index)
             SitesDataSource.sharedInstance.deleteSite(self.sites[index])
-
+            
             self.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
             self.tableView.endUpdates()
         }

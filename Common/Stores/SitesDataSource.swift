@@ -21,8 +21,7 @@ public enum DefaultKey: String, RawRepresentable {
 }
 
 public class SitesDataSource: SiteStoreType {
-    // MARK: Persistence
-    
+
     public static let sharedInstance = SitesDataSource()
     
     private init() {
@@ -41,10 +40,7 @@ public class SitesDataSource: SiteStoreType {
     
     private let defaults: NSUserDefaults
     
-    //    private let sessionManager: SessionManagerType
-    
     private var sessionManagers: [SessionManagerType] = []
-    
     
     public var storageLocation: StorageLocation { return .LocalKeyValueStore }
     
@@ -63,7 +59,6 @@ public class SitesDataSource: SiteStoreType {
         }
         set {
             if lastViewedSiteIndex != newValue {
-                // defaults.setInteger(newValue, forKey: DefaultKey.lastViewedSiteIndex.rawValue)
                 saveData([DefaultKey.lastViewedSiteIndex.rawValue: newValue])
             }
         }
@@ -72,7 +67,6 @@ public class SitesDataSource: SiteStoreType {
     public var primarySite: Site? {
         set{
             if let site = newValue {
-                // defaults.setObject(site.uuid.UUIDString, forKey: DefaultKey.primarySiteUUID.rawValue)
                 saveData([DefaultKey.primarySiteUUID.rawValue: site.uuid.UUIDString])
             }
         }
@@ -100,6 +94,7 @@ public class SitesDataSource: SiteStoreType {
             initial.append(site)
         }
         
+        
         let siteDict = initial.map { $0.encode() }
         
         saveData([DefaultKey.sites.rawValue: siteDict])
@@ -124,7 +119,12 @@ public class SitesDataSource: SiteStoreType {
         
         var initial = sites
         let success = initial.remove(site)
+        
         AppConfiguration.keychain[site.uuid.UUIDString] = nil
+       
+        if site == lastViewedSite {
+            lastViewedSiteIndex = 0
+        }
         
         if sites.isEmpty {
             lastViewedSiteIndex = 0
@@ -178,15 +178,15 @@ public class SitesDataSource: SiteStoreType {
                 for site in sites {
                     #if os(iOS)
                         dispatch_async(dispatch_get_main_queue()) {
-                            let socket = NightscoutSocketIOClient(site: site)
-                            socket.fetchConfigurationData().startWithNext { racSite in
-                                // if let racSite = racSite {
-                                // self.updateSite(racSite)
-                                // }
-                            }
-                            socket.fetchSocketData().observeNext { racSite in
-                                self.updateSite(racSite)
-                            }
+//                            let socket = NightscoutSocketIOClient(site: site)
+//                            socket.fetchConfigurationData().startWithNext { racSite in
+//                                // if let racSite = racSite {
+//                                // self.updateSite(racSite)
+//                                // }
+//                            }
+//                            socket.fetchSocketData().observeNext { racSite in
+//                                self.updateSite(racSite)
+//                            }
                         }
                     #endif
                 }

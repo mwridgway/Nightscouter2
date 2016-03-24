@@ -8,21 +8,20 @@
 
 import Foundation
 
-class iCloudKeyValueStore {
-    // MARK: iCloud Key Store Changed
-    private let iCloudKeyValueStore: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.defaultStore()
-
+class iCloudKeyValueStore: NSObject, SessionManagerType {
     
-//    init() {
-//        iCloudKeyValueStore = NSUbiquitousKeyValueStore.defaultStore()
-//        
-//        NSNotificationCenter.defaultCenter().addObserver(self,
-//            selector: "ubiquitousKeyValueStoreDidChange:",
-//            name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification,
-//            object: iCloudKeyValueStore)
-//        
-//        iCloudKeyValueStore.synchronize()
-//    }
+    private let iCloudKeyValueStore: NSUbiquitousKeyValueStore
+    
+    override init() {
+        iCloudKeyValueStore = NSUbiquitousKeyValueStore.defaultStore()
+        
+        super.init()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "ubiquitousKeyValueStoreDidChange:",
+            name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification,
+            object: iCloudKeyValueStore)
+    }
     
     func ubiquitousKeyValueStoreDidChange(notification: NSNotification) {
         guard let userInfo = notification.userInfo as? [String: AnyObject], changeReason = userInfo[NSUbiquitousKeyValueStoreChangeReasonKey] as? NSNumber else {
@@ -34,7 +33,8 @@ class iCloudKeyValueStore {
         if (reason == NSUbiquitousKeyValueStoreServerChange || reason == NSUbiquitousKeyValueStoreInitialSyncChange) {
             let changedKeys = userInfo[NSUbiquitousKeyValueStoreChangedKeysKey] as! [String]
             let iCloudStore = NSUbiquitousKeyValueStore.defaultStore()
-           
+            print("iCloud has the following changed keys to sync: \(changedKeys)")
+            
             guard let store = store else {
                 print("No Store")
                 
@@ -42,10 +42,11 @@ class iCloudKeyValueStore {
             }
             
             var syncedChanged = [String: AnyObject]()
+            
             for key in changedKeys {
                 // Update Data Source
-                print(key)
-                print(iCloudStore.objectForKey(key))
+                // print(key)
+                // print(iCloudStore.objectForKey(key))
                 syncedChanged[key] = iCloudStore.objectForKey(key)
             }
             
@@ -54,18 +55,10 @@ class iCloudKeyValueStore {
     }
     
     var store: SiteStoreType?
-}
-
-extension iCloudKeyValueStore: SessionManagerType {
     
     func startSession() {
         let lazyMap = Array(iCloudKeyValueStore.dictionaryRepresentation.keys)
         print("keys in \(iCloudKeyValueStore): " + lazyMap.description)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "ubiquitousKeyValueStoreDidChange:",
-            name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification,
-            object: iCloudKeyValueStore)
         
         iCloudKeyValueStore.synchronize()
     }

@@ -29,18 +29,18 @@ class SiteDetailViewController: UIViewController, UIWebViewDelegate {
         didSet {
             guard let site = site else { return }
             
-            let socket = NightscoutSocketIOClient(site: site)
-            
-            socket.fetchConfigurationData().startWithNext { racSite in
-                if let racSite = racSite {
-                    SitesDataSource.sharedInstance.updateSite(racSite)
-                    
-                }
-            }
-            socket.fetchSocketData().observeNext { racSite in
-                SitesDataSource.sharedInstance.updateSite(racSite)
-                self.configureView(withSite: racSite)
-            }
+//            let socket = NightscoutSocketIOClient(site: site)
+//            
+//            socket.fetchConfigurationData().startWithNext { racSite in
+//                if let racSite = racSite {
+//                    SitesDataSource.sharedInstance.updateSite(racSite)
+//                    
+//                }
+//            }
+//            socket.fetchSocketData().observeNext { racSite in
+//                SitesDataSource.sharedInstance.updateSite(racSite)
+//                self.configureView(withSite: racSite)
+//            }
         }
     }
     //var nsApi: NightscoutAPIClient?

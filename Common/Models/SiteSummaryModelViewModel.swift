@@ -130,7 +130,7 @@ public struct SiteSummaryModelViewModel: SiteSummaryModelViewModelDataSource, Si
                 rawNoise = latestSgv.noise
             }
             
-            if let deviceStatus = site.deviceStatus.first {
+            if let deviceStatus = site.deviceStatuses.first {
                 batteryString = deviceStatus.batteryLevel
                 batteryColorVar = deviceStatus.desiredColorState
             }

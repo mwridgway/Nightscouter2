@@ -177,7 +177,7 @@ extension Site: ComplicationDataSourceGenerator {
     
 }
 
-extension Site {
+public extension Site {
     mutating func generateTimeline() {
         self.complicationTimeline = generateComplicationData(forSite: self)
     }

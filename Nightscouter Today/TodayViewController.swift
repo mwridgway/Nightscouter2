@@ -22,10 +22,12 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
         }
     }
     
-    var sites: [Site] {
-        return SitesDataSource.sharedInstance.sites
-    }
-    
+    var sites: [Site] = []
+        
+//        {
+//        return SitesDataSource.sharedInstance.sites
+//    }
+//    
     // Whenever this changes, it updates the attributed title of the refresh control.
     var lastUpdatedTime: NSDate?
     
@@ -38,6 +40,9 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
         let itemCount = sites.isEmpty ? 1 : sites.count
         
         preferredContentSize = CGSize(width: preferredContentSize.width, height: CGFloat(itemCount * TableViewConstants.todayRowHeight))
+        
+        
+        sites = SitesDataSource.sharedInstance.sites
         
         updateData()
     }
@@ -114,16 +119,16 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
         
         // Do not allow refreshing to happen if there is no data in the sites array.
         if !sites.isEmpty {
-            let socket = NightscoutSocketIOClient(site: site)
-            socket.fetchConfigurationData().startWithNext { site in
-                if let site = site {
-                    SitesDataSource.sharedInstance.updateSite(site)
-                }
-            }
-            socket.fetchSocketData().observeNext { site in
-                SitesDataSource.sharedInstance.updateSite(site)
-                self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
-            }
+//            let socket = NightscoutSocketIOClient(site: site)
+//            socket.fetchConfigurationData().startWithNext { site in
+//                if let site = site {
+//                   // SitesDataSource.sharedInstance.updateSite(site)
+//                }
+//            }
+//            socket.fetchSocketData().observeNext { site in
+//                SitesDataSource.sharedInstance.updateSite(site)
+//                self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
+//            }
         }
     }
     
@@ -132,12 +137,7 @@ class TodayViewController: UITableViewController, NCWidgetProviding, SitesDataSo
         if let context = extensionContext {
             
             let site = sites[indexPath.row], uuidString = site.uuid.UUIDString
-            
-            // TODO: Add UUID to URK processing get ride of setting datasource everywhere.
-            
-            SitesDataSource.sharedInstance.lastViewedSiteIndex = indexPath.row
-//            SitesDataSource.sharedInstance.lastViewedSiteUUID = site.uuid
-            
+                                    
             let url = LinkBuilder.buildLink(withViewController: .SiteListPageViewController).URLByAppendingPathComponent(uuidString)
         
             context.openURL(url, completionHandler: nil)

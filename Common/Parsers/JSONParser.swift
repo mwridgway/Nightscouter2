@@ -34,7 +34,7 @@ extension Site: Encodable, Decodable {
         static let sgvs = "sgvs"
         static let mbgs = "mbgs"
         static let cals = "cals"
-        static let deviceStatus = "deviceStatus"
+        static let deviceStatuses = "deviceStatuses"
         static let complicationTimeline = "complicationTimeline"
     }
     
@@ -42,10 +42,10 @@ extension Site: Encodable, Decodable {
         let encodedSgvs: [[String : AnyObject]] = sgvs.flatMap{ $0.encode() }
         let encodedCals: [[String : AnyObject]] = cals.flatMap{ $0.encode() }
         let encodedMgbs: [[String : AnyObject]] = mbgs.flatMap{ $0.encode() }
-        let encodedDeviceStatus: [[String : AnyObject]] = deviceStatus.flatMap{ $0.encode() }
+        let encodedDeviceStatus: [[String : AnyObject]] = deviceStatuses.flatMap{ $0.encode() }
         let encodedComplicationTimeline: [[String : AnyObject]] = complicationTimeline.flatMap { $0.encode() }
         
-        return [JSONKey.url : url.absoluteString, JSONKey.overrideScreenLock : overrideScreenLock, JSONKey.disabled: disabled, JSONKey.uuid: uuid.UUIDString, JSONKey.configuration: configuration?.encode() ?? "", JSONKey.sgvs: encodedSgvs, JSONKey.cals: encodedCals, JSONKey.mbgs: encodedMgbs, JSONKey.deviceStatus: encodedDeviceStatus, JSONKey.complicationTimeline: encodedComplicationTimeline]
+        return [JSONKey.url : url.absoluteString, JSONKey.overrideScreenLock : overrideScreenLock, JSONKey.disabled: disabled, JSONKey.uuid: uuid.UUIDString, JSONKey.configuration: configuration?.encode() ?? "", JSONKey.sgvs: encodedSgvs, JSONKey.cals: encodedCals, JSONKey.mbgs: encodedMgbs, JSONKey.deviceStatuses: encodedDeviceStatus, JSONKey.complicationTimeline: encodedComplicationTimeline]
     }
     
     public static func decode(dict: [String: AnyObject]) -> Site? {
@@ -70,8 +70,8 @@ extension Site: Encodable, Decodable {
             site.cals = cals.flatMap { Calibration.decode($0) }
         }
         
-        if let devStatus = rootDictForData[JSONKey.deviceStatus] as? [[String: AnyObject]] {
-            site.deviceStatus = devStatus.flatMap { DeviceStatus.decode($0) }
+        if let devStatus = rootDictForData[JSONKey.deviceStatuses] as? [[String: AnyObject]] {
+            site.deviceStatuses = devStatus.flatMap { DeviceStatus.decode($0) }
         }
         
         if let config = dict[JSONKey.configuration] as? [String: AnyObject] {
@@ -420,7 +420,7 @@ extension ComplicationTimelineEntry: Encodable, Decodable {
 
 
 // MARK: Append incoming data from a socket.io connection.
-extension Site {
+public extension Site {
     
     /**
      Mutates the current site by adding device, sgv, mbgs, cals received via JSON.
@@ -435,7 +435,7 @@ extension Site {
         }
         
         if let uploaderBattery = json[DeviceStatus.JSONKey.devicestatus][DeviceStatus.JSONKey.uploaderBattery].int {
-            self.deviceStatus.insertOrUpdate(DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: 0))
+            self.deviceStatuses.insertOrUpdate(DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: 0))
         }
         
         let deviceStatus = json[DeviceStatus.JSONKey.devicestatus]
@@ -445,7 +445,7 @@ extension Site {
             if let mills = subJson[DeviceStatus.JSONKey.mills].double {
                 if let uploaderBattery = subJson[DeviceStatus.JSONKey.uploader, DeviceStatus.JSONKey.battery].int {
                     let dStatus = DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: mills)
-                    self.deviceStatus.insertOrUpdate(dStatus)
+                    self.deviceStatuses.insertOrUpdate(dStatus)
                 }
             }
         }
@@ -492,7 +492,7 @@ extension Site {
         self.sgvs.sortByDate()
         self.cals.sortByDate()
         self.mbgs.sortByDate()
-        self.deviceStatus.sortByDate()
+        self.deviceStatuses.sortByDate()
         
     }
 }

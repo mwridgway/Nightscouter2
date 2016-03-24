@@ -18,7 +18,7 @@ public struct Site: Dateable, CustomStringConvertible {
     public var sgvs: [SensorGlucoseValue] = []
     public var cals: [Calibration] = []
     public var mbgs: [MeteredGlucoseValue] = []
-    public var deviceStatus: [DeviceStatus] = []
+    public var deviceStatuses: [DeviceStatus] = []
     public var complicationTimeline: [ComplicationTimelineEntry] = []
     
     // public var allowNotifications: Bool // Will be used when we support push notifications. Future addition.
@@ -75,7 +75,7 @@ public func ==(lhs: Site, rhs: Site) -> Bool {
 
 extension Site: Hashable {
     public var hashValue: Int {
-        return uuid.hashValue + sgvs.count.hashValue + cals.count.hashValue + deviceStatus.count.hashValue
+        return uuid.hashValue + sgvs.count.hashValue + cals.count.hashValue + deviceStatuses.count.hashValue
     }
 }
 

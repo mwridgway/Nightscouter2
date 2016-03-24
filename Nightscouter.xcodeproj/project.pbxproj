@@ -32,7 +32,6 @@
 		173581161C443A8C00E893DB /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173581141C443A8C00E893DB /* ComplicationController.swift */; };
 		173581241C44496700E893DB /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173581231C44496700E893DB /* AppConfiguration.swift */; };
 		173581251C44496700E893DB /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173581231C44496700E893DB /* AppConfiguration.swift */; };
-		173A0B7D1C4D25F5005B74FC /* SocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173A0B7B1C4D25F5005B74FC /* SocketClient.swift */; };
 		173F84E91C4D457B00DCB47D /* SiteRowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173F84E71C4D457B00DCB47D /* SiteRowController.swift */; };
 		173F84EA1C4D457B00DCB47D /* SiteEmptyRowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173F84E81C4D457B00DCB47D /* SiteEmptyRowController.swift */; };
 		173F84ED1C4D45C900DCB47D /* SiteDetailInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173F84EC1C4D45C900DCB47D /* SiteDetailInterfaceController.swift */; };
@@ -50,6 +49,7 @@
 		174EE7051C4F11FB00C7E44E /* Shared Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174EE7031C4F11FB00C7E44E /* Shared Assets.xcassets */; };
 		174EE7061C4F134100C7E44E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 177054891C49601B00302D83 /* Localizable.strings */; };
 		175DDBF31C48236C0083CC8C /* SiteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175DDBF21C48236C0083CC8C /* SiteTableViewCell.swift */; };
+		1760DCED1CA07ABA0000B01D /* SocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1760DCEB1CA07A610000B01D /* SocketClient.swift */; };
 		176BE2761C496A330040F1B7 /* ModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176BE2751C496A330040F1B7 /* ModelController.swift */; };
 		176BE2791C496A3F0040F1B7 /* SiteDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176BE2771C496A3F0040F1B7 /* SiteDetailViewController.swift */; };
 		176BE27A1C496A3F0040F1B7 /* SiteListPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176BE2781C496A3F0040F1B7 /* SiteListPageViewController.swift */; };
@@ -263,7 +263,6 @@
 		173581131C443A8C00E893DB /* GlanceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlanceController.swift; sourceTree = "<group>"; };
 		173581141C443A8C00E893DB /* ComplicationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
 		173581231C44496700E893DB /* AppConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
-		173A0B7B1C4D25F5005B74FC /* SocketClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketClient.swift; sourceTree = "<group>"; };
 		173F84E71C4D457B00DCB47D /* SiteRowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteRowController.swift; sourceTree = "<group>"; };
 		173F84E81C4D457B00DCB47D /* SiteEmptyRowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteEmptyRowController.swift; sourceTree = "<group>"; };
 		173F84EC1C4D45C900DCB47D /* SiteDetailInterfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteDetailInterfaceController.swift; sourceTree = "<group>"; };
@@ -278,6 +277,7 @@
 		175DDBF21C48236C0083CC8C /* SiteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewCell.swift; sourceTree = "<group>"; };
 		175DE0051C5BC7820031613E /* Nightscouter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Nightscouter.entitlements; sourceTree = "<group>"; };
 		175DE0061C5BC7AF0031613E /* Nightscouter Today.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Nightscouter Today.entitlements"; sourceTree = "<group>"; };
+		1760DCEB1CA07A610000B01D /* SocketClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketClient.swift; sourceTree = "<group>"; };
 		176BE2751C496A330040F1B7 /* ModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelController.swift; sourceTree = "<group>"; };
 		176BE2771C496A3F0040F1B7 /* SiteDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteDetailViewController.swift; sourceTree = "<group>"; };
 		176BE2781C496A3F0040F1B7 /* SiteListPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteListPageViewController.swift; sourceTree = "<group>"; };
@@ -480,8 +480,8 @@
 			children = (
 				17A3F66A1C6130D900A702F2 /* WatchSessionManager.swift */,
 				17490CA11C56BE1800389C7C /* AppTheme.swift */,
-				173A0B7B1C4D25F5005B74FC /* SocketClient.swift */,
 				17D0EB661C53C82E007F21FC /* SocketIOClient+Signal.swift */,
+				1760DCEB1CA07A610000B01D /* SocketClient.swift */,
 				176BE2821C497D0C0040F1B7 /* Protocols */,
 				176BE2831C497D1A0040F1B7 /* Views */,
 				1742F03C1C458475008DED3F /* NightscouterAssetKit.swift */,
@@ -970,7 +970,7 @@
 								enabled = 1;
 							};
 							com.apple.Keychain = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.iCloud = {
 								enabled = 1;
@@ -997,10 +997,10 @@
 								enabled = 1;
 							};
 							com.apple.Keychain = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.iCloud = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -1023,8 +1023,8 @@
 			projectRoot = "";
 			targets = (
 				1735804C1C44354200E893DB /* Nightscouter */,
-				173580651C44357D00E893DB /* Nightscouter Today */,
 				1735807D1C4435BD00E893DB /* NightscouterKit */,
+				173580651C44357D00E893DB /* Nightscouter Today */,
 				1735808E1C44370300E893DB /* Nightscouter Watch App */,
 				1735809A1C44370300E893DB /* Nightscouter Watch App Extension */,
 				173580BA1C44375200E893DB /* NightscouterWatchKit */,
@@ -1581,7 +1581,6 @@
 				17B0BC501C98609A003DBC94 /* NSURL-Extensions.swift in Sources */,
 				176BE27E1C496E060040F1B7 /* SegueHandlerType.swift in Sources */,
 				17B0BC541C98609A003DBC94 /* Calibration.swift in Sources */,
-				173A0B7D1C4D25F5005B74FC /* SocketClient.swift in Sources */,
 				17B0BC5E1C98609A003DBC94 /* ServerConfiguration.swift in Sources */,
 				17B0BC6A1C98609A003DBC94 /* Chartable.swift in Sources */,
 				17B0BC621C98609A003DBC94 /* SiteSummaryModelViewModel.swift in Sources */,
@@ -1592,6 +1591,7 @@
 				17B0BC781C98609A003DBC94 /* iCloudKeyValueStore.swift in Sources */,
 				17B0BC661C98609A003DBC94 /* JSONParser.swift in Sources */,
 				17B0BC721C98609A003DBC94 /* UpdatableUserInterfaceType.swift in Sources */,
+				1760DCED1CA07ABA0000B01D /* SocketClient.swift in Sources */,
 				17B0BC601C98609A003DBC94 /* Site.swift in Sources */,
 				17B0BC701C98609A003DBC94 /* Protocols.swift in Sources */,
 				17B0BC581C98609A003DBC94 /* DeviceStatus.swift in Sources */,
@@ -1854,7 +1854,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "Nightscouter Today/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.nothingonline.Nightscouter.Nightscouter-Today";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nothingonline.Nightscouter.NightscouterToday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
@@ -1870,7 +1870,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "Nightscouter Today/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.nothingonline.Nightscouter.Nightscouter-Today";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nothingonline.Nightscouter.NightscouterToday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
