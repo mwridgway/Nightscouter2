@@ -15,13 +15,13 @@ import Alamofire
 
 public class NightscoutSocketIOClient {
     
-    // From ericmarkmartin... RAC integration
-    public let signal: Signal<[AnyObject], NSError>
-    
     private var url: NSURL!
     
     // TODO: Refactor out...
     public var site: Site
+    
+    // From ericmarkmartin... RAC integration
+    public let signal: Signal<[AnyObject], NSError>
     
     private var apiSecret: String
     public let socket: SocketIOClient
@@ -123,4 +123,55 @@ struct SocketHeader {
 // Header values (strings)
 struct SocketValue {
     static let ClientMobile = "mobile"
+}
+
+struct SiteMetadata {
+    let url: NSURL!
+    let apiSecret: String
+}
+
+struct SiteUpdate {
+    let site: Site
+    let changeset: SiteChangeset
+}
+
+func changedSiteSignal(metadata: [SiteMetadata]) -> Signal<Site, NSError> {
+    let (signal, observer) = Signal<Signal<Site, NSError>, NSError>.pipe()
+    
+    for datum in metadata {
+        observer.sendNext(
+            NightscoutSocketIOClient(
+                site: Site(url: datum.url, apiSecret: datum.apiSecret)
+            ).fetchSocketData()
+        )
+    }
+    
+    return signal.flatten(.Merge)
+}
+
+func changedSiteSignalWithChangesets(metadata: [SiteMetadata]) -> Signal<SiteUpdate, NSError> {
+    let (signal, observer) = Signal<Signal<SiteUpdate, NSError>, NSError>.pipe()
+    var sitesDict = [String: Site]()
+    
+    for datum in metadata {
+        let site = Site(url: datum.url, apiSecret: datum.apiSecret)
+        
+        sitesDict[datum.url.absoluteString] = site
+        
+        observer.sendNext(
+            NightscoutSocketIOClient(site: site).fetchSocketData().map { updatedSite in
+                let changeset: SiteChangeset
+                
+                if let oldSite = sitesDict[updatedSite.url.absoluteString] {
+                    changeset = SiteChangeset(site: oldSite, otherSite: updatedSite)
+                } else {
+                    changeset = SiteChangeset()
+                }
+                
+                return SiteUpdate(site: updatedSite, changeset: changeset)
+            }
+        )
+    }
+    
+    return signal.flatten(.Merge)
 }

@@ -58,3 +58,21 @@ public struct ComplicationTimelineEntry: SiteCommonInfoDataSource, SiteCommonInf
     }
 
 }
+
+extension ComplicationTimelineEntry: Equatable {}
+public func ==(lhs: ComplicationTimelineEntry, rhs: ComplicationTimelineEntry) -> Bool {
+    return lhs.milliseconds == rhs.milliseconds &&
+        lhs.lastReadingDate == rhs.lastReadingDate &&
+        lhs.rawLabel == rhs.rawLabel &&
+        lhs.nameLabel == rhs.nameLabel &&
+        lhs.urlLabel == rhs.urlLabel &&
+        lhs.sgvLabel == rhs.sgvLabel &&
+        lhs.deltaLabel == rhs.deltaLabel &&
+        lhs.rawNoise == rhs.rawNoise &&
+        lhs.lastReadingColor == rhs.lastReadingColor &&
+        lhs.sgvColor == rhs.sgvColor &&
+        lhs.deltaColor == rhs.deltaColor &&
+        lhs.units == rhs.units &&
+        lhs.direction == rhs.direction &&
+        lhs.stale == rhs.stale
+}

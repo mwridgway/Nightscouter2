@@ -9,15 +9,10 @@
 import Foundation
 import SocketIOClientSwift
 import ReactiveCocoa
-
 import SwiftyJSON
 
-private var signal : Signal<[AnyObject], NSError>? = nil
-
 public extension SocketIOClient {
-    
     public func rac_socketSignal() -> Signal<[AnyObject], NSError> {
-        
         let (tmpSignal, observer) = Signal<[AnyObject], NSError>.pipe()
         
         self.on(WebEvents.disconnect.rawValue) { data, ack in
@@ -30,20 +25,11 @@ public extension SocketIOClient {
             observer.sendNext(data)
         }
         
-        signal = tmpSignal
-        
         return tmpSignal
-        
     }
 }
 
-
-
 /// New stuff
-
-
-
-
 private func generateConfigurationRequestHeader(withURL url: NSURL, withApiSecretString apiSecret: String) -> NSMutableURLRequest {
     var headers: [String: String] = ["Content-Type": "application/json"]
     headers["api-secret"] = apiSecret.sha1()

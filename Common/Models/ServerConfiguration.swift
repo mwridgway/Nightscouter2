@@ -16,7 +16,7 @@ public struct ServerConfiguration: CustomStringConvertible {
     public let apiEnabled: Bool
     public let careportalEnabled: Bool
     public let boluscalcEnabled: Bool
-    public let head:String
+    public let head: String
     public let settings: Settings?
     
     public var description: String {
@@ -70,6 +70,19 @@ public struct ServerConfiguration: CustomStringConvertible {
         self.head = head
     }
     
+}
+
+extension ServerConfiguration: Equatable { }
+public func ==(lhs: ServerConfiguration, rhs: ServerConfiguration) -> Bool {
+    return lhs.status == rhs.status &&
+        lhs.version == rhs.version &&
+        lhs.name == rhs.name &&
+        lhs.serverTime == rhs.serverTime &&
+        lhs.apiEnabled == rhs.apiEnabled &&
+        lhs.careportalEnabled == rhs.careportalEnabled &&
+        lhs.boluscalcEnabled == rhs.boluscalcEnabled &&
+        lhs.head == rhs.head &&
+        lhs.settings == rhs.settings
 }
 
 extension ServerConfiguration {
@@ -131,6 +144,27 @@ public struct Settings: CustomStringConvertible {
         let dict = ["units": units.description, "timeFormat": timeFormat, "nightMode": nightMode.description, "showRawbg": showRawbg.rawValue, "customTitle": customTitle, "theme": theme, "alarms": alarms.description, "language": language, "baseURL": baseURL]
         return dict.description
     }
+}
+
+extension Settings: Equatable {}
+public func ==(lhs: Settings, rhs: Settings) -> Bool {
+    return lhs.units == rhs.units &&
+        lhs.timeFormat == rhs.timeFormat &&
+        lhs.nightMode == rhs.nightMode &&
+        lhs.editMode == rhs.editMode &&
+        lhs.showRawbg == rhs.showRawbg &&
+        lhs.customTitle == rhs.customTitle &&
+        lhs.theme == rhs.theme &&
+        lhs.alarms == rhs.alarms &&
+        lhs.timeAgo == rhs.timeAgo &&
+        lhs.scaleY == rhs.scaleY &&
+        lhs.language == rhs.language &&
+        lhs.showPlugins == rhs.showPlugins &&
+        lhs.enable == rhs.enable &&
+        lhs.thresholds == rhs.thresholds &&
+        lhs.baseURL == rhs.baseURL &&
+        lhs.alarmType == rhs.alarmType &&
+        lhs.heartbeat == rhs.heartbeat
 }
 
 public enum Plugin: String, CustomStringConvertible, RawRepresentable {
@@ -214,6 +248,14 @@ extension Thresholds: ColorBoundable {
     public var top: Double { return self.bgHigh }
 }
 
+extension Thresholds: Equatable {}
+public func ==(lhs: Thresholds, rhs: Thresholds) -> Bool {
+    return lhs.bottom == rhs.bottom &&
+        lhs.targetBottom == rhs.targetBottom &&
+        lhs.targetTop == rhs.targetTop &&
+        lhs.top == rhs.top
+}
+
 public struct Alarm: CustomStringConvertible {
     public let urgentHigh: Bool
     public let urgentHighMins: [Int]
@@ -229,6 +271,19 @@ public struct Alarm: CustomStringConvertible {
         let dict = ["urgentHigh": urgentHigh, "urgentHighMins": urgentHighMins, "high": high, "highMins": highMins, "low": low, "lowMins": lowMins, "urgentLow": urgentLow, "urgentLowMins": urgentLowMins, "warnMins": warnMins]
         return dict.description
     }
+}
+
+extension Alarm : Equatable {}
+public func ==(lhs: Alarm, rhs: Alarm) -> Bool {
+    return lhs.urgentHigh == rhs.urgentHigh &&
+        lhs.urgentHighMins == rhs.urgentHighMins &&
+        lhs.high == rhs.high &&
+        lhs.highMins == rhs.highMins &&
+        lhs.low == rhs.low &&
+        lhs.lowMins == rhs.lowMins &&
+        lhs.urgentLow == rhs.urgentLow &&
+        lhs.urgentLowMins == rhs.urgentLowMins &&
+        lhs.warnMins == rhs.warnMins
 }
 
 
@@ -272,4 +327,12 @@ public extension TimeAgoAlert {
         return returnValue
     }
     
+}
+
+extension TimeAgoAlert: Equatable {}
+public func ==(lhs: TimeAgoAlert, rhs: TimeAgoAlert) -> Bool {
+    return lhs.warn == rhs.warn &&
+        lhs.warnMins == rhs.warnMins &&
+        lhs.urgent == rhs.urgent &&
+        lhs.urgentMins == rhs.urgentMins
 }

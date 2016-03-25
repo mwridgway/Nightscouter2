@@ -119,3 +119,30 @@ extension Site {
         return SiteSummaryModelViewModel(withSite: self)
     }
 }
+
+struct SiteChangeset {
+    let configurationChanged: Bool
+    let sgvsChanged: Bool
+    let calsChanged: Bool
+    let mbgsChanged: Bool
+    let deviceStatusesChanged: Bool
+    let complicationTimelineChanged: Bool
+    
+    init(site: Site, otherSite: Site) {
+        configurationChanged = site.configuration == otherSite.configuration
+        sgvsChanged = site.sgvs == otherSite.sgvs
+        calsChanged = site.cals == otherSite.cals
+        mbgsChanged = site.mbgs == otherSite.mbgs
+        deviceStatusesChanged = site.deviceStatuses == otherSite.deviceStatuses
+        complicationTimelineChanged = site.complicationTimeline == otherSite.complicationTimeline
+    }
+    
+    init() {
+        configurationChanged = false
+        sgvsChanged = false
+        calsChanged = false
+        mbgsChanged = false
+        deviceStatusesChanged = false
+        complicationTimelineChanged = false
+    }
+}

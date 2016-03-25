@@ -399,6 +399,7 @@
 		173580441C44354200E893DB = {
 			isa = PBXGroup;
 			children = (
+				883D05FD1C9C924B00815816 /* Uploader */,
 				176BE2841C497D890040F1B7 /* LICENSE */,
 				176BE2851C497D890040F1B7 /* README.md */,
 				1735808C1C44367F00E893DB /* Shared Resources */,
@@ -767,6 +768,13 @@
 				2015F04B13ABF57C54A848A0 /* Pods-NightscouterWatchKit.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		883D05FD1C9C924B00815816 /* Uploader */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Uploader;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

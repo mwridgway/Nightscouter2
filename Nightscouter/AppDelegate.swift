@@ -193,7 +193,7 @@ extension AppDelegate {
     // MARK: Notifications
     
     func userDefaultsDidChange(notification: NSNotification) {
-        if let userDefaults = notification.object as? NSUserDefaults {
+        if let _ = notification.object as? NSUserDefaults {
             print("Defaults Changed")
         }
     }
