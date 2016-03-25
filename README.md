@@ -1,4 +1,6 @@
 # Nightscouter
+
+[![Join the chat at https://gitter.im/someoneAnyone/Nightscouter2](https://badges.gitter.im/someoneAnyone/Nightscouter2.svg)](https://gitter.im/someoneAnyone/Nightscouter2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 An Native iOS app used for displaying CGM data from a Nightscout website data. To build and run for your self, you'll need to have a valid Apple Developer account to generate the proper entitlements needed to share data between the Today Widget and the main App.
 
 Don't want to build and install on your own? Nightscouter is now available on the [Apple AppStore] (https://itunes.apple.com/us/app/nightscouter/id1010503247?ls=1&mt=8).
