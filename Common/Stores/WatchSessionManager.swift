@@ -55,7 +55,7 @@ extension WatchSessionManager {
     // Sender
     public func updateApplicationContext(applicationContext: [String : AnyObject]) throws {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function)<<")
         #endif
         do {
             try session.updateApplicationContext(applicationContext)
@@ -103,7 +103,7 @@ extension WatchSessionManager {
 extension WatchSessionManager {
     
     func processApplicationContext(context: [String : AnyObject]) -> Bool {
-        print(">>> Entering \(__FUNCTION__) <<<")
+        print(">>> Entering \(#function) <<<")
         //print("processApplicationContext \(context)")
         
         //print("Did receive payload: \(context)")
@@ -121,7 +121,7 @@ extension WatchSessionManager {
 
 extension WatchSessionManager { 
     public func requestCompanionAppUpdate() {
-        print(">>> Entering \(__FUNCTION__) <<<")
+        print(">>> Entering \(#function) <<<")
         
         let messageToSend = DefaultKey.payloadPhoneUpdate
         

@@ -7,7 +7,7 @@
 //
 
 import WatchKit
-import NightscouterWatchKit
+import NightscouterKit
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
 

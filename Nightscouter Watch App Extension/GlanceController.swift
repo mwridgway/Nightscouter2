@@ -8,7 +8,7 @@
 
 import WatchKit
 import Foundation
-import NightscouterWatchKit
+import NightscouterKit
 
 class GlanceController: WKInterfaceController {
     

@@ -12,6 +12,16 @@ import Foundation
 public struct Calibration: CustomStringConvertible, Dateable {
     public let slope: Double, intercept: Double, scale: Double, milliseconds: Double
     
+    /**
+     
+     Initializes a new calibration structure with the default values.
+     
+     - Parameters:
+     - None
+     
+     
+     - Returns: Calibration
+     */
     public init() {
         slope = 856.59
         intercept = 32179

@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 
 public protocol SegueHandlerType {
-    typealias SegueIdentifier: RawRepresentable
+    associatedtype SegueIdentifier: RawRepresentable
 }
 
 public extension SegueHandlerType where Self: UIViewController,

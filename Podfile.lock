@@ -1,48 +1,49 @@
 PODS:
-  - Alamofire (3.2.1)
-  - CryptoSwift (0.2.3)
-  - KeychainAccess (2.3.4)
-  - ReactiveCocoa (4.0.4-alpha-4):
-    - ReactiveCocoa/UI (= 4.0.4-alpha-4)
-    - Result (~> 1.0)
-  - ReactiveCocoa/Core (4.0.4-alpha-4):
+  - Alamofire (3.3.1)
+  - Charts (2.2.4):
+    - Charts/Core (= 2.2.4)
+  - Charts/Core (2.2.4)
+  - CryptoSwift (0.4)
+  - KeychainAccess (2.3.5)
+  - Operations (2.10.0):
+    - Operations/Standard (= 2.10.0)
+  - Operations/Standard (2.10.0)
+  - ReactiveCocoa (4.1.0):
+    - ReactiveCocoa/UI (= 4.1.0)
+    - Result (~> 2.0)
+  - ReactiveCocoa/Core (4.1.0):
     - ReactiveCocoa/no-arc
-    - Result (~> 1.0)
-  - ReactiveCocoa/no-arc (4.0.4-alpha-4):
-    - Result (~> 1.0)
-  - ReactiveCocoa/UI (4.0.4-alpha-4):
+    - Result (~> 2.0)
+  - ReactiveCocoa/no-arc (4.1.0):
+    - Result (~> 2.0)
+  - ReactiveCocoa/UI (4.1.0):
     - ReactiveCocoa/Core
-    - Result (~> 1.0)
-  - Result (1.0.2)
-  - Socket.IO-Client-Swift (5.5.0)
+    - Result (~> 2.0)
+  - Result (2.0.0)
+  - Socket.IO-Client-Swift (6.1.0)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
   - Alamofire
+  - Charts (~> 2.2)
   - CryptoSwift
   - KeychainAccess
-  - ReactiveCocoa (= 4.0.4-alpha-4)
+  - Operations (~> 2.10)
+  - ReactiveCocoa (~> 4.1)
   - Socket.IO-Client-Swift
-  - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
-
-EXTERNAL SOURCES:
-  SwiftyJSON:
-    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
-
-CHECKOUT OPTIONS:
-  SwiftyJSON:
-    :commit: 2a5b70f06001316d4fb54501edc70b4084705da0
-    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
+  - SwiftyJSON (~> 2.3)
 
 SPEC CHECKSUMS:
-  Alamofire: f11d8624a05f5d39e0c99309b3e600a3ba64298a
-  CryptoSwift: b2bf37b8e7cc6d682ef3365cb966bc5ae5174aa5
-  KeychainAccess: 3a21b6944b4f2a22653f091d770cf10374961a94
-  ReactiveCocoa: e459ea92099447802df20c4735e31e8139b06094
-  Result: dd3dd71af3fa2e262f1a999e14fba2c25ec14f16
-  Socket.IO-Client-Swift: f39dbd4e9b295907bb7fd4b9588b89c00426783d
+  Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
+  Charts: a9e735c83c6d376ade20f6612dcf0ba217394a49
+  CryptoSwift: 584eac7d00b2f497fe7b20de271b8c0c52fff844
+  KeychainAccess: e283c1981a6c5655e1984cd411c6faf16fa165ae
+  Operations: 11f0188d894e441fa16f87264e771c88b3829826
+  ReactiveCocoa: d70004d7a366a7b8e87e60ce2347182c77701949
+  Result: 9e75e1111c774c6ac594e14907b15057053a7959
+  Socket.IO-Client-Swift: b0ebbd80f039992bad6d0f74730b5a540d979520
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
-PODFILE CHECKSUM: 28f49fdac11262b93e08921221742f50bda45a07
+PODFILE CHECKSUM: 5dcf3d984fe10e6d5655f40bebae32a8eec105d3
 
 COCOAPODS: 1.0.0.beta.6

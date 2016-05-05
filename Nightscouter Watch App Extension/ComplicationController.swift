@@ -7,7 +7,7 @@
 //
 
 import ClockKit
-import NightscouterWatchKit
+import NightscouterKit
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
     
@@ -19,7 +19,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getTimelineStartDateForComplication(complication: CLKComplication, withHandler handler: (NSDate?) -> Void) {
         #if DEBUG
-            // print(">>> Entering \(__FUNCTION__) <<<")
+            // print(">>> Entering \(#function) <<<")
         #endif
         var date: NSDate?
         let model = SitesDataSource.sharedInstance.primarySite?.oldestComplicationData
@@ -34,7 +34,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getTimelineEndDateForComplication(complication: CLKComplication, withHandler handler: (NSDate?) -> Void) {
         #if DEBUG
-            // print(">>> Entering \(__FUNCTION__) <<<")
+            // print(">>> Entering \(#function) <<<")
         #endif
         var date: NSDate? = nil
         let model = SitesDataSource.sharedInstance.primarySite?.latestComplicationData
@@ -57,7 +57,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     func getCurrentTimelineEntryForComplication(complication: CLKComplication, withHandler handler: ((CLKComplicationTimelineEntry?) -> Void)) {
         // Call the handler with the current timeline entry
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
         #endif
         
         getTimelineEntriesForComplication(complication, beforeDate: NSDate(), limit: 1) { (timelineEntries) -> Void in
@@ -68,7 +68,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     func getTimelineEntriesForComplication(complication: CLKComplication, beforeDate date: NSDate, limit: Int, withHandler handler: (([CLKComplicationTimelineEntry]?) -> Void)) {
         
         #if DEBUG
-            // print(">>> Entering \(__FUNCTION__) <<<")
+            // print(">>> Entering \(#function) <<<")
             // print("complication: \(complication.family)")
         #endif
         
@@ -94,7 +94,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     func getTimelineEntriesForComplication(complication: CLKComplication, afterDate date: NSDate, limit: Int, withHandler handler: (([CLKComplicationTimelineEntry]?) -> Void)) {
         // Call the handler with the timeline entries after to the given date
         #if DEBUG
-            // print(">>> Entering \(__FUNCTION__) <<<")
+            // print(">>> Entering \(#function) <<<")
             // print("complication: \(complication.family)")
         #endif
         
@@ -182,7 +182,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
 extension ComplicationController {
     private func templateForComplication(complication: CLKComplication, model: ComplicationTimelineEntry) -> CLKComplicationTemplate? {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
         #endif
         
         var template: CLKComplicationTemplate? = nil
@@ -245,7 +245,7 @@ extension ComplicationController {
 extension ComplicationController {
     func requestedUpdateDidBegin() {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
         #endif
         
         // TODO: Start up connecitivty session ask for data from data source. and update.
@@ -256,7 +256,7 @@ extension ComplicationController {
     
     func requestedUpdateBudgetExhausted() {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
         #endif
         // TODO: Start up connecitivty session ask for data from data source. and update. Also bookmark when this happened. Maybe add a new timeline entry informing the user.
         // Ask data store for new data.. log when this happened.
@@ -264,7 +264,7 @@ extension ComplicationController {
     
     static func reloadComplications() {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
         #endif
         
         let complicationServer = CLKComplicationServer.sharedInstance()
@@ -278,7 +278,7 @@ extension ComplicationController {
     
     static func extendComplications() {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
         #endif
         
         let complicationServer = CLKComplicationServer.sharedInstance()

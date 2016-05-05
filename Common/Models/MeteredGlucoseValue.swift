@@ -12,7 +12,17 @@ public struct MeteredGlucoseValue: CustomStringConvertible, Dateable, GlucoseVal
     public let milliseconds: Double
     public let device: Device
     public let mgdl: MgdlValue
-    
+ 
+    /**
+     
+     Initializes a new metered glucose value structure with the default values.
+     
+     - Parameters:
+     - None
+     
+     
+     - Returns: MeteredGlucoseValue
+     */
     public init() {
         milliseconds = AppConfiguration.Constant.knownMilliseconds
         device = Device()

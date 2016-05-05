@@ -100,7 +100,7 @@ public func rac_nightscouterConnectToSocketSignal(withSite site: Site)  -> Signa
         return rac_nightscouterConnectToSocketSignal(withURL: site.url, withApiSecretString: site.apiSecret ?? "" )
 }
 
-public func rac_generateTimeline() -> SignalProducer<[ComplicationTimelineEntry], NoError> {
+public func rac_generateTimeline() -> SignalProducer<[ComplicationTimelineEntry], NSError> {
     return  SignalProducer { observer, disposable in
         observer.sendCompleted()
     }

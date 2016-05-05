@@ -35,7 +35,6 @@ class SiteTableViewCell: UITableViewCell {
         self.dataSource = dataSource
         self.delegate = delegate
         
-        
         siteLastReadingHeader.text = LocalizedString.lastReadingLabel.localized
         siteLastReadingLabel.text = dataSource.lastReadingDate.timeAgoSinceNow()
         siteLastReadingLabel.textColor = delegate?.lastReadingColor
@@ -44,14 +43,16 @@ class SiteTableViewCell: UITableViewCell {
         siteBatteryLabel.text = dataSource.batteryLabel
         siteBatteryLabel.textColor = delegate?.batteryColor
         
-        siteRawHeader.text = LocalizedString.rawLabel.localized
-        siteRawLabel?.hidden = dataSource.rawHidden
-        siteRawHeader?.hidden = dataSource.rawHidden
+        siteBatteryHeader.hidden = dataSource.batteryHidden
+        siteBatteryLabel.hidden = dataSource.batteryHidden
         
+        siteRawHeader.text = LocalizedString.rawLabel.localized
         siteRawLabel.text = dataSource.rawFormatedLabel
         siteRawLabel.textColor = delegate?.rawColor
-        
-        
+
+        siteRawHeader?.hidden = dataSource.rawHidden
+        siteRawLabel?.hidden = dataSource.rawHidden
+
         siteNameLabel.text = dataSource.nameLabel
         siteUrlLabel.text = dataSource.urlLabel
         

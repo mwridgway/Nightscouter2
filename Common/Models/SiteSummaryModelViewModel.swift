@@ -11,6 +11,7 @@ public struct SiteSummaryModelViewModel: SiteSummaryModelViewModelDataSource, Si
     
     public var lastReadingDate: NSDate
     public var batteryLabel: String
+    public var batteryHidden: Bool
     public var nameLabel: String
     public var urlLabel: String
     public var sgvLabel: String
@@ -56,6 +57,7 @@ public struct SiteSummaryModelViewModel: SiteSummaryModelViewModelDataSource, Si
             // Battery
             self.batteryLabel = PlaceHolderStrings.battery
             self.batteryColor = PlaceHolderStrings.defaultColor.colorValue
+            self.batteryHidden = false
             
             // Name and URL
             self.nameLabel = PlaceHolderStrings.displayName
@@ -167,13 +169,14 @@ public struct SiteSummaryModelViewModel: SiteSummaryModelViewModelDataSource, Si
         
         self.rawLabel = rawString ?? PlaceHolderStrings.raw
         self.rawColor = rawColorVar?.colorValue ?? PlaceHolderStrings.defaultColor.colorValue
-        self.rawHidden = !isRawDataAvailable
+        self.rawHidden = !isRawDataAvailable || rawString == nil
         
         self.sgvLabel = sgvString ?? PlaceHolderStrings.sgv
         self.sgvColor = sgvColorVar?.colorValue ?? PlaceHolderStrings.defaultColor.colorValue
         
         self.batteryLabel = batteryString ?? PlaceHolderStrings.battery
         self.batteryColor = batteryColorVar?.colorValue ?? PlaceHolderStrings.defaultColor.colorValue
+        self.batteryHidden = batteryString == nil
         
         self.nameLabel = displayName ?? PlaceHolderStrings.displayName
         self.urlLabel = displayUrlString ?? PlaceHolderStrings.urlName

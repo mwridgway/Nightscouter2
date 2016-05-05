@@ -7,7 +7,7 @@
 //
 
 import WatchKit
-import NightscouterWatchKit
+import NightscouterKit
 
 class SiteRowController: NSObject {
     @IBOutlet var siteNameLabel: WKInterfaceLabel!

@@ -80,16 +80,19 @@ extension Site: Hashable {
 }
 
 extension Site {
-    public var apiSecret: String? {
+    /**
+     This is the string provided by the user in the intial creation of a site.
+     It must be converted to a SHA1 string before use in communicating with a server.
+     */
+    public var apiSecret: String {
         set{
             // write to keychain
             AppConfiguration.keychain[uuid.UUIDString] = newValue
         }
         get{
-            return AppConfiguration.keychain[uuid.UUIDString]
+            return AppConfiguration.keychain[uuid.UUIDString] ?? ""
         }
-        
-    }// SHA1 retrieved from keychain?
+    }
     
     public init(url: NSURL, apiSecret: String){
         self.configuration = nil
@@ -110,7 +113,7 @@ extension Site {
         self.disabled = false
         self.uuid = uuid
         
-        self.apiSecret = AppConfiguration.keychain[uuid.UUIDString]
+        self.apiSecret = AppConfiguration.keychain[uuid.UUIDString] ?? ""
     }
 }
 

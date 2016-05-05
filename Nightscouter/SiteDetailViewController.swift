@@ -82,7 +82,7 @@ class SiteDetailViewController: UIViewController, UIWebViewDelegate {
 
 extension SiteDetailViewController{
     @IBAction func unwindToSiteDetail(segue:UIStoryboardSegue) {
-        // print(">>> Entering \(__FUNCTION__) <<<")
+        // print(">>> Entering \(#function) <<<")
         // print("\(segue)")
     }
     @IBAction func launchSiteSettings(sender: UIBarButtonItem) {
@@ -93,7 +93,7 @@ extension SiteDetailViewController{
 // MARK: WebKit WebView Delegates
 extension SiteDetailViewController {
     func webViewDidFinishLoad(webView: UIWebView) {
-        // print(">>> Entering \(__FUNCTION__) <<<")
+        // print(">>> Entering \(#function) <<<")
         let updateData = "updateData(\(self.data))"
         
         if let configuration = site?.configuration {

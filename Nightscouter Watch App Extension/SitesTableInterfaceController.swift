@@ -7,7 +7,7 @@
 //
 
 import WatchKit
-import NightscouterWatchKit
+import NightscouterKit
 
 class SitesTableInterfaceController: WKInterfaceController {
     
@@ -43,7 +43,7 @@ class SitesTableInterfaceController: WKInterfaceController {
     
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
-        print(">>> Entering \(__FUNCTION__) <<<")
+        print(">>> Entering \(#function) <<<")
         
         self.updateTableData()
         
@@ -66,7 +66,7 @@ class SitesTableInterfaceController: WKInterfaceController {
     override func table(table: WKInterfaceTable, didSelectRowAtIndex rowIndex: Int) {
         // create object.
         // push controller...
-        print(">>> Entering \(__FUNCTION__) <<<")
+        print(">>> Entering \(#function) <<<")
         
         SitesDataSource.sharedInstance.lastViewedSiteIndex = rowIndex
         
@@ -79,7 +79,7 @@ class SitesTableInterfaceController: WKInterfaceController {
     }
     
     private func updateTableData() {
-        print(">>> Entering \(__FUNCTION__) <<<")
+        print(">>> Entering \(#function) <<<")
         
         if self.sites.isEmpty {
             

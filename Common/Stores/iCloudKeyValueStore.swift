@@ -18,7 +18,7 @@ class iCloudKeyValueStore: NSObject, SessionManagerType {
         super.init()
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "ubiquitousKeyValueStoreDidChange:",
+            selector: #selector(ubiquitousKeyValueStoreDidChange(_:)),
             name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification,
             object: iCloudKeyValueStore)
     }

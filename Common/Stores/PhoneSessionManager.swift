@@ -43,7 +43,7 @@ public class WatchSessionManager: NSObject, WCSessionDelegate, SessionManagerTyp
     
     public func startSession() {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
         #endif
         
         session?.delegate = self
@@ -59,13 +59,13 @@ public class WatchSessionManager: NSObject, WCSessionDelegate, SessionManagerTyp
 public extension WatchSessionManager {
     public func sessionReachabilityDidChange(session: WCSession) {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
         #endif
     }
     
     public func sessionWatchStateDidChange(session: WCSession) {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
         #endif
     }
 }
@@ -79,7 +79,7 @@ public extension WatchSessionManager {
     // Sender
     public func updateApplicationContext(applicationContext: [String : AnyObject]) throws {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
         #endif
         if let session = validSession {
             do {
@@ -108,7 +108,7 @@ extension WatchSessionManager {
     public func transferCurrentComplicationUserInfo(userInfo: [String : AnyObject]) -> WCSessionUserInfoTransfer? {
         
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
             // print("transferUserInfo: \(userInfo)")
             print("validSession?.complicationEnabled == \(validReachableSession?.complicationEnabled)")
         #endif
@@ -121,7 +121,7 @@ extension WatchSessionManager {
     // Sender
     public func transferUserInfo(userInfo: [String : AnyObject]) -> WCSessionUserInfoTransfer? {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
             print("transferUserInfo: \(userInfo)")
         #endif
         
@@ -134,7 +134,7 @@ extension WatchSessionManager {
     
     public func session(session: WCSession, didFinishUserInfoTransfer userInfoTransfer: WCSessionUserInfoTransfer, error: NSError?) {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
             print("session \(session), didFinishUserInfoTransfer: \(userInfoTransfer), error: \(error)")
         #endif
         
@@ -145,7 +145,7 @@ extension WatchSessionManager {
     // Receiver
     public func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
             print("session \(session), didReceiveUserInfo: \(userInfo)")
         #endif
         // handle receiving user info
@@ -216,7 +216,7 @@ extension WatchSessionManager {
     public func session(session: WCSession, didReceiveMessage message: [String : AnyObject], replyHandler: ([String : AnyObject]) -> Void) {
         // handle receiving message
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
             print("session: \(session), didReceiveMessage: \(message)")
         #endif
         
@@ -229,7 +229,7 @@ extension WatchSessionManager {
     public func session(session: WCSession, didReceiveMessageData messageData: NSData, replyHandler: (NSData) -> Void) {
         
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
             print("session: \(session), messageData: \(messageData)")
         #endif
         

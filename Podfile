@@ -6,17 +6,19 @@ inhibit_all_warnings!
 
 def limited_pods
 inhibit_all_warnings!
-    pod 'Socket.IO-Client-Swift'    
+    pod 'Socket.IO-Client-Swift'
+    pod 'Charts', '~> 2.2'
+
     #pod 'DateTools'
 end
 
 def global_pods
 inhibit_all_warnings!
     pod 'Alamofire'
-    pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
+    pod 'SwiftyJSON', '~> 2.3'
     pod 'CryptoSwift'
     pod 'KeychainAccess'
-    pod 'ReactiveCocoa', '4.0.4-alpha-4'
+    pod 'ReactiveCocoa', '~> 4.1'
 end
 
 
@@ -25,6 +27,8 @@ target 'Nightscouter' do
     platform :ios, '9.0'
     limited_pods
     global_pods
+    pod 'Operations', '~> 2.10'
+
 end
 
 # iOS9 Today Extension with some UI.
@@ -56,7 +60,7 @@ target 'Nightscouter Watch App Extension' do
 end
 
 # watchOS2 App Framework
-target 'NightscouterWatchKit' do
+target 'NightscouterKit (watchOS)' do
     platform :watchos, '2.0'
     global_pods
 end

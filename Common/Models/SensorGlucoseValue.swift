@@ -18,6 +18,16 @@ public struct SensorGlucoseValue: CustomStringConvertible, Dateable, GlucoseValu
         return "{ SensorGlucoseValue: { device: \(device), mgdl: \(mgdl), date: \(date), direction: \(direction) } }"
     }
     
+    /**
+     
+     Initializes a new sensor glucose value structure with the default values.
+     
+     - Parameters:
+     - None
+     
+     
+     - Returns: SensorGlucoseValue
+     */
     public init() {
         device = Device.TestDevice
         direction = Direction.NotComputable

@@ -18,6 +18,7 @@ public protocol SiteCommonInfoDataSource {
 
 public protocol BatteryDataSource {
     var batteryLabel: String { get }
+    var batteryHidden: Bool { get }
 }
 public protocol BatteryDelegate {
     var batteryColor: Color { get }

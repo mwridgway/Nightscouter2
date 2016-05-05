@@ -36,15 +36,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         registerInitialSettings(userDefaults)
         
         // Register for settings changes as store might have changed
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: Selector("userDefaultsDidChange:"),
-            name: NSUserDefaultsDidChangeNotification,
-            object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.userDefaultsDidChange(_:)), name: NSUserDefaultsDidChangeNotification, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserverForName(DataUpdatedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { (_) -> Void in
-          self.dataManagerDidChange()
+            self.dataManagerDidChange()
         }
-        
         
         // If a shortcut was launched, display its information and take the appropriate action
         if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
@@ -56,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidBecomeActive(application: UIApplication) {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
         #endif
     }
     
@@ -73,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
         #if DEBUG
-            print(">>> Entering \(__FUNCTION__) <<<")
+            print(">>> Entering \(#function) <<<")
             print("Recieved URL: \(url) with options: \(options)")
         #endif
         
@@ -169,7 +165,7 @@ extension AppDelegate {
                         
                         if let UUIDString = pathComponents[safe: 2], uuid = NSUUID(UUIDString: UUIDString), site = (SitesDataSource.sharedInstance.sites.filter { $0.uuid == uuid }.first), index = SitesDataSource.sharedInstance.sites.indexOf(site) {
                             
-                           SitesDataSource.sharedInstance.lastViewedSiteIndex = index
+                            SitesDataSource.sharedInstance.lastViewedSiteIndex = index
                         }
                         
                         viewControllers.append(newViewController) // Create the view controller and append it to the navigation view controller stack
@@ -195,6 +191,7 @@ extension AppDelegate {
     func userDefaultsDidChange(notification: NSNotification) {
         if let userDefaults = notification.object as? NSUserDefaults {
             print("Defaults Changed")
+            print(userDefaults.dictionaryRepresentation().keys)
         }
     }
     
@@ -203,7 +200,7 @@ extension AppDelegate {
     }
     
     func setupNotificationSettings() {
-        print(">>> Entering \(__FUNCTION__) <<<")
+        print(">>> Entering \(#function) <<<")
         // Specify the notification types.
         let notificationTypes: UIUserNotificationType = [.Alert, .Sound, .Badge]
         
@@ -213,7 +210,6 @@ extension AppDelegate {
         
         // TODO: Enabled remote notifications... need to get a server running.
         // UIApplication.sharedApplication().registerForRemoteNotifications()
-        
         UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(UIApplicationBackgroundFetchIntervalMinimum)
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         UIApplication.sharedApplication().cancelAllLocalNotifications()
@@ -225,22 +221,22 @@ extension AppDelegate {
     // AppDataManagerNotificationDidChange Handler
     func dataManagerDidChange(notification: NSNotification? = nil) {
         
-//        let sites = SitesDataSource.sharedInstance.sites
-//        
-//        if UIApplication.sharedApplication().currentUserNotificationSettings()?.types == .None || !sites.isEmpty {
-//            setupNotificationSettings()
-//        }
-//        
-//        UIApplication.sharedApplication().shortcutItems = nil
-//        
-//        let useCase = CommonUseCasesForShortcuts.ShowDetail.applicationShortcutItemType
-//        
-//        for (index, site) in sites.enumerate() {
-//            
-//            let mvm = site.generateSummaryModelViewModel()
-//            
-//            UIApplication.sharedApplication().shortcutItems?.append(UIApplicationShortcutItem(type: useCase, localizedTitle: mvm.nameLabel, localizedSubtitle: mvm.urlLabel, icon: nil, userInfo: ["uuid": site.uuid.UUIDString, "siteIndex": index]))
-//        }
+        //        let sites = SitesDataSource.sharedInstance.sites
+        //
+        //        if UIApplication.sharedApplication().currentUserNotificationSettings()?.types == .None || !sites.isEmpty {
+        //            setupNotificationSettings()
+        //        }
+        //
+        //        UIApplication.sharedApplication().shortcutItems = nil
+        //
+        //        let useCase = CommonUseCasesForShortcuts.ShowDetail.applicationShortcutItemType
+        //
+        //        for (index, site) in sites.enumerate() {
+        //
+        //            let mvm = site.generateSummaryModelViewModel()
+        //
+        //            UIApplication.sharedApplication().shortcutItems?.append(UIApplicationShortcutItem(type: useCase, localizedTitle: mvm.nameLabel, localizedSubtitle: mvm.urlLabel, icon: nil, userInfo: ["uuid": site.uuid.UUIDString, "siteIndex": index]))
+        //        }
     }
     
 }
