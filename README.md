@@ -55,4 +55,4 @@ Nightscouter is available under the MIT license. See the LICENSE file for more i
 We can always use a hand! For information on how you can contribute, please check out the [gitter room](https://gitter.im/someoneAnyone/Nightscouter2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge).
 
 ##Contributors (Thank you!)
-@ericmarkmartin
+[@ericmarkmartin](https://github.com/ericmarkmartin)
