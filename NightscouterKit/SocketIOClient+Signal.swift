@@ -12,31 +12,31 @@ import ReactiveCocoa
 
 import SwiftyJSON
 
-private var signal : Signal<[AnyObject], NSError>? = nil
-
-public extension SocketIOClient {
-    
-    public func rac_socketSignal() -> Signal<[AnyObject], NSError> {
-        
-        let (tmpSignal, observer) = Signal<[AnyObject], NSError>.pipe()
-        
-        self.on(WebEvents.disconnect.rawValue) { data, ack in
-            print("socketSignal complete")
-            observer.sendCompleted()
-        }
-        
-        self.on(WebEvents.dataUpdate.rawValue) { data, ack in
-            print("socketSignal dataUpdate for \(self.socketURL)")
-            observer.sendNext(data)
-        }
-        
-        signal = tmpSignal
-        
-        return tmpSignal
-        
-    }
-}
-
+//private var signal : Signal<[AnyObject], NSError>? = nil
+//
+//public extension SocketIOClient {
+//    
+//    public func rac_socketSignal() -> Signal<[AnyObject], NSError> {
+//        
+//        let (tmpSignal, observer) = Signal<[AnyObject], NSError>.pipe()
+//        
+//        self.on(WebEvents.disconnect.rawValue) { data, ack in
+//            print("socketSignal complete")
+//            observer.sendCompleted()
+//        }
+//        
+//        self.on(WebEvents.dataUpdate.rawValue) { data, ack in
+//            print("socketSignal dataUpdate for \(self.socketURL)")
+//            observer.sendNext(data)
+//        }
+//        
+//        signal = tmpSignal
+//        
+//        return tmpSignal
+//        
+//    }
+//}
+//
 
 
 /// New stuff

@@ -20,7 +20,7 @@ PODS:
     - ReactiveCocoa/Core
     - Result (~> 2.0)
   - Result (2.0.0)
-  - Socket.IO-Client-Swift (6.1.0)
+  - Socket.IO-Client-Swift (6.1.1)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
@@ -41,9 +41,9 @@ SPEC CHECKSUMS:
   Operations: 11f0188d894e441fa16f87264e771c88b3829826
   ReactiveCocoa: d70004d7a366a7b8e87e60ce2347182c77701949
   Result: 9e75e1111c774c6ac594e14907b15057053a7959
-  Socket.IO-Client-Swift: b0ebbd80f039992bad6d0f74730b5a540d979520
+  Socket.IO-Client-Swift: 86a3744e1da181a4078a24a632bd3acc34b9f1f5
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
 PODFILE CHECKSUM: 5dcf3d984fe10e6d5655f40bebae32a8eec105d3
 
-COCOAPODS: 1.0.0.beta.6
+COCOAPODS: 1.0.0.rc.1

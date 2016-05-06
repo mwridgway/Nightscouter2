@@ -9,7 +9,11 @@
 import UIKit
 import NightscouterKit
 import ReactiveCocoa
+import Operations
+
 class SitesTableViewController: UITableViewController, SitesDataSourceProvider, SegueHandlerType {
+    
+    let operationQueue = OperationQueue()
     
     struct CellIdentifier {
         static let SiteTableViewStyleLarge = "siteCellLarge"
@@ -278,7 +282,10 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         clearsSelectionOnViewWillAppear = true
         
         // Configure table view properties.
-        tableView.rowHeight = 240
+        tableView.rowHeight = UITableViewAutomaticDimension//240
+        tableView.estimatedRowHeight = 240.0
+
+        
         tableView.backgroundView = BackgroundView() // TODO: Move this out to a theme manager.
         tableView.separatorColor = Theme.Color.navBarColor
         
@@ -298,7 +305,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         
     }
     
-    func updateData(){
+    func updateData(userInitiated: Bool = true){
         // Do not allow refreshing to happen if there is no data in the sites array.
         if sites.isEmpty == false {
             if refreshControl?.refreshing == false {
@@ -306,31 +313,43 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
                 tableView.setContentOffset(CGPointMake(0, tableView.contentOffset.y-refreshControl!.frame.size.height), animated: true)
             }
             
-            
-            for site in sites {
-                rac_nightscouterFetchSiteConfigurationData(withSite: site)
-                    .observeOn(UIScheduler())
-                    .startWithNext { configuration in
-                        var newSite = site
-                        newSite.configuration = configuration
-                        SitesDataSource.sharedInstance.updateSite(newSite)
+            for (index,site) in sites.enumerate() {
+                
+                let getSites = GetSiteDataOperation(withSites: site) {
+                    dispatch_async(dispatch_get_main_queue()){
+                        self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
+                    }
                 }
                 
-                rac_nightscouterConnectToSocketSignal(withSite: site)
-                    .observeOn(UIScheduler())
-                    .map({ (items, event) -> Site in
-                        var newSite = site
-                        
-                        newSite.parseJSONforSocketData(items)
-                        SitesDataSource.sharedInstance.updateSite(newSite)
-                        return newSite
-                        
-                    })
-                    .startWithNext { (site) in
-                        NSNotificationCenter.defaultCenter().postNotificationName(DataUpdatedNotification, object: nil)
+                if userInitiated {
+                    getSites.userIntent = .Initiated
                 }
                 
+                operationQueue.addOperation(getSites)
             }
+            //                rac_nightscouterFetchSiteConfigurationData(withSite: site)
+            //                    .observeOn(UIScheduler())
+            //                    .startWithNext { configuration in
+            //                        var newSite = site
+            //                        newSite.configuration = configuration
+            //                        SitesDataSource.sharedInstance.updateSite(newSite)
+            //                }
+            //
+            //                rac_nightscouterConnectToSocketSignal(withSite: site)
+            //                    .observeOn(UIScheduler())
+            //                    .map({ (items, event) -> Site in
+            //                        var newSite = site
+            //
+            //                        newSite.parseJSONforSocketData(items)
+            //                        SitesDataSource.sharedInstance.updateSite(newSite)
+            //                        return newSite
+            //
+            //                    })
+            //                    .startWithNext { (site) in
+            //                        NSNotificationCenter.defaultCenter().postNotificationName(DataUpdatedNotification, object: nil)
+            //                }
+            
+            //            }
         }
         
         defer {

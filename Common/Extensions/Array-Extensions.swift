@@ -84,3 +84,28 @@ public func sortByDate<T: Dateable>(a: [T], orderDescending descending: Bool = t
         d1.date.compare(d2.date) == compare
     })
 }
+
+
+
+extension Array where Element: Dateable {
+    public func nearestElement(toDate date: NSDate) -> Element? {
+    
+        if self.isEmpty { return nil }
+        
+        var desiredIndex: Int?
+            var minDate: NSTimeInterval = fabs(NSDate().timeIntervalSinceNow)
+            for (index, item) in self.enumerate() {
+                let dateInterval = fabs(item.date.timeIntervalSinceDate(date))
+                let compared = minDate < dateInterval
+                if compared {
+                    minDate = dateInterval
+                    desiredIndex = index
+                }
+            }
+            guard let index = desiredIndex else {
+                print("NON-FATAL ERROR: No valid index was found... return first calibration if its there.")
+                return self.first
+            }
+            return self[safe: index]
+    }
+}

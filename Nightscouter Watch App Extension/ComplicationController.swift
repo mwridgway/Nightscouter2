@@ -189,6 +189,8 @@ extension ComplicationController {
         
         let displayName = model.nameLabel
         let sgv = model.sgvLabel + " " + model.direction.emojiForDirection
+        var sgvShort = sgv
+        
         let tintColor = model.sgvColor
         let delta = model.deltaLabel
         let deltaShort = model.deltaShort
@@ -197,6 +199,15 @@ extension ComplicationController {
         
         let utilLargeSting = sgv + " " + delta + " " + raw
         let utilLargeStingShort = sgv + " " + deltaShort + " " + raw
+        
+        switch sgv {
+        case "Warning":
+            sgvShort = "!!"
+        case "Urgent":
+            sgvShort = "!!!"
+        default:
+            break
+        }
         
         switch complication.family {
         case .ModularSmall:
@@ -219,7 +230,7 @@ extension ComplicationController {
             template = modularLarge
         case .UtilitarianSmall:
             let utilitarianSmall = CLKComplicationTemplateUtilitarianSmallFlat()
-            utilitarianSmall.textProvider = CLKSimpleTextProvider(text: sgv)
+            utilitarianSmall.textProvider = CLKSimpleTextProvider(text: sgv, shortText: sgvShort)
             
             template = utilitarianSmall
         case .UtilitarianLarge:
@@ -230,7 +241,7 @@ extension ComplicationController {
             template = utilitarianLarge
         case .CircularSmall:
             let circularSmall = CLKComplicationTemplateCircularSmallStackText()
-            circularSmall.line1TextProvider = CLKSimpleTextProvider(text: sgv)
+            circularSmall.line1TextProvider = CLKSimpleTextProvider(text: sgv, shortText: sgvShort)
             circularSmall.line2TextProvider = CLKSimpleTextProvider(text: delta, shortText: deltaShort)
             circularSmall.tintColor = tintColor
             

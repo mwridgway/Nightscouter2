@@ -8,6 +8,7 @@
 
 import UIKit
 import NightscouterKit
+import Operations
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -85,14 +86,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, performActionForShortcutItem shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
         print(shortcutItem)
         
-        guard let type = CommonUseCasesForShortcuts(rawValue: shortcutItem.type) else {
-            completionHandler(false)
+        var complete: Bool = false
+        defer {
+            completionHandler(complete)
+        }
+        
+        guard let type = ShortcutUseCase(rawValue: shortcutItem.type) else {
+            complete = false
             return
         }
         
         switch type {
         case .AddNew:
             let url = type.linkForUseCase()
+            complete = true
             deepLinkToURL(url)
         case .ShowDetail:
             let siteIndex = shortcutItem.userInfo!["siteIndex"] as! Int
@@ -103,21 +110,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             #endif
             
             let url = type.linkForUseCase()
-            
+            complete = true
             deepLinkToURL(url)
         default:
-            completionHandler(false)
+            complete = false
+            
+            return
         }
-        
-        completionHandler(true)
     }
-    
     
     func application(application: UIApplication, performFetchWithCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         // TODO: Background fetch new data and update watch.
         
         completionHandler(.NewData)
     }
+    
+    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+        UserNotificationCondition.didRegisterUserNotificationSettings(notificationSettings)
+    }
+
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        RemoteNotificationCondition.didReceiveNotificationToken(deviceToken)
+    }
+    
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        RemoteNotificationCondition.didFailToRegisterForRemoteNotifications(error)
+    }
+
 }
 
 extension AppDelegate {

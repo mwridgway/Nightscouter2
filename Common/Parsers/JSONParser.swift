@@ -13,18 +13,18 @@ import SwiftyJSON
 
 // All the JSON keys I saw when parsing the socket.io output for dataUpdate
 
-struct GlobalJSONKey {
-    static let sgvs = "sgvs"
-    static let mbgs = "mbgs"
-    static let cals = "cals"
+public struct GlobalJSONKey {
+    public static let sgvs = "sgvs"
+    public static let mbgs = "mbgs"
+    public static let cals = "cals"
     // static let deltaCount = "delta"
     // static let profiles = "profiles"
     // static let treatments = "treatments"
 }
 
 extension Site: Encodable, Decodable {
-    struct JSONKey {
-        static let lastUpdated = "lastUpdated"
+    public struct JSONKey {
+        public static let lastUpdated = "lastUpdated"
         static let url = "url"
         static let overrideScreenLock = "overrideScreenLock"
         static let disabled = "disabled"
@@ -299,7 +299,7 @@ extension MeteredGlucoseValue: Encodable {
         return [JSONKey.mills: milliseconds, JSONKey.mgdl: mgdl, JSONKey.device: device.description]
     }
     
-    static func decode(dict: [String : AnyObject]) -> MeteredGlucoseValue? {
+    public static func decode(dict: [String : AnyObject]) -> MeteredGlucoseValue? {
         let json = JSON(dict)
         
         guard let deviceString = json[JSONKey.device].string, mgdl = json[JSONKey.mgdl].double, mill = json[JSONKey.mills].double else {
@@ -332,21 +332,26 @@ extension SensorGlucoseValue: Encodable, Decodable {
     public static func decode(dict: [String : AnyObject]) -> SensorGlucoseValue? {
         
         let json = JSON(dict)
-        guard let deviceString = json[JSONKey.device].string, mgdl = json[JSONKey.mgdl].double, mill = json[JSONKey.mills].double, directionString = json[JSONKey.direction].string, rssi = json[JSONKey.rssi].int, unfiltered = json[JSONKey.unfiltered].double, filtered = json[JSONKey.filtered].double, noiseInt = json[JSONKey.noise].int else {
+        guard let mgdl = json[JSONKey.mgdl].double, mills = json[JSONKey.mills].double, directionString = json[JSONKey.direction].string else {
             return nil
         }
+    
+        let rssi = json[SensorGlucoseValue.JSONKey.rssi].intValue
+        let unfiltered = json[SensorGlucoseValue.JSONKey.unfiltered].doubleValue
+        let filtered = json[SensorGlucoseValue.JSONKey.filtered].doubleValue
+        let noiseInt = json[SensorGlucoseValue.JSONKey.noise].intValue
         
-        let device = Device(rawValue: deviceString) ?? .Unknown
-        let direction = Direction(rawValue: directionString) ?? .None
         let noise = Noise(rawValue: noiseInt) ?? .Unknown
+        let device = Device(rawValue: json[SensorGlucoseValue.JSONKey.device].stringValue) ?? Device.Unknown
+        let direction = Direction(rawValue: directionString) ?? Direction.None
         
-        return SensorGlucoseValue(direction: direction, device: device, rssi: rssi, unfiltered: unfiltered, filtered: filtered, mgdl: mgdl, noise: noise, milliseconds: mill)
+        return SensorGlucoseValue(direction: direction, device: device, rssi: rssi, unfiltered: unfiltered, filtered: filtered, mgdl: mgdl, noise: noise, milliseconds: mills)
     }
 }
 
 extension DeviceStatus: Encodable, Decodable {
-    struct JSONKey {
-        static let devicestatus = "devicestatus"
+    public struct JSONKey {
+        public static let devicestatus = "devicestatus"
         static let mills = "mills"
         static let uploader = "uploader"
         static let uploaderBattery = "uploaderBattery"
@@ -361,9 +366,11 @@ extension DeviceStatus: Encodable, Decodable {
     public static func decode(dict: [String : AnyObject]) -> DeviceStatus? {
         let json = JSON(dict)
         
-        guard let mills = json[JSONKey.mills].double, uploaderBattery = json[JSONKey.uploaderBattery].int else {
+        guard let uploaderBattery = json[JSONKey.uploaderBattery].int else {
             return nil
         }
+        
+        let mills = json[JSONKey.mills].doubleValue
         
         return DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: mills)
     }
@@ -429,11 +436,13 @@ public extension Site {
      
      */
     mutating func parseJSONforSocketData(json: JSON) {
+        print(#function)
         
         if let lastUpdated = json[Site.JSONKey.lastUpdated].double {
             self.milliseconds = lastUpdated
         }
-        
+        //TODO: Why am I doing this twice?
+        // 1.
         if let uploaderBattery = json[DeviceStatus.JSONKey.devicestatus][DeviceStatus.JSONKey.uploaderBattery].int {
             self.deviceStatuses.insertOrUpdate(DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: 0))
         }
@@ -441,6 +450,7 @@ public extension Site {
         let deviceStatus = json[DeviceStatus.JSONKey.devicestatus]
         print("deviceStatus count: \(deviceStatus.count)")
         
+        // 2.
         for (_, subJson) in deviceStatus {
             if let mills = subJson[DeviceStatus.JSONKey.mills].double {
                 if let uploaderBattery = subJson[DeviceStatus.JSONKey.uploader, DeviceStatus.JSONKey.battery].int {
@@ -455,16 +465,7 @@ public extension Site {
         
         for (_, subJson) in sgvs {
             // print("working on sgv[\(index)]")
-            
-            if let deviceString = subJson[SensorGlucoseValue.JSONKey.device].string, rssi = subJson[SensorGlucoseValue.JSONKey.rssi].int, unfiltered = subJson[SensorGlucoseValue.JSONKey.unfiltered].double, directionString = subJson[SensorGlucoseValue.JSONKey.direction].string, filtered = subJson[SensorGlucoseValue.JSONKey.filtered].double, noiseInt = subJson[SensorGlucoseValue.JSONKey.noise].int, mills = subJson[SensorGlucoseValue.JSONKey.mills].double, mgdl = subJson[SensorGlucoseValue.JSONKey.mgdl].double {
-                
-                let device = Device(rawValue: deviceString) ?? Device.Unknown
-                let direction = Direction(rawValue: directionString) ?? Direction.None
-                let noise = Noise(rawValue: noiseInt) ?? Noise()
-                
-                let sensorValue = SensorGlucoseValue(direction: direction, device: device, rssi: rssi, unfiltered: unfiltered, filtered: filtered, mgdl: mgdl, noise: noise, milliseconds: mills)
-                self.sgvs.insertOrUpdate(sensorValue)
-            }
+            self.sgvs.insertOrUpdate(SensorGlucoseValue.decode(subJson.dictionaryObject ?? [:])!)
         }
         
         let mbgs = json[GlobalJSONKey.mbgs]

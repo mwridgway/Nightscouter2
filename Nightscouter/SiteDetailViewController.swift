@@ -28,7 +28,7 @@ class SiteDetailViewController: UIViewController, UIWebViewDelegate {
     var site: Site? {
         didSet {
             guard let site = site else { return }
-            
+            self.configureView(withSite: site)
 //            let socket = NightscoutSocketIOClient(site: site)
 //            
 //            socket.fetchConfigurationData().startWithNext { racSite in

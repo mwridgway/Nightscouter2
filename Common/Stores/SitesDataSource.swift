@@ -177,6 +177,7 @@ public class SitesDataSource: SiteStoreType {
                 print("found an action: \(action)")
                 for site in sites {
                     #if os(iOS)
+                        print(site)
                         dispatch_async(dispatch_get_main_queue()) {
 //                            let socket = NightscoutSocketIOClient(site: site)
 //                            socket.fetchConfigurationData().startWithNext { racSite in

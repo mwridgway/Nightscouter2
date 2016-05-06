@@ -61,7 +61,7 @@ public struct LinkBuilder {
 }
 
 
-public enum CommonUseCasesForShortcuts: String {
+public enum ShortcutUseCase: String {
     case ShowDetail, AddNew, AddNewWhenEmpty, ShowList
     
     public func linkForUseCase() -> NSURL {

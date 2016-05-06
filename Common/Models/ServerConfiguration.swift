@@ -196,14 +196,21 @@ public enum RawBGMode: String, CustomStringConvertible {
 }
 
 public struct Thresholds: CustomStringConvertible {
-    public let bgHigh: Double
-    public let bgLow: Double
-    public let bgTargetBottom :Double
-    public let bgTargetTop :Double
+    public let bgHigh: MgdlValue
+    public let bgLow: MgdlValue
+    public let bgTargetBottom :MgdlValue
+    public let bgTargetTop :MgdlValue
     
     public var description: String {
         let dict = ["bgHigh": bgHigh, "bgLow": bgLow, "bgTargetBottom": bgTargetBottom, "bgTargetTop": bgTargetTop]
         return dict.description
+    }
+    
+    public init(bgHigh: Double, bgLow: Double, bgTargetBottom: Double, bgTargetTop: Double) {
+        self.bgHigh = bgHigh
+        self.bgLow = bgLow
+        self.bgTargetBottom = bgTargetBottom
+        self.bgTargetTop = bgTargetTop
     }
 }
 
