@@ -135,6 +135,7 @@
 		3DFC12D518539DCBDE22AF93 /* Pods_NightscouterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3689830C529C3873F282C7D /* Pods_NightscouterKit.framework */; };
 		3F1CA0D9484B1A5F3E812975 /* Pods_Nightscouter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB8BA945E32A2CDA6A6E2F8 /* Pods_Nightscouter.framework */; };
 		45F641F3BEC56D85A2681AC9 /* Pods_Nightscouter_Watch_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44B14307447B5996DE37DBB0 /* Pods_Nightscouter_Watch_App.framework */; };
+		8349C4BF1CDD5448003AC563 /* SocketSetupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8349C4BE1CDD5448003AC563 /* SocketSetupOperation.swift */; };
 		8351EC2C1CDC150B004C6671 /* SocketIOOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8351EC2B1CDC150B004C6671 /* SocketIOOperation.swift */; };
 		B94304DC968662360C750D1F /* Pods_Nightscouter_Today.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C3ED571C5C1800E7DE79380 /* Pods_Nightscouter_Today.framework */; };
 		E38491FD3F7B27C4F844A49F /* Pods_Nightscouter_Watch_App_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 063A2AFF85F972E7993F42B2 /* Pods_Nightscouter_Watch_App_Extension.framework */; };
@@ -348,6 +349,7 @@
 		62989D4907518BC08CB1A582 /* Pods-Nightscouter Watch App Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter Watch App Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter Watch App Extension/Pods-Nightscouter Watch App Extension.release.xcconfig"; sourceTree = "<group>"; };
 		77902B5E0792562C9E9226BD /* Pods-NightscouterKit (watchOS).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NightscouterKit (watchOS).debug.xcconfig"; path = "Pods/Target Support Files/Pods-NightscouterKit (watchOS)/Pods-NightscouterKit (watchOS).debug.xcconfig"; sourceTree = "<group>"; };
 		7F2E9F0ABD9EFEF331213F82 /* Pods-NightscouterKit (watchOS).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NightscouterKit (watchOS).release.xcconfig"; path = "Pods/Target Support Files/Pods-NightscouterKit (watchOS)/Pods-NightscouterKit (watchOS).release.xcconfig"; sourceTree = "<group>"; };
+		8349C4BE1CDD5448003AC563 /* SocketSetupOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SocketSetupOperation.swift; path = "App Operations/SocketSetupOperation.swift"; sourceTree = "<group>"; };
 		8351EC2B1CDC150B004C6671 /* SocketIOOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SocketIOOperation.swift; path = "App Operations/SocketIOOperation.swift"; sourceTree = "<group>"; };
 		8866D2A1F74C68056828DC74 /* Pods-Nightscouter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nightscouter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nightscouter/Pods-Nightscouter.debug.xcconfig"; sourceTree = "<group>"; };
 		A3689830C529C3873F282C7D /* Pods_NightscouterKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NightscouterKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -418,10 +420,11 @@
 		171C93B21CDD1DFA00311999 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
-				8351EC2B1CDC150B004C6671 /* SocketIOOperation.swift */,
 				17671E2D1CDBC73C00F91508 /* ParseSiteConfigurationData.swift */,
 				171C93B01CDD16DA00311999 /* ComplicationTimelineGenerationOperation.swift */,
+				8351EC2B1CDC150B004C6671 /* SocketIOOperation.swift */,
 				17E6C0411CDB931B006D95EC /* ParseSiteSocketDataOperation.swift */,
+				8349C4BE1CDD5448003AC563 /* SocketSetupOperation.swift */,
 			);
 			name = Operations;
 			sourceTree = "<group>";
@@ -1575,6 +1578,7 @@
 				177054861C495F7600302D83 /* SitesTableViewController.swift in Sources */,
 				176BE2761C496A330040F1B7 /* ModelController.swift in Sources */,
 				171C93B61CDD264C00311999 /* GetSiteDataOperation.swift in Sources */,
+				8349C4BF1CDD5448003AC563 /* SocketSetupOperation.swift in Sources */,
 				175DDBF31C48236C0083CC8C /* SiteTableViewCell.swift in Sources */,
 				1742F0431C45889D008DED3F /* FormViewController.swift in Sources */,
 				176BE27A1C496A3F0040F1B7 /* SiteListPageViewController.swift in Sources */,

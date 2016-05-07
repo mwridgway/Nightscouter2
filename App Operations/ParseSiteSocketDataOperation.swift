@@ -5,6 +5,9 @@
 //  Created by Peter Ina on 5/5/16.
 //  Copyright © 2016 Nothingonline. All rights reserved.
 //
+/*
+ Socket IO as an Operation with Results for injection in other operations
+ */
 
 import Foundation
 import NightscouterKit
@@ -20,14 +23,17 @@ public struct ParsedSocketIODataObject: Dateable {
 }
 
 /// An `Operation` to parse earthquakes out of a downloaded feed from the USGS.
-class ParseSiteSocketDataOperation: Operation {
-    let cacheFile: NSURL
+class ParseSiteSocketDataOperation: Operation, ResultOperationType {
+
     var site: Site
+    var json: [String: AnyObject]
     
-    init(cacheFile: NSURL, forSite site: Site) {
+    var result: Site?
+    
+    init(withSocketData json: [String: AnyObject], forSite site: Site) {
         print(#function)
-        
-        self.cacheFile = cacheFile
+    
+        self.json = json
         self.site = site
         super.init()
         
@@ -35,31 +41,7 @@ class ParseSiteSocketDataOperation: Operation {
     }
     
     override func execute() {
-        guard let stream = NSInputStream(URL: cacheFile) else {
-            finish()
-            return
-        }
-        
-        stream.open()
-        
-        defer {
-            stream.close()
-        }
-        
-        do {
-            let json = try NSJSONSerialization.JSONObjectWithStream(stream, options: []) as? [String: AnyObject]
-            
-            if let features = json {
-                parse(features)
-            }
-            else {
-                finish()
-            }
-        }
-        catch let jsonError as NSError {
-            //finishWithError(jsonError)
-            finish([jsonError])
-        }
+        parse(json)
     }
     
     private func parse(features: [String: AnyObject]) {
@@ -72,7 +54,7 @@ class ParseSiteSocketDataOperation: Operation {
             newData.milliseconds = lastUpdated
         }
         
-        newData.deviceStatuses.insertOrUpdate(DeviceStatus.decode(features)!)
+        //newData.deviceStatuses.insertOrUpdate(DeviceStatus.decode(features)!)
         
         let deviceStatus = json[DeviceStatus.JSONKey.devicestatus]
         print("deviceStatus count: \(deviceStatus.count)")
@@ -107,7 +89,17 @@ class ParseSiteSocketDataOperation: Operation {
         newData.cals.sortByDate()
         newData.mbgs.sortByDate()
         newData.deviceStatuses.sortByDate()
+     
         
+        site.sgvs = newData.sgvs
+        site.cals = newData.cals
+        site.mbgs = newData.mbgs
+        site.deviceStatuses = newData.deviceStatuses
+        
+        result = site
+        
+        SitesDataSource.sharedInstance.updateSite(site)
+        finish()
     }
     
 }

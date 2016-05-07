@@ -210,7 +210,7 @@ extension AppDelegate {
     func userDefaultsDidChange(notification: NSNotification) {
         if let userDefaults = notification.object as? NSUserDefaults {
             print("Defaults Changed")
-            print(userDefaults.dictionaryRepresentation().keys)
+            // print(userDefaults.dictionaryRepresentation().keys)
         }
     }
     

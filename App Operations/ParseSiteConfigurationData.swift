@@ -61,6 +61,7 @@ class ParseSiteConfigurationData: Operation, ResultOperationType {
         result = configuraiton
         
         self.site.configuration = configuraiton
+        
         SitesDataSource.sharedInstance.updateSite(self.site)
 
         finish()

@@ -6,6 +6,10 @@
 //  Copyright © 2016 Nothingonline. All rights reserved.
 //
 
+/*
+ Socket IO as an Operation
+ */
+
 import Foundation
 import Operations
 import SocketIOClientSwift

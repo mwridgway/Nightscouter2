@@ -30,28 +30,25 @@ class GetSiteDataOperation: GroupOperation {
          3. The operation to invoke the completion handler
          */
         downloadSiteConfigurationOperation = DownloadSiteConfigurationOperation(cacheFile: cacheFile, forSiteURL: site.url, withApiSecretString: site.apiSecret)
-
         parseSiteConfigurationData = ParseSiteConfigurationData(cacheFile: cacheFile, forSite: site)
-
-        
         // These operations must be executed in order
         parseSiteConfigurationData.addDependency(downloadSiteConfigurationOperation)
         
-        let client = SocketIOClient(socketURL: site.url)
-        let socketIOOperation = SocketIOOperation(socketClient: client, apiSecret: site.apiSecret) { (json) in
-            var newSite = site
-            newSite.parseJSONforSocketData(json)
-            
-            SitesDataSource.sharedInstance.updateSite(newSite)
-        }
-        socketIOOperation.addDependency(parseSiteConfigurationData)
+//        let client = SocketIOClient(socketURL: site.url)
+//        let socketIOOperation = SocketIOOperation(socketClient: client, apiSecret: site.apiSecret) { (json) in
+//            var newSite = site
+//            newSite.parseJSONforSocketData(json)
+//            
+//            SitesDataSource.sharedInstance.updateSite(newSite)
+//        }
+//        socketIOOperation.addDependency(parseSiteConfigurationData)
 
 
         let finishOperation = NSBlockOperation(block: completionHandler)
         finishOperation.addDependency(parseSiteConfigurationData)
 
         
-        super.init(operations: [downloadSiteConfigurationOperation, parseSiteConfigurationData, socketIOOperation, finishOperation])
+        super.init(operations: [downloadSiteConfigurationOperation, parseSiteConfigurationData, finishOperation])
         
         name = "Get Nightscout Data"
     }

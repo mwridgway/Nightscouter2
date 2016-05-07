@@ -12,15 +12,19 @@ import NightscouterKit
 
 class ComplicationTimelineGenerationOperation: Operation, AutomaticInjectionOperationType, ResultOperationType {
     
-    var requirement: (configuration: ServerConfiguration, sgvs: [SensorGlucoseValue], cals: [Calibration])?
+    var requirement: Site?
     private(set) var result: [ComplicationTimelineEntry]?
     
-    init(configuration: ServerConfiguration, sgvs: [SensorGlucoseValue], cals: [Calibration]) {
-        self.requirement = (configuration, sgvs, cals)
+    init(forSite site: Site) {
+        self.requirement = site
         super.init()
+        
+        name = "Complication Timeline Operation"
+
     }
     
     override func execute() {
+        print(#function)
         guard !cancelled else { return }
         
         generateComplicationTimeline(requirement) { timeline in
@@ -29,14 +33,14 @@ class ComplicationTimelineGenerationOperation: Operation, AutomaticInjectionOper
         }
     }
     
-    func generateComplicationTimeline(requirement: (configuration: ServerConfiguration, sgvs: [SensorGlucoseValue], cals: [Calibration])?, completion: (timeline: [ComplicationTimelineEntry]) -> Void) {
+    func generateComplicationTimeline(requirement: Site?, completion: (timeline: [ComplicationTimelineEntry]) -> Void) {
         
         guard let requirement = requirement else {
             completion(timeline: [])
             return
         }
         
-        let configuration = requirement.configuration
+        let configuration = requirement.configuration ?? ServerConfiguration()
         let sgvs = requirement.sgvs
         let calibrations = requirement.cals
         
