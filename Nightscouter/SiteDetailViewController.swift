@@ -29,18 +29,18 @@ class SiteDetailViewController: UIViewController, UIWebViewDelegate {
         didSet {
             guard let site = site else { return }
             self.configureView(withSite: site)
-//            let socket = NightscoutSocketIOClient(site: site)
-//            
-//            socket.fetchConfigurationData().startWithNext { racSite in
-//                if let racSite = racSite {
-//                    SitesDataSource.sharedInstance.updateSite(racSite)
-//                    
-//                }
-//            }
-//            socket.fetchSocketData().observeNext { racSite in
-//                SitesDataSource.sharedInstance.updateSite(racSite)
-//                self.configureView(withSite: racSite)
-//            }
+            //            let socket = NightscoutSocketIOClient(site: site)
+            //
+            //            socket.fetchConfigurationData().startWithNext { racSite in
+            //                if let racSite = racSite {
+            //                    SitesDataSource.sharedInstance.updateSite(racSite)
+            //
+            //                }
+            //            }
+            //            socket.fetchSocketData().observeNext { racSite in
+            //                SitesDataSource.sharedInstance.updateSite(racSite)
+            //                self.configureView(withSite: racSite)
+            //            }
         }
     }
     //var nsApi: NightscoutAPIClient?
@@ -111,13 +111,14 @@ extension SiteDetailViewController {
     
     func configureView(withSite site: Site) {
         
-        
         UIApplication.sharedApplication().idleTimerDisabled = site.overrideScreenLock
         
         let dataSource = site.generateSummaryModelViewModel()
         siteLastReadingLabel?.text = dataSource.lastReadingDate.timeAgoSinceNow()
         siteLastReadingLabel?.textColor = dataSource.lastReadingColor
         
+        siteBatteryHeader?.hidden = dataSource.batteryHidden
+        siteBatteryLabel?.hidden = dataSource.batteryHidden
         siteBatteryLabel?.text = dataSource.batteryLabel
         siteBatteryLabel?.textColor = dataSource.batteryColor
         
@@ -133,7 +134,6 @@ extension SiteDetailViewController {
         self.updateTitles(dataSource.nameLabel)
         
         data = site.sgvs.map{ $0.jsonForChart }
-        
         
     }
     
@@ -174,7 +174,7 @@ extension SiteDetailViewController {
     }
     
     func presentSettings(sender: UIBarButtonItem) {
-
+        
         guard let alertController = self.storyboard?.instantiateViewControllerWithIdentifier(StoryboardIdentifier.SiteSettingsNavigationViewController.rawValue) as? UINavigationController else {
             return
         }
@@ -203,11 +203,11 @@ extension SiteDetailViewController: SiteSettingsDelegate {
         var tempSettings: [SettingsModelViewModel] = []
         if let site = site {
             // FIXME: Add primary site conformance
-
-//            let defaultSite = (site.uuid == SitesDataSource.sharedInstance.primarySiteUUID)
-
+            
+            // let defaultSite = (site.uuid == SitesDataSource.sharedInstance.primarySiteUUID)
+            
             let defaultSite = site == SitesDataSource.sharedInstance.lastViewedSite// (site.uuid == SitesDataSource.sharedInstance.primarySiteUUID)
-
+            
             tempSettings.append(SettingsModelViewModel(title: LocalizedString.settingsPreventLocking.localized, intent: SettingIntent.PreventLocking , subTitle: nil, switchOn: site.overrideScreenLock))
             tempSettings.append(SettingsModelViewModel(title: LocalizedString.settingsDefaultSite.localized, intent: SettingIntent.SetDefault , subTitle: LocalizedString.settingsDefaultSiteSubTitle.localized, switchOn: defaultSite , cellIdentifier: .cellSubtitle))
             tempSettings.append(SettingsModelViewModel(title: LocalizedString.settingsEditSite.localized, intent: SettingIntent.Edit, subTitle: LocalizedString.settingsEditSiteSubTitle.localized, cellIdentifier: .cellBasicDisclosure))
@@ -226,10 +226,10 @@ extension SiteDetailViewController: SiteSettingsDelegate {
             if let boolSetting = setting.switchOn where boolSetting == true {
                 
                 // FIXME: Add primary site conformance
-//                SitesDataSource.sharedInstance.primarySiteUUID = site?.uuid
+                //                SitesDataSource.sharedInstance.primarySiteUUID = site?.uuid
                 SitesDataSource.sharedInstance.primarySite = site
             } else {
-//                SitesDataSource.sharedInstance.primarySiteUUID = nil
+                //                SitesDataSource.sharedInstance.primarySiteUUID = nil
                 SitesDataSource.sharedInstance.primarySite = nil
             }
         case .Edit:
@@ -237,7 +237,7 @@ extension SiteDetailViewController: SiteSettingsDelegate {
             inViewController.dismissViewControllerAnimated(false, completion: { () -> Void in
                 let formViewController = self.storyboard?.instantiateViewControllerWithIdentifier(StoryboardIdentifier.FormViewController.rawValue) as! FormViewController
                 
-                    formViewController.site = self.site!
+                formViewController.site = self.site!
                 
                 self.navigationController?.pushViewController(formViewController, animated: true)
                 
