@@ -441,30 +441,18 @@ public extension Site {
         if let lastUpdated = json[Site.JSONKey.lastUpdated].double {
             self.milliseconds = lastUpdated
         }
-        //TODO: Why am I doing this twice?
-        // 1.
-        if let uploaderBattery = json[DeviceStatus.JSONKey.devicestatus][DeviceStatus.JSONKey.uploaderBattery].int {
-            self.deviceStatuses.insertOrUpdate(DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: 0))
-        }
         
         let deviceStatus = json[DeviceStatus.JSONKey.devicestatus]
         print("deviceStatus count: \(deviceStatus.count)")
         
-        // 2.
         for (_, subJson) in deviceStatus {
-            if let mills = subJson[DeviceStatus.JSONKey.mills].double {
-                if let uploaderBattery = subJson[DeviceStatus.JSONKey.uploader, DeviceStatus.JSONKey.battery].int {
-                    let dStatus = DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: mills)
-                    self.deviceStatuses.insertOrUpdate(dStatus)
-                }
-            }
+            self.deviceStatuses.insertOrUpdate(DeviceStatus.decode(subJson.dictionaryObject ?? [:])!)
         }
         
         let sgvs = json[GlobalJSONKey.sgvs]
         print("sgv count: \(sgvs.count)")
         
         for (_, subJson) in sgvs {
-            // print("working on sgv[\(index)]")
             self.sgvs.insertOrUpdate(SensorGlucoseValue.decode(subJson.dictionaryObject ?? [:])!)
         }
         
@@ -472,23 +460,16 @@ public extension Site {
         print("mbgs count: \(mbgs.count)")
         
         for (_, subJson) in mbgs {
-            if let deviceString = subJson[MeteredGlucoseValue.JSONKey.device].string, mills = subJson[MeteredGlucoseValue.JSONKey.mills].double, mgdl = subJson[MeteredGlucoseValue.JSONKey.mgdl].double {
-                let device = Device(rawValue: deviceString) ?? Device.Unknown
-                let meter = MeteredGlucoseValue(milliseconds: mills, device: device, mgdl: mgdl)
-                self.mbgs.insertOrUpdate(meter)
-            }
+            self.mbgs.insertOrUpdate(MeteredGlucoseValue.decode(subJson.dictionaryObject ?? [:])!)
         }
         
         let cals = json[GlobalJSONKey.cals]
         print("cals count: \(cals.count)")
         
         for (_, subJson) in cals {
-            if let slope = subJson[Calibration.JSONKey.slope].double, intercept = subJson[Calibration.JSONKey.intercept].double, scale = subJson[Calibration.JSONKey.scale].double, mills = subJson[Calibration.JSONKey.mills].double {
-                let calibration = Calibration(slope: slope, intercept: intercept, scale: scale, milliseconds: mills)
-                self.cals.insertOrUpdate(calibration)
-            }
+            self.cals.insertOrUpdate(Calibration.decode(subJson.dictionaryObject ?? [:])!)
         }
-        
+
         // makes sure things are sorted correctly by date. When delta's come in they might screw up the order.
         self.sgvs.sortByDate()
         self.cals.sortByDate()

@@ -284,7 +284,7 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
         // Configure table view properties.
         tableView.rowHeight = UITableViewAutomaticDimension//240
         tableView.estimatedRowHeight = 240.0
-
+        
         
         tableView.backgroundView = BackgroundView() // TODO: Move this out to a theme manager.
         tableView.separatorColor = Theme.Color.navBarColor
@@ -316,9 +316,25 @@ class SitesTableViewController: UITableViewController, SitesDataSourceProvider, 
             for (index,site) in sites.enumerate() {
                 
                 let getSites = GetSiteDataOperation(withSites: site) {
-                    dispatch_async(dispatch_get_main_queue()){
-                        self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
+                    //                    dispatch_async(dispatch_get_main_queue()){
+                    rac_nightscouterConnectToSocketSignal(withSite: site)
+                        .observeOn(UIScheduler())
+                        .map({ (items, event) -> Site in
+                            var newSite = site
+                            
+                            newSite.parseJSONforSocketData(items)
+                            newSite.generateTimeline()
+                            return newSite
+                            
+                        })
+                        .startWithNext { (site) in
+                            NSNotificationCenter.defaultCenter().postNotificationName(DataUpdatedNotification, object: nil)
+                            
+                            SitesDataSource.sharedInstance.updateSite(site)
+                            
+                            // self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
                     }
+                    //                    }
                 }
                 
                 if userInitiated {

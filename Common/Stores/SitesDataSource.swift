@@ -168,7 +168,7 @@ public class SitesDataSource: SiteStoreType {
         
         #if os(watchOS)
             if let lastDataUpdateDateFromPhone = payload[DefaultKey.lastDataUpdateDateFromPhone.rawValue] as? NSDate {
-                defaults.setObject(lastDataUpdateDateFromPhone,forKey: DefaultKey.lastDataUpdateDateFromPhone.rawValue)
+                //defaults.setObject(lastDataUpdateDateFromPhone,forKey: DefaultKey.lastDataUpdateDateFromPhone.rawValue)
             }
         #endif
         

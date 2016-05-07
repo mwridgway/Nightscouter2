@@ -36,22 +36,26 @@ public extension ComplicationDataSourceGenerator {
     }
     
     func nearest(calibration cals: [Calibration], forDate date: NSDate) -> Calibration? {
-        var desiredIndex: Int?
-        var minDate: NSTimeInterval = fabs(NSDate().timeIntervalSinceNow)
-        for (index, cal) in cals.enumerate() {
-            let dateInterval = fabs(cal.date.timeIntervalSinceDate(date))
-            let compared = minDate < dateInterval
-            if compared {
-                minDate = dateInterval
-                desiredIndex = index
-            }
-        }
-        guard let index = desiredIndex else {
-            print("NON-FATAL ERROR: No valid index was found... return first calibration if its there.")
-            return cals.first
-        }
-        return cals[safe: index]
+        return cals.nearestElement(toDate: date)
     }
+    
+//    func nearest(calibration cals: [Calibration], forDate date: NSDate) -> Calibration? {
+//        var desiredIndex: Int?
+//        var minDate: NSTimeInterval = fabs(NSDate().timeIntervalSinceNow)
+//        for (index, cal) in cals.enumerate() {
+//            let dateInterval = fabs(cal.date.timeIntervalSinceDate(date))
+//            let compared = minDate < dateInterval
+//            if compared {
+//                minDate = dateInterval
+//                desiredIndex = index
+//            }
+//        }
+//        guard let index = desiredIndex else {
+//            print("NON-FATAL ERROR: No valid index was found... return first calibration if its there.")
+//            return cals.first
+//        }
+//        return cals[safe: index]
+//    }
 }
 
 // MARK: Complication Data Source
@@ -114,7 +118,7 @@ extension Site: ComplicationDataSourceGenerator {
             var rawString: String = ""
             
             // Get nearest calibration for a given sensor glucouse value's date.
-            if let calibration = nearest(calibration: calibrations, forDate: sgv.date) {
+            if let calibration = calibrations.nearestElement(toDate: sgv.date) {//nearest(calibration: calibrations, forDate: sgv.date) {
                 
                 // Calculate Raw BG for a given calibration.
                 let raw = calculateRawBG(fromSensorGlucoseValue: sgv, calibration: calibration)
